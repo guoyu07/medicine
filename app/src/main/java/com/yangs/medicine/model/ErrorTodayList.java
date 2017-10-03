@@ -9,6 +9,16 @@ public class ErrorTodayList {
     private Boolean isClick;
     private int count;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    private String type;
+
     public String getName() {
         return name;
     }
