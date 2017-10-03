@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.MainActivity">
+    <item
+        android:id="@+id/menu_main_search"
+        android:icon="@drawable/ic_format_size_white_24dp"
+        android:title="字体大小"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_main_about"
+        android:orderInCategory="100"
+        android:title="关于"
+        app:showAsAction="never" />
+</menu>

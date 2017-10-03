@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7faef4</color>
+    <color name="colorPrimaryDark">#79a8f0</color>
+    <color name="colorAccent">#7faef4</color>
+    <color name="white">#ffffff</color>
+    <color name="error_white1">#f0f7fd</color>
+    <color name="error_white2">#ecf4fd</color>
+    <color name="gray2">#dcd9d9</color>
+    <color name="gray">#7c7777</color>
+    <color name="gray3">#3e3c3c</color>
+    <color name="gray4">#f1f6fc</color>
+    <color name="orange">#eae1cb</color>
+    <color name="tv_topic">#a5b6cc</color>
+    <color name="red">#e75353</color>
+    <color name="black">#000000</color>
+    <color name="blue">#5197FC</color>
+</resources>
