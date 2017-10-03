@@ -1,11 +1,7 @@
 ## 项目开发中
 # 截图
-<img src="./screen/1启动页.jpg" width = "375" height = "667" alt="1启动页.jpg" align=center />
-<img src="./screen/2楚咻登录.jpg" width = "375" height = "667" alt="2楚咻登录.jpg" align=center />
-<img src="./screen/3选择专业.jpg" width = "375" height = "667" alt="3选择专业.jpg" align=center />
-<img src="./screen/4题集.jpg" width = "375" height = "667" alt="4题集.jpg" align=center />
-<img src="./screen/5错题集.jpg" width = "375" height = "667" alt="5错题集.jpg" align=center />
-<img src="./screen/6教材.jpg" width = "375" height = "667" alt="6教材.jpg" align=center />
-<img src="./screen/7任务.jpg" width = "375" height = "667" alt="7任务.jpg" align=center />
-<img src="./screen/8我的.jpg" width = "375" height = "667" alt="8我的.jpg" align=center />
+# <img src="https://github.com/yangs2012/medicine/blob/master/screenshot/1%E5%90%AF%E5%8A%A8%E9%A1%B5.jpg" width=375 height=667/>       <img src="https://github.com/yangs2012/medicine/blob/master/screenshot/2%E6%A5%9A%E5%92%BB%E7%99%BB%E5%BD%95.jpg" width=375 height=667/> 
+# <img src="https://github.com/yangs2012/medicine/blob/master/screenshot/3%E9%80%89%E6%8B%A9%E4%B8%93%E4%B8%9A.jpg" width=375 height=667/>      <img src="https://github.com/yangs2012/medicine/blob/master/screenshot/4%E9%A2%98%E9%9B%86.jpg" width=375 height=667/> 
+# <img src="https://github.com/yangs2012/medicine/blob/master/screenshot/5%E9%94%99%E9%A2%98%E9%9B%86.jpg" width=375 height=667/>       <img src="https://github.com/yangs2012/medicine/blob/master/screenshot/6%E6%95%99%E6%9D%90.jpg" width=375 height=667/> 
+# <img src="https://github.com/yangs2012/medicine/blob/master/screenshot/7%E4%BB%BB%E5%8A%A1.jpg" width=375 height=667/>        <img src="https://github.com/yangs2012/medicine/blob/master/screenshot/8%E6%88%91%E7%9A%84.jpg" width=375 height=667/> 
 
