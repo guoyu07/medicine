@@ -30,15 +30,15 @@
             android:gravity="center"
             android:text="生理学"
             android:textColor="@color/tv_topic"
-            android:textSize="20sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/topic_adapter_tv_3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_weight="1"
             android:background="@drawable/topic_tab_lay1"
             android:gravity="center"
@@ -49,8 +49,8 @@
 
         <ImageView
             android:id="@+id/topic_adapter_iv"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="right" />
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right|center_vertical" />
     </LinearLayout>
 </LinearLayout>

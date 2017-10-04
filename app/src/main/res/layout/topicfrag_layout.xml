@@ -7,8 +7,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:layout_height="85dp"
+        android:background="@drawable/bg_topic_top"
         android:orientation="vertical">
 
         <LinearLayout
@@ -31,21 +31,21 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_search_white_24dp" />
+                    android:src="@drawable/ic_search" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="12dp"
                     android:gravity="center"
                     android:text="输入关键词"
                     android:textColor="@color/tv_topic"
-                    android:textSize="16sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <ImageView
@@ -54,7 +54,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/ic_share_white_24dp" />
+                android:src="@drawable/ic_share" />
         </LinearLayout>
 
         <TextView
@@ -72,7 +72,9 @@
         android:id="@+id/topic_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:background="@drawable/topic_tab_lay2" />
 

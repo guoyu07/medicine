@@ -22,7 +22,6 @@ import java.util.List;
 
 public class ErrorFragment extends LazyLoadFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private View mLay;
-    private TitleBuilder titleBuilder;
     private Button bt_1;
     private Button bt_2;
     private View v_1;
@@ -54,8 +53,6 @@ public class ErrorFragment extends LazyLoadFragment implements View.OnClickListe
         errorAllFragment = new ErrorAllFragment();
         listFragment.add(errorTodayFragment);
         listFragment.add(errorAllFragment);
-        titleBuilder = new TitleBuilder(mLay);
-        titleBuilder.setLeftVisible(View.GONE).setTitleText("错题集");
         bt_1 = (Button) mLay.findViewById(R.id.error_bt_1);
         bt_2 = (Button) mLay.findViewById(R.id.error_bt_2);
         vp = (ViewPager) mLay.findViewById(R.id.error_vp);

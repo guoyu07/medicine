@@ -49,7 +49,7 @@ public class ErrorTodayAdapter extends RecyclerView.Adapter<ErrorTodayAdapter.Vi
             if (errorTodayList.getClick())
                 holder.iv.setImageResource(R.drawable.ic_keyboard_arrow_down_gray_24dp);
             else
-                holder.iv.setImageResource(R.drawable.ic_chevron_right_black_24dp);
+                holder.iv.setImageResource(R.drawable.ic_keyboard_arrow_right_white_24dp);
         } else if (errorTodayList.getType().equals("small")) {
             holder.tv_2.setVisibility(View.VISIBLE);
             holder.tv_1.setVisibility(View.GONE);

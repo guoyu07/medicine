@@ -11,10 +11,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.APPlication;
@@ -33,11 +36,13 @@ import java.util.Map;
 public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     private View mLay;
     private RecyclerView mrecyclerView;
+    private TextView empty_tv;
     private List<ErrorTodayList> list;
     private Map<String, List<ErrorTodayList>> map;
     private ErrorTodayAdapter errorTodayAdapter;
     private SwipeRefreshLayout srl;
     private Handler mHandler;
+    private int i = 0;
 
     @Override
     protected int setContentView() {
@@ -52,10 +57,11 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
                 map = new HashMap<>();
                 initHandler();
                 mLay = getContentView();
-                srl = (SwipeRefreshLayout) mLay.findViewById(R.id.errortoday_srl);
-                srl.setColorSchemeColors(Color.RED, Color.GREEN, ContextCompat.getColor(getContext(),
-                        R.color.colorPrimary));
                 mrecyclerView = (RecyclerView) mLay.findViewById(R.id.errortoday_rv);
+                empty_tv = (TextView) mLay.findViewById(R.id.errortoday_tv);
+                srl = (SwipeRefreshLayout) mLay.findViewById(R.id.errortoday_srl);
+                srl.setColorSchemeColors(Color.CYAN, Color.GREEN, ContextCompat.getColor(getContext(),
+                        R.color.colorPrimary));
                 errorTodayAdapter = new ErrorTodayAdapter(list, getActivity());
                 errorTodayAdapter.setOnItemClickListener(ErrorTodayFragment.this);
                 mrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -63,6 +69,8 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
                 mrecyclerView.addItemDecoration(new DividerItemDecoration(
                         getActivity(), DividerItemDecoration.VERTICAL));
                 srl.setOnRefreshListener(this);
+                empty_tv.setVisibility(View.GONE);
+                mrecyclerView.setVisibility(View.VISIBLE);
                 srl.post(new Runnable() {
                     @Override
                     public void run() {
@@ -88,6 +96,8 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
     }
 
     private void initData() {
+        list.clear();
+        map.clear();
         ErrorTodayList errorTodayList = new ErrorTodayList();
         errorTodayList.setName("生理学");
         errorTodayList.setClick(false);
@@ -138,8 +148,17 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
             @Override
             public void run() {
                 srl.setRefreshing(false);
-                initData();
-                errorTodayAdapter.notifyDataSetChanged();
+                if (i == 2) {
+                    empty_tv.setVisibility(View.VISIBLE);
+                    mrecyclerView.setVisibility(View.GONE);
+                    i = 0;
+                } else if (i == 0) {
+                    i = 2;
+                    empty_tv.setVisibility(View.GONE);
+                    mrecyclerView.setVisibility(View.VISIBLE);
+                    initData();
+                    errorTodayAdapter.notifyDataSetChanged();
+                }
             }
         }, 2000);
     }

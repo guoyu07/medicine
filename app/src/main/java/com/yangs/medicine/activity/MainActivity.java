@@ -15,6 +15,7 @@ import com.yangs.medicine.R;
 import com.yangs.medicine.fragment.BookFragment;
 import com.yangs.medicine.fragment.ErrorFragment;
 import com.yangs.medicine.fragment.MeFragment;
+import com.yangs.medicine.fragment.TaskFragment;
 import com.yangs.medicine.fragment.TopicFragment;
 import com.yangs.medicine.util.StatusBar;
 
@@ -24,18 +25,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout tab_ly_2;
     private LinearLayout tab_ly_3;
     private LinearLayout tab_ly_4;
+    private LinearLayout tab_ly_5;
     private TextView tab_tv_1;
     private TextView tab_tv_2;
     private TextView tab_tv_3;
     private TextView tab_tv_4;
+    private TextView tab_tv_5;
     private ImageView tab_iv_1;
     private ImageView tab_iv_2;
     private ImageView tab_iv_3;
     private ImageView tab_iv_4;
+    private ImageView tab_iv_5;
     private TopicFragment topicFragment;
     private ErrorFragment errorFragment;
     private BookFragment bookFragment;
     private MeFragment meFragment;
+    private TaskFragment taskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +56,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tab_ly_2 = (LinearLayout) findViewById(R.id.tab_ly_2);
         tab_ly_3 = (LinearLayout) findViewById(R.id.tab_ly_3);
         tab_ly_4 = (LinearLayout) findViewById(R.id.tab_ly_4);
+        tab_ly_5 = (LinearLayout) findViewById(R.id.tab_ly_5);
         tab_tv_1 = (TextView) tab_ly_1.findViewById(R.id.tab_tv_1);
         tab_tv_2 = (TextView) tab_ly_2.findViewById(R.id.tab_tv_2);
         tab_tv_3 = (TextView) tab_ly_3.findViewById(R.id.tab_tv_3);
         tab_tv_4 = (TextView) tab_ly_4.findViewById(R.id.tab_tv_4);
+        tab_tv_5 = (TextView) tab_ly_5.findViewById(R.id.tab_tv_5);
         tab_iv_1 = (ImageView) tab_ly_1.findViewById(R.id.tab_iv_1);
         tab_iv_2 = (ImageView) tab_ly_2.findViewById(R.id.tab_iv_2);
         tab_iv_3 = (ImageView) tab_ly_3.findViewById(R.id.tab_iv_3);
         tab_iv_4 = (ImageView) tab_ly_4.findViewById(R.id.tab_iv_4);
+        tab_iv_5 = (ImageView) tab_ly_5.findViewById(R.id.tab_iv_5);
         tab_ly_1.setOnClickListener(this);
         tab_ly_2.setOnClickListener(this);
         tab_ly_3.setOnClickListener(this);
         tab_ly_4.setOnClickListener(this);
+        tab_ly_5.setOnClickListener(this);
     }
 
     @Override
@@ -80,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tab_ly_4:
                 switchFragment(4);
                 break;
+            case R.id.tab_ly_5:
+                switchFragment(5);
+                break;
         }
 
     }
@@ -94,14 +106,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             transaction.hide(bookFragment);
         if (meFragment != null)
             transaction.hide(meFragment);
+        if (taskFragment != null)
+            transaction.hide(taskFragment);
         tab_tv_1.setTextColor(getResources().getColor(R.color.gray));
         tab_tv_2.setTextColor(getResources().getColor(R.color.gray));
         tab_tv_3.setTextColor(getResources().getColor(R.color.gray));
         tab_tv_4.setTextColor(getResources().getColor(R.color.gray));
+        tab_tv_5.setTextColor(getResources().getColor(R.color.gray));
         tab_iv_1.setBackgroundResource(R.drawable.tabbar_icon_tiji_default);
         tab_iv_2.setBackgroundResource(R.drawable.tabbar_icon_cuotiji_default);
         tab_iv_3.setBackgroundResource(R.drawable.tabbar_icon_jiaocai_default);
-        tab_iv_4.setBackgroundResource(R.drawable.tabbar_icon_wode_default);
+        tab_iv_4.setBackgroundResource(R.drawable.tabbar_icon_renwu_default);
+        tab_iv_5.setBackgroundResource(R.drawable.tabbar_icon_wode_default);
         switch (i) {
             case 1:
                 if (topicFragment == null) {
@@ -131,17 +147,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     transaction.show(bookFragment);
                 }
                 tab_tv_3.setTextColor(getResources().getColor(R.color.blue));
-                tab_iv_3.setBackgroundResource(R.drawable.tabbar_icon_jiaocai_selected);
+                tab_iv_3.setBackgroundResource(R.drawable.tabbar_icon_jiaocaii_selected);
                 break;
             case 4:
+                if (taskFragment == null) {
+                    taskFragment = new TaskFragment();
+                    transaction.add(R.id.frame, taskFragment);
+                } else {
+                    transaction.show(taskFragment);
+                }
+                tab_tv_4.setTextColor(getResources().getColor(R.color.blue));
+                tab_iv_4.setBackgroundResource(R.drawable.tabbar_icon_renwu_selected);
+                break;
+            case 5:
                 if (meFragment == null) {
                     meFragment = new MeFragment();
                     transaction.add(R.id.frame, meFragment);
                 } else {
                     transaction.show(meFragment);
                 }
-                tab_tv_4.setTextColor(getResources().getColor(R.color.blue));
-                tab_iv_4.setBackgroundResource(R.drawable.tabbar_icon_wode_selected);
+                tab_tv_5.setTextColor(getResources().getColor(R.color.blue));
+                tab_iv_5.setBackgroundResource(R.drawable.tabbar_icon_wode_selected);
                 break;
         }
         transaction.commitAllowingStateLoss();
