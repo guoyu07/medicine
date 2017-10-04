@@ -1,5 +1,7 @@
 package com.yangs.medicine.fragment;
 
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -92,6 +94,8 @@ public class BookFragment extends LazyLoadFragment implements SwipeRefreshLayout
         recyclerView.addItemDecoration(new DividerItemDecoration(
                 getActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(bookAdapter);
+        srl.setColorSchemeColors(Color.CYAN, Color.GREEN, ContextCompat.getColor(getContext(),
+                R.color.colorPrimary));
         srl.setOnRefreshListener(this);
         iv_search.setOnClickListener(this);
         srl.post(new Runnable() {
