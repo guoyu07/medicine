@@ -20,11 +20,13 @@ import java.util.List;
 public class ErrorTodayAdapter extends RecyclerView.Adapter<ErrorTodayAdapter.ViewHolder> implements View.OnClickListener {
     private List<ErrorTodayList> lists;
     private Context context;
+    private String type;
     private OnItemClickListener onItemClickListener;
 
-    public ErrorTodayAdapter(List<ErrorTodayList> lists, Context context) {
+    public ErrorTodayAdapter(List<ErrorTodayList> lists, Context context, String type) {
         this.lists = lists;
         this.context = context;
+        this.type = type;
     }
 
     @Override
@@ -41,11 +43,15 @@ public class ErrorTodayAdapter extends RecyclerView.Adapter<ErrorTodayAdapter.Vi
         if (errorTodayList.getType().equals("big")) {
             holder.tv_2.setVisibility(View.GONE);
             holder.tv_1.setVisibility(View.VISIBLE);
-            holder.tv_3.setVisibility(View.VISIBLE);
             holder.v.setVisibility(View.VISIBLE);
             holder.iv.setVisibility(View.VISIBLE);
             holder.tv_1.setText(errorTodayList.getName());
-            holder.tv_3.setText(errorTodayList.getCount() + "");
+            if (!"NotError".equals(this.type)) {
+                holder.tv_3.setText(errorTodayList.getCount() + "");
+                holder.tv_3.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv_3.setVisibility(View.GONE);
+            }
             if (errorTodayList.getClick())
                 holder.iv.setImageResource(R.drawable.ic_keyboard_arrow_down_gray_24dp);
             else

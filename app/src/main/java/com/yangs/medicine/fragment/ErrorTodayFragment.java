@@ -43,6 +43,7 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
     private SwipeRefreshLayout srl;
     private Handler mHandler;
     private int i = 0;
+    private String type;
 
     @Override
     protected int setContentView() {
@@ -62,7 +63,7 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
                 srl = (SwipeRefreshLayout) mLay.findViewById(R.id.errortoday_srl);
                 srl.setColorSchemeColors(Color.CYAN, Color.GREEN, ContextCompat.getColor(getContext(),
                         R.color.colorPrimary));
-                errorTodayAdapter = new ErrorTodayAdapter(list, getActivity());
+                errorTodayAdapter = new ErrorTodayAdapter(list, getActivity(), type);
                 errorTodayAdapter.setOnItemClickListener(ErrorTodayFragment.this);
                 mrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 mrecyclerView.setAdapter(errorTodayAdapter);
@@ -80,6 +81,10 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
                 });
             }
         }
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     private void initHandler() {

@@ -10,6 +10,8 @@
     <color name="gray">#7c7777</color>
     <color name="gray3">#3e3c3c</color>
     <color name="gray4">#f1f6fc</color>
+    <color name="gray5">#c6c6c6</color>
+    <color name="gray6">#dcdcdc</color>
     <color name="orange">#eae1cb</color>
     <color name="tv_topic">#a5b6cc</color>
     <color name="tv_book1">#8897aa</color>
@@ -19,4 +21,5 @@
     <color name="red">#e75353</color>
     <color name="black">#000000</color>
     <color name="blue">#5197FC</color>
+    <color name="blue2">#5c9af7</color>
 </resources>

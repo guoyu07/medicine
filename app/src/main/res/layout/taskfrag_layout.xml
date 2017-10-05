@@ -41,6 +41,7 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="25dp"
         android:src="@drawable/ic_edit_white_24dp"
+        android:visibility="gone"
         fab:fab_colorNormal="@color/yellow"
         fab:fab_colorPressed="@color/yellow_press" />
 

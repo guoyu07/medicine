@@ -16,16 +16,16 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/task_adapter_sdv"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="5dp"
             fresco:placeholderImage="@drawable/img_zhangsan"
             fresco:roundedCornerRadius="8dp" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -36,7 +36,7 @@
                 android:gravity="center_vertical"
                 android:text="Zhangsan"
                 android:textColor="@color/tv_book1"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/task_adapter_time"
@@ -45,7 +45,7 @@
                 android:gravity="center_vertical"
                 android:text="2017.10.1  10:21"
                 android:textColor="@color/tv_book1"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -68,7 +68,7 @@
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:orientation="horizontal">
 
         <TextView

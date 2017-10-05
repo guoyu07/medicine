@@ -31,6 +31,7 @@ public class TaskFragment extends LazyLoadFragment implements TaskAdapter.OnItem
     private TaskAdapter taskAdapter;
     private TextView empty_tv;
     private int c = 0;
+    private String type;
 
     @Override
     protected int setContentView() {
@@ -49,12 +50,15 @@ public class TaskFragment extends LazyLoadFragment implements TaskAdapter.OnItem
     private void initView() {
         lists = new ArrayList<>();
         mLay = getContentView();
+        fab = (FloatingActionButton) mLay.findViewById(R.id.task_fab);
         srl = (SwipeRefreshLayout) mLay.findViewById(R.id.task_srl);
         recyclerView = (RecyclerView) mLay.findViewById(R.id.task_rv);
-        fab = (FloatingActionButton) mLay.findViewById(R.id.task_fab);
-        fab.attachToRecyclerView(recyclerView);
-        fab.setOnClickListener(this);
-        taskAdapter = new TaskAdapter(getContext(), lists);
+        if (type == null) {
+            fab.setVisibility(View.VISIBLE);
+            fab.attachToRecyclerView(recyclerView);
+            fab.setOnClickListener(this);
+        }
+        taskAdapter = new TaskAdapter(getContext(), lists, type);
         empty_tv = (TextView) mLay.findViewById(R.id.task_tv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(
@@ -77,6 +81,16 @@ public class TaskFragment extends LazyLoadFragment implements TaskAdapter.OnItem
     private void initData() {
         lists.clear();
         TaskList taskList = new TaskList();
+        if ("我接受的".equals(type)) {
+            taskList.setPicUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
+            taskList.setName("Lisi");
+            taskList.setTime("2017.9.30 11:51");
+            taskList.setContent("笔者与一个在苏州出差的朋友和一个天津的朋友一起连线。刚分配进游戏服务器，还没读完盘，客户端就崩溃掉了。");
+            taskList.setMoney("20¥");
+            taskList.setFinish(true);
+            lists.add(taskList);
+            return;
+        }
         taskList.setPicUrl("res://com.yangs.medicine/" + R.drawable.img_zhangsan);
         taskList.setName("Zhangsan");
         taskList.setTime("2017.10.1 10:21");
@@ -84,6 +98,8 @@ public class TaskFragment extends LazyLoadFragment implements TaskAdapter.OnItem
         taskList.setMoney("25¥");
         taskList.setFinish(false);
         lists.add(taskList);
+        if ("我发布的".equals(type))
+            return;
         taskList = new TaskList();
         taskList.setPicUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
         taskList.setName("Lisi");
@@ -108,6 +124,10 @@ public class TaskFragment extends LazyLoadFragment implements TaskAdapter.OnItem
         taskList.setMoney("20¥");
         taskList.setFinish(false);
         lists.add(taskList);
+    }
+
+    public void setTyep(String type) {
+        this.type = type;
     }
 
     @Override

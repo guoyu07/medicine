@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.yangs.medicine.activity.LoginActivity;
 import com.yangs.medicine.activity.MainActivity;
 
 /**
@@ -14,7 +15,7 @@ public class Splash extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startActivity(new Intent(Splash.this, MainActivity.class));
+        startActivity(new Intent(Splash.this, LoginActivity.class));
         finish();
     }
 }

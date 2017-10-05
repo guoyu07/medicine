@@ -6,77 +6,86 @@
     android:background="@color/gray4"
     android:orientation="vertical">
 
-    <include layout="@layout/top" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="170dp"
         android:layout_gravity="center"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/bg_me"
         android:orientation="vertical">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/me_sv"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            fresco:actualImageScaleType="centerCrop"
-            fresco:placeholderImage="@drawable/ic_me_blank"
-            fresco:placeholderImageScaleType="centerCrop"
-            fresco:roundAsCircle="true" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <LinearLayout
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/me_sv"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="30dp"
+                fresco:actualImageScaleType="centerCrop"
+                fresco:placeholderImage="@drawable/ic_me_blank"
+                fresco:placeholderImageScaleType="centerCrop"
+                fresco:roundAsCircle="true" />
+
+            <ImageView
+                android:id="@+id/me_iv_edit"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                fresco:srcCompat="@drawable/ic_edit_me" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:orientation="horizontal">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/me_name"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1.2"
+                android:id="@+id/me_tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:gravity="center"
                 android:text="爱做题的小明"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/me_level"
-                    android:layout_width="60dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/me_tab_lay1"
-                    android:gravity="center"
-                    android:text="大三"
-                    android:textColor="@color/white" />
-            </LinearLayout>
-        </LinearLayout>
+            <TextView
+                android:id="@+id/me_tv_level"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_alignTop="@+id/me_tv_name"
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_toEndOf="@+id/me_tv_name"
+                android:layout_toRightOf="@+id/me_tv_name"
+                android:background="@drawable/ic_me_level_bg"
+                android:gravity="center"
+                android:text="大二"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </RelativeLayout>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/me_rv"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:background="@drawable/topic_tab_lay2" />
 
     <Button
-        android:id="@+id/me_bt"
+        android:id="@+id/me_bt_logout"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
