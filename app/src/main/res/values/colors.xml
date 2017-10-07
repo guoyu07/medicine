@@ -3,6 +3,7 @@
     <color name="colorPrimary">#7faef4</color>
     <color name="colorPrimaryDark">#79a8f0</color>
     <color name="colorAccent">#7faef4</color>
+    <color name="transparence">#00000000</color>
     <color name="white">#ffffff</color>
     <color name="me_white">#f1f7ff</color>
     <color name="me_tv_color">#8897ac</color>
