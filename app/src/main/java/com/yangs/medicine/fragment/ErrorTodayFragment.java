@@ -71,7 +71,6 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
                         getActivity(), DividerItemDecoration.VERTICAL));
                 srl.setOnRefreshListener(this);
                 empty_tv.setVisibility(View.GONE);
-                mrecyclerView.setVisibility(View.VISIBLE);
                 srl.post(new Runnable() {
                     @Override
                     public void run() {

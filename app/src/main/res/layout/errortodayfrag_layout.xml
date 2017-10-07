@@ -16,7 +16,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/topic_tab_lay2"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/errortoday_tv"
@@ -26,7 +27,8 @@
                 android:gravity="center"
                 android:text="今日还没有答题哦"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="invisible" />
         </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 

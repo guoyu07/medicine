@@ -8,92 +8,115 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="180dp"
         android:layout_gravity="center"
         android:background="@drawable/bg_me"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/me_sv"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
                 android:layout_marginTop="30dp"
                 fresco:actualImageScaleType="centerCrop"
-                fresco:placeholderImage="@drawable/ic_me_blank"
+                fresco:placeholderImage="@drawable/img_touxiang"
                 fresco:placeholderImageScaleType="centerCrop"
                 fresco:roundAsCircle="true" />
 
-            <ImageView
-                android:id="@+id/me_iv_edit"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="10dp"
-                fresco:srcCompat="@drawable/ic_edit_me" />
-        </RelativeLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-        <RelativeLayout
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/me_iv_edit"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="15dp"
+                    android:src="@drawable/ic_edit_me" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="20dp"
             android:orientation="horizontal">
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/me_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="爱做题的小明"
-                android:textColor="@color/white"
+                android:textColor="@color/me_white"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/me_tv_level"
-                android:layout_width="50dp"
-                android:layout_height="25dp"
-                android:layout_alignTop="@+id/me_tv_name"
-                android:layout_marginLeft="24dp"
-                android:layout_marginStart="24dp"
-                android:layout_toEndOf="@+id/me_tv_name"
-                android:layout_toRightOf="@+id/me_tv_name"
-                android:background="@drawable/ic_me_level_bg"
-                android:gravity="center"
-                android:text="大二"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-        </RelativeLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/me_tv_level"
+                    android:layout_width="50dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/ic_me_level_bg"
+                    android:gravity="center"
+                    android:text="大二"
+                    android:textColor="@color/me_white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/me_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:background="@drawable/topic_tab_lay2" />
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/topic_tab_lay4" />
 
     <Button
         android:id="@+id/me_bt_logout"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"
         android:background="@color/white"
         android:gravity="center"
         android:text="退出登录"
-        android:textColor="@color/tv_topic"
+        android:textColor="@color/me_tv_color"
         android:textSize="18sp" />
 </LinearLayout>
