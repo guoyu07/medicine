@@ -46,7 +46,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
         holder.tv_1.setText(list.get(position).getIndex());
         holder.tv_2.setText(list.get(position).getName());
         if (list.get(position).getLock().equals("lock")) {
-            holder.iv.setBackgroundResource(R.drawable.ic_lock_outline_white_24dp);
+            holder.iv.setBackgroundResource(R.drawable.icon_suo);
             holder.tv_3.setVisibility(View.VISIBLE);
             if (list.get(position).getOperation().contains("qq"))
                 holder.tv_3.setText("分享QQ群 解锁4-7");
@@ -55,7 +55,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
             else
                 holder.tv_3.setText("未定义解锁方式");
         } else {
-            holder.iv.setBackgroundResource(R.drawable.ic_keyboard_arrow_right_white_24dp);
+            holder.iv.setBackgroundResource(R.drawable.icon_return);
             holder.tv_3.setText("");
         }
     }

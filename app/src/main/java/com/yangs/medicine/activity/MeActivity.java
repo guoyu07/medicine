@@ -16,6 +16,7 @@ import com.yangs.medicine.R;
 import com.yangs.medicine.fragment.ErrorTodayFragment;
 import com.yangs.medicine.fragment.MeBookFragment;
 import com.yangs.medicine.fragment.TaskFragment;
+import com.yangs.medicine.util.FitStatusBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
  * Created by yangs on 2017/10/5 0005.
  */
 
-public class MeActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class MeActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private ImageView iv_back;
     private TextView tv_title;
     private Button bt_1;
@@ -44,6 +45,7 @@ public class MeActivity extends AppCompatActivity implements View.OnClickListene
     }
 
     private void initView() {
+        FitStatusBar.addStatusBarView(this);
         listFragment = new ArrayList<>();
         iv_back = (ImageView) findViewById(R.id.meactivity_iv_back);
         tv_title = (TextView) findViewById(R.id.meactivity_tv_title);

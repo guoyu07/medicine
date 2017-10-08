@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/me_adapter_iv"
-            android:layout_width="23dp"
-            android:layout_height="20dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="15dp" />

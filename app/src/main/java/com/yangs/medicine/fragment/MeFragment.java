@@ -68,7 +68,7 @@ public class MeFragment extends LazyLoadFragment implements MeAdapter.OnItemClic
         meList.setName("消息");
         list.add(meList);
         meList = new MeList();
-        meList.setIcon(R.drawable.icon_fankuiyijian);
+        meList.setIcon(R.drawable.icon_yijian);
         meList.setName("反馈意见");
         list.add(meList);
         meList = new MeList();

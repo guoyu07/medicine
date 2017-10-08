@@ -1,26 +1,23 @@
 package com.yangs.medicine.activity;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.yangs.medicine.R;
-import com.yangs.medicine.util.StatusBar;
+import com.yangs.medicine.util.FitStatusBar;
 
 /**
  * Created by yangs on 2017/9/24 0024.
  */
 
-public class SearchActivity extends AppCompatActivity implements View.OnKeyListener {
+public class SearchActivity extends BaseActivity implements View.OnKeyListener {
     private Toolbar toolbar;
     private EditText et_txt;
 
@@ -28,6 +25,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnKeyListe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searchactivity_layout);
+        FitStatusBar.addStatusBarView(this);
         toolbar = (Toolbar) findViewById(R.id.search_ac_toolbar);
         et_txt = (EditText) toolbar.findViewById(R.id.search_ac_tv_txt);
         et_txt.setOnKeyListener(this);

@@ -3,9 +3,11 @@ package com.yangs.medicine.fragment;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +36,7 @@ public class TopicFragment extends LazyLoadFragment implements View.OnClickListe
     private RecyclerView mRecyclerView;
     private TopicAdapter mAdapter;
     private List<TopicList> list;
+    private Toolbar toolbar;
 
     @Override
     protected int setContentView() {
@@ -53,6 +56,8 @@ public class TopicFragment extends LazyLoadFragment implements View.OnClickListe
     private void initView() {
         initData();
         mLay = getContentView();
+        toolbar = (Toolbar) mLay.findViewById(R.id.topic_toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         topic_title_ll = (LinearLayout) mLay.findViewById(R.id.topic_title_ll);
         topic_title_share = (ImageView) mLay.findViewById(R.id.topic_title_share);
         topic_tv_id = (TextView) mLay.findViewById(R.id.topic_tv_id);

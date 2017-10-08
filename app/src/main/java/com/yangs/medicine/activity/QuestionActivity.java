@@ -1,22 +1,17 @@
 package com.yangs.medicine.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.adapter.TitleBuilder;
 import com.yangs.medicine.fragment.QuestionFragment;
-import com.yangs.medicine.util.StatusBar;
+import com.yangs.medicine.util.FitStatusBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +20,7 @@ import java.util.List;
  * Created by yangs on 2017/9/24 0024.
  */
 
-public class QuestionActivity extends AppCompatActivity {
+public class QuestionActivity extends BaseActivity {
     private TitleBuilder titleBuilder;
     private ViewPager viewPager;
     private List<Fragment> list;
@@ -34,6 +29,7 @@ public class QuestionActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.questionactivity_layout);
+        FitStatusBar.addStatusBarView(this);
         list = new ArrayList<>();
         QuestionFragment answerFragment = new QuestionFragment();
         list.add(answerFragment);

@@ -3,26 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_tap"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/search_ac_toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:subtitleTextColor="@color/white"
-        app:theme="@style/ToolbarTheme"
-        app:titleTextColor="@color/white">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/search_ac_tv_txt"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/search_ac_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ellipsize="end"
-            android:hint="输入关键词或真题编号"
-            android:singleLine="true"
-            android:textColorHint="@color/gray" />
-    </android.support.v7.widget.Toolbar>
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_topic_top"
+            app:subtitleTextColor="@color/white"
+            app:theme="@style/ToolbarTheme"
+            app:titleTextColor="@color/white">
+
+            <EditText
+                android:id="@+id/search_ac_tv_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:hint="输入关键词或真题编号"
+                android:singleLine="true"
+                android:textColorHint="@color/gray" />
+        </android.support.v7.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 </LinearLayout>

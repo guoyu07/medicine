@@ -13,12 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.util.FitStatusBar;
 
 /**
  * Created by yangs on 2017/10/5 0005.
  */
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private EditText et_user;
     private EditText et_pwd;
     private TextView tv_forgetpwd;
@@ -38,6 +39,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
+        FitStatusBar.addStatusBarView(this);
         et_user = (EditText) findViewById(R.id.loginactivity_et_user);
         et_pwd = (EditText) findViewById(R.id.loginactivity_et_pwd);
         tv_forgetpwd = (TextView) findViewById(R.id.loginactivity_tv_forgetpwd);
