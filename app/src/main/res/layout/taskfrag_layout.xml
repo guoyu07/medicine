@@ -9,16 +9,16 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/task_srl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/task_rv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/topic_tab_lay4"
@@ -27,7 +27,8 @@
             <TextView
                 android:id="@+id/task_tv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="还没有发布的任务"
                 android:textColor="@color/colorPrimary"
@@ -44,8 +45,8 @@
         android:layout_marginBottom="25dp"
         android:layout_marginRight="25dp"
         android:src="@drawable/ic_edit_white_24dp"
-        android:visibility="visible"
-        fab:fab_colorNormal="@color/yellow"
-        fab:fab_colorPressed="@color/yellow_press" />
+        android:visibility="invisible"
+        fab:fab_colorNormal="@color/blue3"
+        fab:fab_colorPressed="@color/blue2" />
 
 </android.support.design.widget.CoordinatorLayout>

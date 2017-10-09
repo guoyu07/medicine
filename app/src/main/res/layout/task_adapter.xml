@@ -16,8 +16,8 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/task_adapter_sdv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_margin="5dp"
             fresco:placeholderImage="@drawable/img_zhangsan"
             fresco:roundedCornerRadius="10dp" />
@@ -65,7 +65,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="2dp"
@@ -95,8 +95,8 @@
         <TextView
             android:id="@+id/task_adapter_ok"
             android:layout_width="90dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/topic_tab_lay1"
+            android:layout_height="30dp"
+            android:background="@drawable/button_woyaojieshou_default"
             android:gravity="center"
             android:text="我要接受"
             android:textColor="@color/white"

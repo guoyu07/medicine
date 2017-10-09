@@ -16,6 +16,8 @@
                 android:id="@+id/errortoday_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:background="@drawable/topic_tab_lay4"
                 android:scrollbars="vertical"
                 android:visibility="invisible" />
@@ -23,7 +25,7 @@
             <TextView
                 android:id="@+id/errortoday_tv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="今日还没有答题哦"
