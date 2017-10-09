@@ -67,8 +67,8 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
                 errorTodayAdapter.setOnItemClickListener(ErrorTodayFragment.this);
                 mrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 mrecyclerView.setAdapter(errorTodayAdapter);
-                mrecyclerView.addItemDecoration(new DividerItemDecoration(
-                        getActivity(), DividerItemDecoration.VERTICAL));
+//                mrecyclerView.addItemDecoration(new DividerItemDecoration(
+//                        getActivity(), DividerItemDecoration.VERTICAL));
                 srl.setOnRefreshListener(this);
                 empty_tv.setVisibility(View.GONE);
                 srl.post(new Runnable() {
@@ -137,7 +137,7 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
             errorTodayList.setType("small");
             tmpList.add(errorTodayList);
             errorTodayList = new ErrorTodayList();
-            errorTodayList.setName("DNA双螺旋结构的维持主要靠核苷酸间的磷酸");
+            errorTodayList.setName("DNA 双螺旋结构的维持主要靠核苷酸间的磷酸二酯键");
             errorTodayList.setType("small");
             tmpList.add(errorTodayList);
             map.put(list.get(position).getName(), tmpList);

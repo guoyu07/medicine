@@ -90,8 +90,8 @@ public class MeFragment extends LazyLoadFragment implements MeAdapter.OnItemClic
         bt_logout.setOnClickListener(this);
         iv_edit.setOnClickListener(this);
         mrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mrecyclerView.addItemDecoration(new DividerItemDecoration(
-                getActivity(), DividerItemDecoration.VERTICAL));
+//        mrecyclerView.addItemDecoration(new DividerItemDecoration(
+//                getActivity(), DividerItemDecoration.VERTICAL));
         mrecyclerView.setAdapter(meAdapter);
     }
 

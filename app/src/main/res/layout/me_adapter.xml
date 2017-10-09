@@ -37,4 +37,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/me_adapter_v"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="28dp"
+        android:background="@color/gray7" />
 </LinearLayout>

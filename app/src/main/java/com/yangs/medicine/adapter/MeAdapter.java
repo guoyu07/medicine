@@ -40,6 +40,8 @@ public class MeAdapter extends RecyclerView.Adapter<MeAdapter.MyViewHolder> impl
         holder.itemView.setTag(position);
         holder.iv.setBackgroundResource(list.get(position).getIcon());
         holder.tv.setText(list.get(position).getName());
+        if (position == (list.size() - 1))
+            holder.v.setVisibility(View.GONE);
     }
 
     @Override
@@ -64,11 +66,13 @@ public class MeAdapter extends RecyclerView.Adapter<MeAdapter.MyViewHolder> impl
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView iv;
         TextView tv;
+        View v;
 
         public MyViewHolder(View view) {
             super(view);
             iv = (ImageView) view.findViewById(R.id.me_adapter_iv);
             tv = (TextView) view.findViewById(R.id.me_adapter_tv);
+            v = view.findViewById(R.id.me_adapter_v);
         }
     }
 }

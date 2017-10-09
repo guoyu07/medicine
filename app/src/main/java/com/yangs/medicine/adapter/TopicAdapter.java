@@ -45,6 +45,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
         holder.itemView.setTag(position);
         holder.tv_1.setText(list.get(position).getIndex());
         holder.tv_2.setText(list.get(position).getName());
+        holder.v.setVisibility(View.VISIBLE);
         if (list.get(position).getLock().equals("lock")) {
             holder.iv.setBackgroundResource(R.drawable.icon_suo);
             holder.tv_3.setVisibility(View.VISIBLE);
@@ -85,6 +86,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
         TextView tv_2;
         TextView tv_3;
         ImageView iv;
+        View v;
 
         public MyViewHolder(View view) {
             super(view);
@@ -92,6 +94,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
             tv_2 = (TextView) view.findViewById(R.id.topic_adapter_tv_2);
             tv_3 = (TextView) view.findViewById(R.id.topic_adapter_tv_3);
             iv = (ImageView) view.findViewById(R.id.topic_adapter_iv);
+            v = view.findViewById(R.id.topic_adapter_v);
         }
     }
 }

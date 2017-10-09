@@ -65,8 +65,8 @@ public class TopicFragment extends LazyLoadFragment implements View.OnClickListe
         mAdapter = new TopicAdapter(list, getActivity());
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(
-                getActivity(), DividerItemDecoration.VERTICAL));
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(
+//                getActivity(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
         topic_title_ll.setOnClickListener(this);
         topic_title_share.setOnClickListener(this);

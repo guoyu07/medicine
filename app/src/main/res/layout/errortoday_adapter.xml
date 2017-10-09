@@ -27,9 +27,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="45dp"
             android:ellipsize="end"
             android:gravity="center"
-            android:text="北京时间10月3日17点45分，万众瞩目的2017年诺贝尔物理学奖揭晓"
+            android:maxLines="1"
+            android:text=""
             android:textColor="@color/tv_topic"
             android:textSize="14sp"
             android:visibility="gone" />
@@ -42,8 +44,8 @@
 
         <ImageView
             android:id="@+id/errortoday_adapter_iv"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
             android:layout_gravity="center"
             android:layout_marginRight="10dp" />
 
@@ -57,4 +59,19 @@
             android:textColor="@color/red"
             android:textSize="18sp" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/errortoday_adapter_v3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="22dp"
+        android:background="@color/gray7"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/errortoday_adapter_v2"
+        android:layout_width="match_parent"
+        android:layout_height="11dp"
+        android:background="@color/me_white"
+        android:visibility="gone" />
 </LinearLayout>
