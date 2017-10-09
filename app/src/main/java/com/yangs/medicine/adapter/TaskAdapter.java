@@ -47,6 +47,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> im
         holder.time.setText(lists.get(position).getTime());
         holder.content.setText(lists.get(position).getContent());
         holder.money.setText(lists.get(position).getMoney());
+        holder.v.setVisibility(View.VISIBLE);
         if ("我发布的".equals(type)) {
             if (lists.get(position).getFinish()) {
                 holder.ok.setText("已被接受");
@@ -109,6 +110,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> im
         TextView content;
         TextView money;
         TextView ok;
+        View v;
 
         public ViewHolder(View view) {
             super(view);
@@ -118,6 +120,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> im
             content = (TextView) view.findViewById(R.id.task_adapter_content);
             money = (TextView) view.findViewById(R.id.task_adapter_money);
             ok = (TextView) view.findViewById(R.id.task_adapter_ok);
+            v = view.findViewById(R.id.task_adapter_v);
         }
     }
 }

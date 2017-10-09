@@ -18,7 +18,7 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:text="教材"
-            android:textColor="@color/white"
+            android:textColor="@color/me_white"
             android:textSize="20sp" />
 
         <ImageView
@@ -47,6 +47,9 @@
                 android:id="@+id/book_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/topic_tab_lay4"
                 android:scrollbars="vertical"
                 android:visibility="gone" />
 

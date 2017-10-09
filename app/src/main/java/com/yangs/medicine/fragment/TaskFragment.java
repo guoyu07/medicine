@@ -61,8 +61,8 @@ public class TaskFragment extends LazyLoadFragment implements TaskAdapter.OnItem
         taskAdapter = new TaskAdapter(getContext(), lists, type);
         empty_tv = (TextView) mLay.findViewById(R.id.task_tv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(
-                getActivity(), DividerItemDecoration.VERTICAL));
+//        recyclerView.addItemDecoration(new DividerItemDecoration(
+//                getActivity(), DividerItemDecoration.VERTICAL));
         taskAdapter.setOnItemClickListener(this);
         srl.setColorSchemeColors(Color.CYAN, Color.GREEN, ContextCompat.getColor(getContext(),
                 R.color.colorPrimary));

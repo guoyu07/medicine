@@ -18,6 +18,8 @@
     <color name="gray7">#dfe5ec</color>
     <color name="orange">#eae1cb</color>
     <color name="tv_topic">#a5b6cc</color>
+    <color name="error_tv">#8897ac</color>
+    <color name="error_gray">#b9c7d8</color>
     <color name="topic_tv_search">#a2b4ca</color>
     <color name="tv_book1">#8897aa</color>
     <color name="tv_book2">#96a4b9</color>

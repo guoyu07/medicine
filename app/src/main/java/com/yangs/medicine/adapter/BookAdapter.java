@@ -42,6 +42,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> im
         holder.tv_time.setText(lists.get(position).getTime());
         holder.tv_summary.setText(lists.get(position).getSummary());
         holder.tv_count.setText(lists.get(position).getCount());
+        holder.v.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -69,6 +70,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> im
         TextView tv_time;
         TextView tv_summary;
         TextView tv_count;
+        View v;
 
         public ViewHolder(View view) {
             super(view);
@@ -77,6 +79,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> im
             tv_time = (TextView) view.findViewById(R.id.book_adapter_time);
             tv_summary = (TextView) view.findViewById(R.id.book_adapter_summary);
             tv_count = (TextView) view.findViewById(R.id.book_adapter_count);
+            v = view.findViewById(R.id.book_adapter_v);
         }
     }
 }

@@ -91,8 +91,8 @@ public class BookFragment extends LazyLoadFragment implements SwipeRefreshLayout
         bookAdapter = new BookAdapter(getContext(), list);
         bookAdapter.setOnItemClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(
-                getActivity(), DividerItemDecoration.VERTICAL));
+//        recyclerView.addItemDecoration(new DividerItemDecoration(
+//                getActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(bookAdapter);
         srl.setColorSchemeColors(Color.CYAN, Color.GREEN, ContextCompat.getColor(getContext(),
                 R.color.colorPrimary));

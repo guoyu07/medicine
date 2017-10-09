@@ -17,7 +17,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="错题集"
-            android:textColor="@color/white"
+            android:textColor="@color/me_white"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="今日复习"
-                android:textColor="@color/error_white1"
+                android:textColor="@color/me_white"
                 android:textSize="18sp" />
 
             <Button
@@ -42,7 +42,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="全部错题"
-                android:textColor="@color/error_white2"
+                android:textColor="@color/me_white"
                 android:textSize="18sp" />
         </LinearLayout>
 

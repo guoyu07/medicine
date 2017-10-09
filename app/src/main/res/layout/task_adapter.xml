@@ -20,7 +20,7 @@
             android:layout_height="40dp"
             android:layout_margin="5dp"
             fresco:placeholderImage="@drawable/img_zhangsan"
-            fresco:roundedCornerRadius="8dp" />
+            fresco:roundedCornerRadius="10dp" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -35,7 +35,7 @@
                 android:layout_height="25dp"
                 android:gravity="center_vertical"
                 android:text="Zhangsan"
-                android:textColor="@color/tv_book1"
+                android:textColor="@color/error_tv"
                 android:textSize="16sp" />
 
             <TextView
@@ -44,7 +44,7 @@
                 android:layout_height="25dp"
                 android:gravity="center_vertical"
                 android:text="2017.10.1  10:21"
-                android:textColor="@color/tv_book1"
+                android:textColor="@color/error_tv"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
@@ -59,7 +59,7 @@
         android:ellipsize="end"
         android:maxLines="6"
         android:text=""
-        android:textColor="@color/tv_book2"
+        android:textColor="@color/error_tv"
         android:textSize="16sp" />
 
     <LinearLayout
@@ -76,7 +76,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="金额:  "
-            android:textColor="@color/tv_book2"
+            android:textColor="@color/error_tv"
             android:textSize="16sp" />
 
         <TextView
@@ -102,4 +102,11 @@
             android:textColor="@color/white"
             android:textSize="14sp" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/task_adapter_v"
+        android:layout_width="match_parent"
+        android:layout_height="11dp"
+        android:background="@color/me_white"
+        android:visibility="gone" />
 </LinearLayout>

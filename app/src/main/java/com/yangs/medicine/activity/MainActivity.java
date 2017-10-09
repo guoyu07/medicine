@@ -1,5 +1,6 @@
 package com.yangs.medicine.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -107,11 +108,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             transaction.hide(meFragment);
         if (taskFragment != null)
             transaction.hide(taskFragment);
-        tab_tv_1.setTextColor(getResources().getColor(R.color.gray));
-        tab_tv_2.setTextColor(getResources().getColor(R.color.gray));
-        tab_tv_3.setTextColor(getResources().getColor(R.color.gray));
-        tab_tv_4.setTextColor(getResources().getColor(R.color.gray));
-        tab_tv_5.setTextColor(getResources().getColor(R.color.gray));
+        tab_tv_1.setTextColor(Color.rgb(162, 180, 202));
+        tab_tv_2.setTextColor(Color.rgb(162, 180, 202));
+        tab_tv_3.setTextColor(Color.rgb(162, 180, 202));
+        tab_tv_4.setTextColor(Color.rgb(162, 180, 202));
+        tab_tv_5.setTextColor(Color.rgb(162, 180, 202));
         tab_iv_1.setBackgroundResource(R.drawable.tabbar_icon_tiji_default);
         tab_iv_2.setBackgroundResource(R.drawable.tabbar_icon_cuotiji_default);
         tab_iv_3.setBackgroundResource(R.drawable.tabbar_icon_jiaocai_default);
@@ -125,7 +126,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     transaction.show(topicFragment);
                 }
-                tab_tv_1.setTextColor(getResources().getColor(R.color.blue));
+                tab_tv_1.setTextColor(Color.rgb(81, 151, 252));
                 tab_iv_1.setBackgroundResource(R.drawable.tabbar_icon_tiji_selected);
                 break;
             case 2:
@@ -135,7 +136,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     transaction.show(errorFragment);
                 }
-                tab_tv_2.setTextColor(getResources().getColor(R.color.blue));
+                tab_tv_2.setTextColor(Color.rgb(81, 151, 252));
                 tab_iv_2.setBackgroundResource(R.drawable.tabbar_icon_cuotiji_selected);
                 break;
             case 3:
@@ -145,7 +146,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     transaction.show(bookFragment);
                 }
-                tab_tv_3.setTextColor(getResources().getColor(R.color.blue));
+                tab_tv_3.setTextColor(Color.rgb(81, 151, 252));
                 tab_iv_3.setBackgroundResource(R.drawable.tabbar_icon_jiaocaii_selected);
                 break;
             case 4:
@@ -155,7 +156,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     transaction.show(taskFragment);
                 }
-                tab_tv_4.setTextColor(getResources().getColor(R.color.blue));
+                tab_tv_4.setTextColor(Color.rgb(81, 151, 252));
                 tab_iv_4.setBackgroundResource(R.drawable.tabbar_icon_renwu_selected);
                 break;
             case 5:
@@ -165,7 +166,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     transaction.show(meFragment);
                 }
-                tab_tv_5.setTextColor(getResources().getColor(R.color.blue));
+                tab_tv_5.setTextColor(Color.rgb(81, 151, 252));
                 tab_iv_5.setBackgroundResource(R.drawable.tabbar_icon_wode_selected);
                 break;
         }

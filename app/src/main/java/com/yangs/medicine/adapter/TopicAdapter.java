@@ -45,7 +45,8 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
         holder.itemView.setTag(position);
         holder.tv_1.setText(list.get(position).getIndex());
         holder.tv_2.setText(list.get(position).getName());
-        holder.v.setVisibility(View.VISIBLE);
+        if (position != list.size() - 1)
+            holder.v.setVisibility(View.VISIBLE);
         if (list.get(position).getLock().equals("lock")) {
             holder.iv.setBackgroundResource(R.drawable.icon_suo);
             holder.tv_3.setVisibility(View.VISIBLE);

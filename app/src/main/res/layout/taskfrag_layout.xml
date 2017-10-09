@@ -19,7 +19,9 @@
                 android:id="@+id/task_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/topic_tab_lay4"
                 android:scrollbars="vertical" />
 
             <TextView
@@ -39,9 +41,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_margin="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="25dp"
         android:src="@drawable/ic_edit_white_24dp"
-        android:visibility="gone"
+        android:visibility="visible"
         fab:fab_colorNormal="@color/yellow"
         fab:fab_colorPressed="@color/yellow_press" />
 
