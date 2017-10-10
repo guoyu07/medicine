@@ -31,7 +31,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
-                    android:background="@drawable/topic_tab_lay3"
+                    android:background="@drawable/topic_tab_lay2"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -94,7 +94,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
-            android:background="@drawable/topic_tab_lay4" />
+            android:background="@drawable/topic_tab_lay1"/>
     </LinearLayout>
 
 </LinearLayout>

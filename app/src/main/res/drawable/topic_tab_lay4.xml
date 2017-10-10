@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="2dp" />
-    <solid android:color="@color/white" />
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--点击状态-->
+    <item android:state_pressed="true">
+        <shape>
+            <corners android:radius="5dp" />
+            <solid android:color="#DCDCDC" />
+        </shape>
+    </item>
+    <!--默认状态-->
+    <item>
+        <shape>
+            <corners android:radius="5dp" />
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+</selector>
