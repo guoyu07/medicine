@@ -49,7 +49,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/topic_tab_lay1"
+                android:background="@drawable/selector_2dp_white"
                 android:visibility="gone" />
 
             <TextView

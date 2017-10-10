@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.APPlication;
-import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.TaskList;
 
 import java.util.List;
@@ -51,21 +50,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> im
         if ("我发布的".equals(type)) {
             if (lists.get(position).getFinish()) {
                 holder.ok.setText("已被接受");
-                holder.ok.setBackgroundResource(R.drawable.topic_tab_lay_blue);
+                holder.ok.setBackgroundResource(R.drawable.task_selector_blue);
                 holder.ok.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             } else {
                 holder.ok.setText("未被接受");
-                holder.ok.setBackgroundResource(R.drawable.topic_tab_lay_red);
+                holder.ok.setBackgroundResource(R.drawable.task_selector_red);
                 holder.ok.setTextColor(ContextCompat.getColor(context, R.color.red));
             }
         } else if ("我接受的".equals(type)) {
             if (lists.get(position).getFinish()) {
                 holder.ok.setText("已完成");
-                holder.ok.setBackgroundResource(R.drawable.topic_tab_lay_blue);
+                holder.ok.setBackgroundResource(R.drawable.task_selector_blue);
                 holder.ok.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             } else {
                 holder.ok.setText("未完成");
-                holder.ok.setBackgroundResource(R.drawable.topic_tab_lay_red);
+                holder.ok.setBackgroundResource(R.drawable.task_selector_red);
                 holder.ok.setTextColor(ContextCompat.getColor(context, R.color.red));
             }
         } else {

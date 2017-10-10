@@ -90,7 +90,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/topic_tab_lay2"
+                    android:background="@drawable/ques_selector_bottom"
                     android:gravity="center"
                     android:orientation="horizontal">
 

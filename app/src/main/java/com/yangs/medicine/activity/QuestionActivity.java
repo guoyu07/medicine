@@ -12,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.yangs.medicine.R;
-import com.yangs.medicine.adapter.TitleBuilder;
-import com.yangs.medicine.fragment.QuestionFragment;
+import com.yangs.medicine.question.AskQuesFragment;
+import com.yangs.medicine.question.BlankQuesFragment;
+import com.yangs.medicine.question.CheckQuesFragment;
 import com.yangs.medicine.question.ChooseQuesFragment;
+import com.yangs.medicine.question.ExplainQuesFragment;
 import com.yangs.medicine.util.FitStatusBar;
 
 import java.util.ArrayList;
@@ -35,8 +37,10 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private ViewPager viewPager;
     private List<Fragment> list;
     private ChooseQuesFragment chooseQuesFragment1;
-    private ChooseQuesFragment chooseQuesFragment2;
-    private ChooseQuesFragment chooseQuesFragment3;
+    private CheckQuesFragment checkQuesFragment;
+    private BlankQuesFragment blankQuesFragment;
+    private ExplainQuesFragment explainQuesFragment;
+    private AskQuesFragment askQuesFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +49,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         FitStatusBar.addStatusBarView(this);
         initView();
         initData();
+        viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -77,10 +82,14 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         list = new ArrayList<>();
         chooseQuesFragment1 = new ChooseQuesFragment();
         list.add(chooseQuesFragment1);
-        chooseQuesFragment2 = new ChooseQuesFragment();
-        list.add(chooseQuesFragment2);
-        chooseQuesFragment3 = new ChooseQuesFragment();
-        list.add(chooseQuesFragment3);
+        checkQuesFragment = new CheckQuesFragment();
+        list.add(checkQuesFragment);
+        blankQuesFragment = new BlankQuesFragment();
+        list.add(blankQuesFragment);
+        explainQuesFragment = new ExplainQuesFragment();
+        list.add(explainQuesFragment);
+        askQuesFragment = new AskQuesFragment();
+        list.add(askQuesFragment);
     }
 
     private void initView() {
@@ -117,9 +126,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 if (viewPager.getCurrentItem() == 0)
                     chooseQuesFragment1.checkOK();
                 if (viewPager.getCurrentItem() == 1)
-                    chooseQuesFragment2.checkOK();
-                if (viewPager.getCurrentItem() == 2)
-                    chooseQuesFragment3.checkOK();
+                    checkQuesFragment.checkOK();
                 break;
             case R.id.questionactivity_ll:
                 APPlication.showToast("评论", 0);

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/me_white"
-    android:orientation="vertical">
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,14 +19,14 @@
             android:layout_height="wrap_content"
             android:text="12: 休克时正确的补液原则是 (  )"
             android:textColor="@color/error_tv"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="30dp"
             android:orientation="vertical">
 
@@ -36,15 +36,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/topic_tab_lay3"
+                android:background="@drawable/selector_white_7dp"
                 android:clickable="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/choosequesfrag_ll_A_1"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/topic_tab_lay3"
+                    android:background="@drawable/selector_white_7dp"
                     android:gravity="center"
                     android:text="A"
                     android:textColor="@color/error_tv"
@@ -53,7 +53,7 @@
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_A_2"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_blue"
                     android:gravity="center"
@@ -67,7 +67,7 @@
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_A_3"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_red"
                     android:gravity="center"
@@ -80,7 +80,7 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_width="3dp"
+                    android:layout_width="4dp"
                     android:layout_height="match_parent"
                     android:background="@color/me_white" />
 
@@ -91,7 +91,7 @@
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
-                    android:text="需多少，补多少"
+                    android:text="补液 宁多勿少"
                     android:textColor="@color/error_tv"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -101,13 +101,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/topic_tab_lay3"
+                android:background="@drawable/selector_white_7dp"
                 android:clickable="true"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_B_2"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_blue"
                     android:gravity="center"
@@ -121,9 +121,9 @@
 
                 <TextView
                     android:id="@+id/choosequesfrag_ll_B_1"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/topic_tab_lay3"
+                    android:background="@drawable/selector_white_7dp"
                     android:gravity="center"
                     android:text="B"
                     android:textColor="@color/error_tv"
@@ -132,7 +132,7 @@
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_B_3"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_red"
                     android:gravity="center"
@@ -145,7 +145,7 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_width="3dp"
+                    android:layout_width="4dp"
                     android:layout_height="match_parent"
                     android:background="@color/me_white" />
 
@@ -166,13 +166,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/topic_tab_lay3"
+                android:background="@drawable/selector_white_7dp"
                 android:clickable="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/choosequesfrag_ll_C_1"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="C"
@@ -182,7 +182,7 @@
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_C_2"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_blue"
                     android:gravity="center"
@@ -196,7 +196,7 @@
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_C_3"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_red"
                     android:gravity="center"
@@ -209,7 +209,7 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_width="3dp"
+                    android:layout_width="4dp"
                     android:layout_height="match_parent"
                     android:background="@color/me_white" />
 
@@ -219,9 +219,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:background="@drawable/topic_tab_lay3"
+                    android:background="@drawable/selector_white_7dp"
                     android:gravity="left|center_vertical"
-                    android:text="需多少，补多少"
+                    android:text="补充丧失的部分液体和当天继续丧失的液体"
                     android:textColor="@color/error_tv"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -231,15 +231,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/topic_tab_lay3"
+                android:background="@drawable/selector_white_7dp"
                 android:clickable="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/choosequesfrag_ll_D_1"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/topic_tab_lay3"
+                    android:background="@drawable/selector_white_7dp"
                     android:gravity="center"
                     android:text="D"
                     android:textColor="@color/error_tv"
@@ -248,7 +248,7 @@
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_D_2"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_blue"
                     android:gravity="center"
@@ -262,7 +262,7 @@
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_D_3"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_red"
                     android:gravity="center"
@@ -275,7 +275,7 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_width="3dp"
+                    android:layout_width="4dp"
                     android:layout_height="match_parent"
                     android:background="@color/me_white" />
 
@@ -286,7 +286,7 @@
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
-                    android:text="需多少，补多少"
+                    android:text="失多少，补多少"
                     android:textColor="@color/error_tv"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -296,13 +296,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/topic_tab_lay3"
+                android:background="@drawable/selector_white_7dp"
                 android:clickable="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/choosequesfrag_ll_E_1"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="E"
@@ -312,7 +312,7 @@
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_E_2"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_blue"
                     android:gravity="center"
@@ -326,7 +326,7 @@
 
                 <LinearLayout
                     android:id="@+id/choosequesfrag_ll_E_3"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/ll_chooseques_red"
                     android:gravity="center"
@@ -339,7 +339,7 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_width="3dp"
+                    android:layout_width="4dp"
                     android:layout_height="match_parent"
                     android:background="@color/me_white" />
 
@@ -349,9 +349,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:background="@drawable/topic_tab_lay3"
+                    android:background="@drawable/selector_white_7dp"
                     android:gravity="left|center_vertical"
-                    android:text="需多少，补多少"
+                    android:text="如血压正常不必补液"
                     android:textColor="@color/error_tv"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -371,7 +371,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="解析:"
                 android:textColor="@color/error_tv"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/choosequesfrag_ll_jiexi2"
@@ -381,8 +381,7 @@
                 android:layout_marginRight="18dp"
                 android:text="休克时正确的补液原则是：需多少，补多少。所谓需多少应包含：向体外丧失的部分体液；血管床容量扩大的部分；微循环淤滞的部分以及血浆外渗的部分。"
                 android:textColor="@color/error_tv"
-                android:textSize="16sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

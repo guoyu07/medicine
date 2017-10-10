@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/explain_adapter_ll_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_white_5dp_press">
+
+        <TextView
+            android:id="@+id/explain_adapter_ques"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="25dp"
+            android:text="问题"
+            android:textColor="@color/error_tv"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/explain_adapter_v"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/me_white" />
+
+</LinearLayout>
