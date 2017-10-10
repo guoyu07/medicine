@@ -113,7 +113,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@color/white"
         android:gravity="center"
         android:text="退出登录"
