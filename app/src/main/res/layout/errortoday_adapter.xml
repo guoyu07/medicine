@@ -8,8 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
@@ -48,16 +46,17 @@
             android:layout_width="27dp"
             android:layout_height="27dp"
             android:layout_gravity="center"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="5dp" />
 
         <TextView
             android:id="@+id/errortoday_adapter_tv_3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
             android:layout_marginRight="10dp"
+            android:background="@drawable/error_selector_tvnumber"
             android:gravity="center"
             android:text="1"
-            android:textColor="@color/red"
+            android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>
 
