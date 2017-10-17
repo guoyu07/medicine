@@ -1,28 +1,26 @@
 package com.yangs.medicine.model;
 
-import java.util.List;
-
 /**
- * Created by yangs on 2017/10/16 0016.
+ * Created by yangs on 2017/10/12 0012.
  */
 
 public class TimuList {
-    private String type = "";     //是否为标题
-    private List<TimuDialogList> lists;
+    private int index;          //序号
+    private String status;      //状态 :  对,错,没做
 
-    public String getType() {
-        return type;
+    public int getIndex() {
+        return index;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
-    public List<TimuDialogList> getLists() {
-        return lists;
+    public String getStatus() {
+        return status;
     }
 
-    public void setLists(List<TimuDialogList> lists) {
-        this.lists = lists;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

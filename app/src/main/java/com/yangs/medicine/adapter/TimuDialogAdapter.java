@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.APPlication;
-import com.yangs.medicine.model.TimuDialogList;
 import com.yangs.medicine.model.TimuList;
+import com.yangs.medicine.model.TimuDialogList;
 
 import java.util.List;
 
@@ -20,10 +20,10 @@ import java.util.List;
  */
 
 public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<TimuList> timuList;
+    private List<TimuDialogList> timuList;
     private Context context;
 
-    public TimuDialogAdapter(List<TimuList> timuList, Context context) {
+    public TimuDialogAdapter(List<TimuDialogList> timuList, Context context) {
         this.timuList = timuList;
         this.context = context;
     }
@@ -51,7 +51,7 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolder) {
             ViewHolder v = (ViewHolder) holder;
-            List<TimuDialogList> list = timuList.get(position).getLists();
+            List<TimuList> list = timuList.get(position).getLists();
             for (int i = 0; i < list.size(); i++) {
                 switch (i) {
                     case 0:
@@ -85,7 +85,7 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public void setTimu(TextView tv, final TimuDialogList tdl) {
+    public void setTimu(TextView tv, final TimuList tdl) {
         tv.setVisibility(View.VISIBLE);
         tv.setText(tdl.getIndex() + "");
         tv.setOnClickListener(new View.OnClickListener() {
