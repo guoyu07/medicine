@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="忘记密码?"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/gray9"
                     android:textSize="16sp" />
 
                 <View
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="注册账号?"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/blue6"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -146,7 +146,7 @@
                     android:layout_height="1px"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@color/gray" />
+                    android:background="@color/gray10" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -155,14 +155,14 @@
                     android:layout_marginRight="15dp"
                     android:gravity="center"
                     android:text="第三方快速登录"
-                    android:textColor="@color/gray5" />
+                    android:textColor="@color/gray11" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1px"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@color/gray" />
+                    android:background="@color/gray10" />
             </LinearLayout>
 
             <LinearLayout

@@ -88,7 +88,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     public void run() {
                         if (dialog.isShowing())
                             dialog.dismiss();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        APPlication.save.edit().putBoolean("login_status", true).apply();
+                        startActivity(new Intent(LoginActivity.this, SelectSubActivity.class));
                         finish();
                     }
                 }, 1500);

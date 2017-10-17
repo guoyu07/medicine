@@ -13,10 +13,13 @@
     <color name="gray">#7c7777</color>
     <color name="gray3">#3e3c3c</color>
     <color name="gray4">#f2f7fe</color>
-    <color name="gray5">#c6c6c6</color>
+    <color name="gray5">#c3c3c3</color>
     <color name="gray6">#dcdcdc</color>
     <color name="gray7">#dfe5ec</color>
     <color name="gray8">#b9c7d8</color>
+    <color name="gray9">#969696</color>
+    <color name="gray10">#d8d8d8</color>
+    <color name="gray11">#969696</color>
     <color name="orange">#eae1cb</color>
     <color name="tv_topic">#a5b6cc</color>
     <color name="error_tv">#8897ac</color>
@@ -32,4 +35,7 @@
     <color name="blue">#5197FC</color>
     <color name="blue2">#5c9af7</color>
     <color name="blue3">#76a5ee</color>
+    <color name="blue4">#8abaff</color>
+    <color name="blue5">#5296fb</color>
+    <color name="blue6">#3a89fc</color>
 </resources>
