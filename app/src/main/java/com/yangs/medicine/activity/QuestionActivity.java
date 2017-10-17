@@ -98,12 +98,19 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void run() {
                 isInitOk = false;
+                initTitle();
                 initChoose();
                 initBlank();
                 initCheck();
                 isInitOk = true;
             }
         }).start();
+    }
+
+    private void initTitle() {
+        TimuDialogList timuDialogList = new TimuDialogList();
+        timuDialogList.setType("生理学 第一章");
+        timudialog_list.add(timuDialogList);
     }
 
     /*
@@ -287,7 +294,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.questionactivity_iv_timu:
                 if (!isInitOk) {
-                    APPlication.showToast("题目为初始化完成", 0);
+                    APPlication.showToast("题目未初始化完成", 0);
                     return;
                 }
                 if (timuDialog == null) {
@@ -309,7 +316,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                     dialogWindow.setWindowAnimations(R.style.dialogstyle);
                     WindowManager.LayoutParams lp = dialogWindow.getAttributes();
                     lp.x = 0;
-                    lp.y = -20;
+                    lp.y = 0;
                     lp.width = getResources().getDisplayMetrics().widthPixels;
                     timuDialog_ll.measure(0, 0);
                     lp.height = timuDialog_ll.getMeasuredHeight();

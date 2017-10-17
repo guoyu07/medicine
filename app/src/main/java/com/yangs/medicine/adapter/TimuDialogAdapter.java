@@ -30,10 +30,14 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
-        if ("".equals(timuList.get(position).getType()))
-            return 0;
-        else
-            return 1;//head title
+        if ("".equals(timuList.get(position).getType())) {
+            return 0;           //题
+        } else {
+            if (timuList.get(position).getType().contains("章"))
+                return 1;       //章节
+            else
+                return 2;       //题型
+        }
     }
 
     @Override
@@ -81,7 +85,15 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             }
         } else if (holder instanceof HeadViewHolder) {
-            ((HeadViewHolder) holder).head_tv.setText(timuList.get(position).getType());
+            HeadViewHolder holder1 = (HeadViewHolder) holder;
+            String s = timuList.get(position).getType();
+            if (s.contains("章")) {
+                holder1.head_tv_left.setVisibility(View.VISIBLE);
+                holder1.head_tv_left.setText(s);
+            } else {
+                holder1.head_tv_center.setVisibility(View.VISIBLE);
+                holder1.head_tv_center.setText(s);
+            }
         }
     }
 
@@ -139,11 +151,13 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     class HeadViewHolder extends RecyclerView.ViewHolder {
-        TextView head_tv;
+        TextView head_tv_left;
+        TextView head_tv_center;
 
         HeadViewHolder(View view) {
             super(view);
-            head_tv = (TextView) view.findViewById(R.id.timudialog_adapter_head_tv);
+            head_tv_left = (TextView) view.findViewById(R.id.timudialog_adapter_head_left);
+            head_tv_center = (TextView) view.findViewById(R.id.timudialog_adapter_head_center);
         }
     }
 }
