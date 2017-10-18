@@ -386,6 +386,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         if (timuDialog != null) {
             timuDialog.cancel();
         }
+
         viewPager.setCurrentItem(1, false);
     }
 
