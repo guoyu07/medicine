@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import com.yangs.medicine.R;
 import com.yangs.medicine.adapter.TimuDialogAdapter;
 import com.yangs.medicine.fragment.TestFragment;
+import com.yangs.medicine.model.ChooseList;
 import com.yangs.medicine.model.TimuList;
 import com.yangs.medicine.model.TimuDialogList;
 import com.yangs.medicine.question.AskQuesFragment;
@@ -55,6 +56,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private Dialog timuDialog;
     private DialogOnClickListener timuListener;
     private List<TimuDialogList> timudialog_list;
+    private List<ChooseList> chooseLists;
     private Boolean isInitOk = false;
     private int currentPosition;
     private int ti_index = 1;
@@ -95,20 +97,20 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                     if (currentPosition == viewPager.getAdapter().getCount() - 1) {
                         ti_index++;
                         ((ChooseQuesFragment) frag_list.get(0))
-                                .updateQuestion((ti_index - 1) + "", "A", "B", "C", "D", "E", "无");
+                                .updateQuestion(chooseLists.get(ti_index));
                         ((ChooseQuesFragment) frag_list.get(1))
-                                .updateQuestion(ti_index + "", "A", "B", "C", "D", "E", "无");
+                                .updateQuestion(chooseLists.get(ti_index-1));
                         ((ChooseQuesFragment) frag_list.get(2))
-                                .updateQuestion((ti_index + 1) + "", "A", "B", "C", "D", "E", "无");
+                                .updateQuestion(chooseLists.get(ti_index));
                         viewPager.setCurrentItem(1, false);
                     } else if (currentPosition == 0) {
                         ti_index--;
                         ((ChooseQuesFragment) frag_list.get(0))
-                                .updateQuestion((ti_index - 1) + "", "A", "B", "C", "D", "E", "无");
+                                .updateQuestion(chooseLists.get(ti_index));
                         ((ChooseQuesFragment) frag_list.get(1))
-                                .updateQuestion(ti_index + "", "A", "B", "C", "D", "E", "无");
+                                .updateQuestion(chooseLists.get(ti_index-1));
                         ((ChooseQuesFragment) frag_list.get(2))
-                                .updateQuestion((ti_index + 1) + "", "A", "B", "C", "D", "E", "无");
+                                .updateQuestion(chooseLists.get(ti_index));
                         viewPager.setCurrentItem(viewPager.getAdapter().getCount() - 2, false);
                     }
                 }
@@ -137,35 +139,41 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         timudialog_list = new ArrayList<>();
         Bundle bundle = new Bundle();
         chooseQuesFragment = new ChooseQuesFragment();
-        bundle.putString("question", "0");
-        bundle.putString("A", "A");
-        bundle.putString("B", "B");
-        bundle.putString("C", "C");
-        bundle.putString("D", "D");
-        bundle.putString("E", "E");
-        bundle.putString("explain", "无");
+        ChooseList chooseList = new ChooseList();
+        chooseList.setQuestion("0.XXX");
+        chooseList.setA("A");
+        chooseList.setB("B");
+        chooseList.setC("C");
+        chooseList.setD("D");
+        chooseList.setE("E");
+        chooseList.setExplain("无");
+        bundle.putSerializable("question", chooseList);
         chooseQuesFragment.setArguments(bundle);
         frag_list.add(chooseQuesFragment);
         chooseQuesFragment = new ChooseQuesFragment();
         bundle = new Bundle();
-        bundle.putString("question", "1");
-        bundle.putString("A", "A");
-        bundle.putString("B", "B");
-        bundle.putString("C", "C");
-        bundle.putString("D", "D");
-        bundle.putString("E", "E");
-        bundle.putString("explain", "无");
+        chooseList = new ChooseList();
+        chooseList.setQuestion("1.XXX");
+        chooseList.setA("A");
+        chooseList.setB("B");
+        chooseList.setC("C");
+        chooseList.setD("D");
+        chooseList.setE("E");
+        chooseList.setExplain("无");
+        bundle.putSerializable("question", chooseList);
         chooseQuesFragment.setArguments(bundle);
         frag_list.add(chooseQuesFragment);
         chooseQuesFragment = new ChooseQuesFragment();
         bundle = new Bundle();
-        bundle.putString("question", "2");
-        bundle.putString("A", "A");
-        bundle.putString("B", "B");
-        bundle.putString("C", "C");
-        bundle.putString("D", "D");
-        bundle.putString("E", "E");
-        bundle.putString("explain", "无");
+        chooseList = new ChooseList();
+        chooseList.setQuestion("2.XXX");
+        chooseList.setA("A");
+        chooseList.setB("B");
+        chooseList.setC("C");
+        chooseList.setD("D");
+        chooseList.setE("E");
+        chooseList.setExplain("无");
+        bundle.putSerializable("question", chooseList);
         chooseQuesFragment.setArguments(bundle);
         frag_list.add(chooseQuesFragment);
     }
@@ -308,6 +316,18 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         timuDialogList = new TimuDialogList();
         timuDialogList.setLists(list_8);
         timudialog_list.add(timuDialogList);
+        chooseLists = new ArrayList<>();
+        for (int i = 1; i <= 20; i++) {
+            ChooseList chooseList = new ChooseList();
+            chooseList.setQuestion(i + ".XXX");
+            chooseList.setA("A");
+            chooseList.setB("B");
+            chooseList.setC("C");
+            chooseList.setD("D");
+            chooseList.setE("E");
+            chooseList.setExplain("无");
+            chooseLists.add(chooseList);
+        }
     }
 
     @Override
@@ -378,15 +398,14 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     public void timuOnClick(int index) {
         ti_index = index;
         ((ChooseQuesFragment) frag_list.get(0))
-                .updateQuestion((ti_index - 1) + "", "A", "B", "C", "D", "E", "无");
+                .updateQuestion(chooseLists.get(ti_index));
         ((ChooseQuesFragment) frag_list.get(1))
-                .updateQuestion(ti_index + "", "A", "B", "C", "D", "E", "无");
+                .updateQuestion(chooseLists.get(ti_index-1));
         ((ChooseQuesFragment) frag_list.get(2))
-                .updateQuestion((ti_index + 1) + "", "A", "B", "C", "D", "E", "无");
+                .updateQuestion(chooseLists.get(ti_index));
         if (timuDialog != null) {
             timuDialog.cancel();
         }
-
         viewPager.setCurrentItem(1, false);
     }
 

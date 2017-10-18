@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.fragment.LazyLoadFragment;
+import com.yangs.medicine.model.ChooseList;
 
 /**
  * Created by yangs on 2017/10/10 0010.
@@ -99,14 +100,8 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_C.setOnClickListener(this);
         ll_D.setOnClickListener(this);
         ll_E.setOnClickListener(this);
-        Bundle bundle = getArguments();
-        tv_ques.setText(bundle.getString("question"));
-        ll_A_4.setText(bundle.getString("A"));
-        ll_B_4.setText(bundle.getString("B"));
-        ll_C_4.setText(bundle.getString("C"));
-        ll_D_4.setText(bundle.getString("D"));
-        ll_E_4.setText(bundle.getString("E"));
-        ll_jiexi2.setText(bundle.getString("explain"));
+        ChooseList chooseList = (ChooseList) getArguments().getSerializable("question");
+        updateQuestion(chooseList);
     }
 
     private int b = 0;
@@ -155,14 +150,14 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    public void updateQuestion(String s, String a, String b, String c, String d, String e, String ex) {
-        tv_ques.setText(s);
-        ll_A_4.setText(a);
-        ll_B_4.setText(b);
-        ll_C_4.setText(c);
-        ll_D_4.setText(d);
-        ll_E_4.setText(e);
-        ll_jiexi2.setText(ex);
+    public void updateQuestion(ChooseList chooseList) {
+        tv_ques.setText(chooseList.getQuestion());
+        ll_A_4.setText(chooseList.getA());
+        ll_B_4.setText(chooseList.getB());
+        ll_C_4.setText(chooseList.getC());
+        ll_D_4.setText(chooseList.getD());
+        ll_E_4.setText(chooseList.getE());
+        ll_jiexi2.setText(chooseList.getExplain());
     }
 
     private void reset() {
