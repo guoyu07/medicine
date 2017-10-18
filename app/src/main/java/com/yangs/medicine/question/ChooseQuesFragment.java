@@ -1,7 +1,12 @@
 package com.yangs.medicine.question;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,10 +19,10 @@ import com.yangs.medicine.fragment.LazyLoadFragment;
  * 复杂界面,后期模块化
  */
 
-public class ChooseQuesFragment extends LazyLoadFragment implements View.OnClickListener {
+public class ChooseQuesFragment extends Fragment implements View.OnClickListener {
     private View mLay;
     //问题
-    private TextView tv_ques;
+    public TextView tv_ques;
     //A选项
     private LinearLayout ll_A;
     private TextView ll_A_1;
@@ -52,23 +57,15 @@ public class ChooseQuesFragment extends LazyLoadFragment implements View.OnClick
     private LinearLayout ll_jiexi;
     private TextView ll_jiexi2;
 
+    @Nullable
     @Override
-    protected int setContentView() {
-        return R.layout.choosequesfrgament;
-    }
-
-    @Override
-    protected void lazyLoad() {
-        if (isInit) {
-            if (!isLoad) {
-                initView();
-            }
-        }
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mLay = inflater.inflate(R.layout.choosequesfrgament, container, false);
+        initView();
+        return mLay;
     }
 
     private void initView() {
-        mLay = getContentView();
         tv_ques = (TextView) mLay.findViewById(R.id.choosequesfrag_tv_ques);
         ll_A = (LinearLayout) mLay.findViewById(R.id.choosequesfrag_ll_A);
         ll_B = (LinearLayout) mLay.findViewById(R.id.choosequesfrag_ll_B);
@@ -102,6 +99,14 @@ public class ChooseQuesFragment extends LazyLoadFragment implements View.OnClick
         ll_C.setOnClickListener(this);
         ll_D.setOnClickListener(this);
         ll_E.setOnClickListener(this);
+        Bundle bundle = getArguments();
+        tv_ques.setText(bundle.getString("question"));
+        ll_A_4.setText(bundle.getString("A"));
+        ll_B_4.setText(bundle.getString("B"));
+        ll_C_4.setText(bundle.getString("C"));
+        ll_D_4.setText(bundle.getString("D"));
+        ll_E_4.setText(bundle.getString("E"));
+        ll_jiexi2.setText(bundle.getString("explain"));
     }
 
     private int b = 0;
@@ -148,6 +153,16 @@ public class ChooseQuesFragment extends LazyLoadFragment implements View.OnClick
                 break;
 
         }
+    }
+
+    public void updateQuestion(String s, String a, String b, String c, String d, String e, String ex) {
+        tv_ques.setText(s);
+        ll_A_4.setText(a);
+        ll_B_4.setText(b);
+        ll_C_4.setText(c);
+        ll_D_4.setText(d);
+        ll_E_4.setText(e);
+        ll_jiexi2.setText(ex);
     }
 
     private void reset() {

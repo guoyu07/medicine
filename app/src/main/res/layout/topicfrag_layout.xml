@@ -30,7 +30,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="7"
+                    android:layout_weight="6"
                     android:background="@drawable/ques_selector_bottom"
                     android:orientation="horizontal">
 
@@ -91,10 +91,10 @@
             android:id="@+id/topic_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="15dp"
-            android:background="@drawable/selector_2dp_white"/>
+            android:background="@drawable/selector_2dp_white" />
     </LinearLayout>
 
 </LinearLayout>

@@ -22,6 +22,7 @@ import java.util.List;
 public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<TimuDialogList> timuList;
     private Context context;
+    private TimuOnClickListener timuOnClickListener;
 
     public TimuDialogAdapter(List<TimuDialogList> timuList, Context context) {
         this.timuList = timuList;
@@ -97,13 +98,21 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
+    public void setTimuOnClickListener(TimuOnClickListener timuOnClickListener) {
+        this.timuOnClickListener = timuOnClickListener;
+    }
+
+    public interface TimuOnClickListener {
+        void timuOnClick(int index);
+    }
+
     public void setTimu(TextView tv, final TimuList tdl) {
         tv.setVisibility(View.VISIBLE);
         tv.setText(tdl.getIndex() + "");
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                APPlication.showToast(tdl.getIndex() + "", 0);
+                timuOnClickListener.timuOnClick(tdl.getIndex());
             }
         });
         switch (tdl.getStatus()) {
