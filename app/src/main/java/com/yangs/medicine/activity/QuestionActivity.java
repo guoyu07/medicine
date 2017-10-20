@@ -311,8 +311,8 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void timuOnClick(int index) {
-        viewPager.setCurrentItem(timuLists.get(index - 1).getFragIndex(), false);
+    public void timuOnClick(TimuList timuList) {
+        viewPager.setCurrentItem(timuList.getFragIndex(), false);
         if (timuDialog != null) {
             timuDialog.cancel();
         }

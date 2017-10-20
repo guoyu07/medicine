@@ -73,7 +73,7 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder1.tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    timuOnClickListener.timuOnClick(timu.getIndex());
+                    timuOnClickListener.timuOnClick(timu);
                 }
             });
         } else if (holder instanceof HeadViewHolder) {
@@ -94,7 +94,7 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public interface TimuOnClickListener {
-        void timuOnClick(int index);
+        void timuOnClick(TimuList timuList);
     }
 
     @Override
