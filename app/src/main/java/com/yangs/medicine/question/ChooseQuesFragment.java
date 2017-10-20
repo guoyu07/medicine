@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.yangs.medicine.R;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ChooseList;
+import com.yangs.medicine.model.TimuList;
 
 /**
  * Created by yangs on 2017/10/10 0010.
@@ -20,7 +21,7 @@ import com.yangs.medicine.model.ChooseList;
  * 复杂界面,后期模块化
  */
 
-public class ChooseQuesFragment extends Fragment implements View.OnClickListener {
+public class ChooseQuesFragment extends LazyLoadFragment implements View.OnClickListener {
     private View mLay;
     //问题
     public TextView tv_ques;
@@ -58,12 +59,19 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private LinearLayout ll_jiexi;
     private TextView ll_jiexi2;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mLay = inflater.inflate(R.layout.choosequesfrgament, container, false);
-        initView();
-        return mLay;
+    protected int setContentView() {
+        return R.layout.choosequesfrgament;
+    }
+
+    @Override
+    protected void lazyLoad() {
+        if (isInit) {
+            if (!isLoad) {
+                initView();
+            }
+        }
+
     }
 
     private void initView() {
@@ -100,8 +108,10 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_C.setOnClickListener(this);
         ll_D.setOnClickListener(this);
         ll_E.setOnClickListener(this);
-        ChooseList chooseList = (ChooseList) getArguments().getSerializable("question");
-        updateQuestion(chooseList);
+        if (getArguments() != null) {
+            TimuList timuList = (TimuList) getArguments().getSerializable("question");
+            updateQuestion(timuList);
+        }
     }
 
     private int b = 0;
@@ -150,14 +160,14 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    public void updateQuestion(ChooseList chooseList) {
-        tv_ques.setText(chooseList.getQuestion());
-        ll_A_4.setText(chooseList.getA());
-        ll_B_4.setText(chooseList.getB());
-        ll_C_4.setText(chooseList.getC());
-        ll_D_4.setText(chooseList.getD());
-        ll_E_4.setText(chooseList.getE());
-        ll_jiexi2.setText(chooseList.getExplain());
+    public void updateQuestion(TimuList timuList) {
+        tv_ques.setText(timuList.getIndex() + ".问题");
+        ll_A_4.setText("无");
+        ll_B_4.setText("无");
+        ll_C_4.setText("无");
+        ll_D_4.setText("无");
+        ll_E_4.setText("无");
+        ll_jiexi2.setText("无");
     }
 
     private void reset() {

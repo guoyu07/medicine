@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yangs.medicine.R;
-import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.model.TimuList;
-import com.yangs.medicine.model.TimuDialogList;
 
 import java.util.List;
 
@@ -20,11 +18,11 @@ import java.util.List;
  */
 
 public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<TimuDialogList> timuList;
+    private List<TimuList> timuList;
     private Context context;
     private TimuOnClickListener timuOnClickListener;
 
-    public TimuDialogAdapter(List<TimuDialogList> timuList, Context context) {
+    public TimuDialogAdapter(List<TimuList> timuList, Context context) {
         this.timuList = timuList;
         this.context = context;
     }
@@ -55,36 +53,29 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolder) {
-            ViewHolder v = (ViewHolder) holder;
-            List<TimuList> list = timuList.get(position).getLists();
-            for (int i = 0; i < list.size(); i++) {
-                switch (i) {
-                    case 0:
-                        setTimu(v.v1, list.get(i));
-                        break;
-                    case 1:
-                        setTimu(v.v2, list.get(i));
-                        break;
-                    case 2:
-                        setTimu(v.v3, list.get(i));
-                        break;
-                    case 3:
-                        setTimu(v.v4, list.get(i));
-                        break;
-                    case 4:
-                        setTimu(v.v5, list.get(i));
-                        break;
-                    case 5:
-                        setTimu(v.v6, list.get(i));
-                        break;
-                    case 6:
-                        setTimu(v.v7, list.get(i));
-                        break;
-                    case 7:
-                        setTimu(v.v8, list.get(i));
-                        break;
-                }
+            final TimuList timu = timuList.get(position);
+            final ViewHolder holder1 = (ViewHolder) holder;
+            holder1.tv.setText(timu.getIndex() + "");
+            switch (timu.getStatus()) {
+                case "未做":
+                    holder1.tv.setBackgroundResource(R.drawable.timudialog_adapter_lay_gray);
+                    holder1.tv.setTextColor(ContextCompat.getColor(context, R.color.error_tv));
+                    break;
+                case "对":
+                    holder1.tv.setBackgroundResource(R.drawable.timudialog_adapter_lay_blue);
+                    holder1.tv.setTextColor(ContextCompat.getColor(context, R.color.me_white));
+                    break;
+                case "错":
+                    holder1.tv.setBackgroundResource(R.drawable.timudialog_adapter_lay_red);
+                    holder1.tv.setTextColor(ContextCompat.getColor(context, R.color.me_white));
+                    break;
             }
+            holder1.tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    timuOnClickListener.timuOnClick(timu.getIndex());
+                }
+            });
         } else if (holder instanceof HeadViewHolder) {
             HeadViewHolder holder1 = (HeadViewHolder) holder;
             String s = timuList.get(position).getType();
@@ -106,56 +97,17 @@ public class TimuDialogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         void timuOnClick(int index);
     }
 
-    public void setTimu(TextView tv, final TimuList tdl) {
-        tv.setVisibility(View.VISIBLE);
-        tv.setText(tdl.getIndex() + "");
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timuOnClickListener.timuOnClick(tdl.getIndex());
-            }
-        });
-        switch (tdl.getStatus()) {
-            case "未做":
-                tv.setBackgroundResource(R.drawable.timudialog_adapter_lay_gray);
-                tv.setTextColor(ContextCompat.getColor(context, R.color.error_tv));
-                break;
-            case "对":
-                tv.setBackgroundResource(R.drawable.timudialog_adapter_lay_blue);
-                tv.setTextColor(ContextCompat.getColor(context, R.color.me_white));
-                break;
-            case "错":
-                tv.setBackgroundResource(R.drawable.timudialog_adapter_lay_red);
-                tv.setTextColor(ContextCompat.getColor(context, R.color.me_white));
-                break;
-        }
-    }
-
     @Override
     public int getItemCount() {
         return timuList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView v1;
-        TextView v2;
-        TextView v3;
-        TextView v4;
-        TextView v5;
-        TextView v6;
-        TextView v7;
-        TextView v8;
+        TextView tv;
 
         ViewHolder(View view) {
             super(view);
-            v1 = (TextView) view.findViewById(R.id.timudialog_adapter_v1);
-            v2 = (TextView) view.findViewById(R.id.timudialog_adapter_v2);
-            v3 = (TextView) view.findViewById(R.id.timudialog_adapter_v3);
-            v4 = (TextView) view.findViewById(R.id.timudialog_adapter_v4);
-            v5 = (TextView) view.findViewById(R.id.timudialog_adapter_v5);
-            v6 = (TextView) view.findViewById(R.id.timudialog_adapter_v6);
-            v7 = (TextView) view.findViewById(R.id.timudialog_adapter_v7);
-            v8 = (TextView) view.findViewById(R.id.timudialog_adapter_v8);
+            tv = (TextView) view.findViewById(R.id.timudialog_adapter_tv);
         }
     }
 
