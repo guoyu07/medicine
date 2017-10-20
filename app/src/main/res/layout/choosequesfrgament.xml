@@ -22,7 +22,6 @@
                 android:id="@+id/choosequesfrag_tv_ques"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="12: 休克时正确的补液原则是 (  )"
                 android:textColor="@color/error_tv"
                 android:textSize="18sp" />
 
@@ -51,7 +50,6 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/selector_white_7dp"
                         android:gravity="center"
-                        android:text="A"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
@@ -96,7 +94,6 @@
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
-                        android:text="补液 宁多勿少"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -130,7 +127,6 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/selector_white_7dp"
                         android:gravity="center"
-                        android:text="B"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
@@ -161,7 +157,6 @@
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
-                        android:text="需多少，补多少"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -180,7 +175,6 @@
                         android:layout_width="35dp"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="C"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
@@ -226,7 +220,6 @@
                         android:layout_weight="1"
                         android:background="@drawable/selector_white_7dp"
                         android:gravity="left|center_vertical"
-                        android:text="补充丧失的部分液体和当天继续丧失的液体"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -246,7 +239,6 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/selector_white_7dp"
                         android:gravity="center"
-                        android:text="D"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
@@ -291,7 +283,6 @@
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
-                        android:text="失多少，补多少"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -310,7 +301,6 @@
                         android:layout_width="35dp"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="E"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
@@ -356,7 +346,6 @@
                         android:layout_weight="1"
                         android:background="@drawable/selector_white_7dp"
                         android:gravity="left|center_vertical"
-                        android:text="如血压正常不必补液"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -384,7 +373,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="18dp"
-                    android:text="休克时正确的补液原则是：需多少，补多少。所谓需多少应包含：向体外丧失的部分体液；血管床容量扩大的部分；微循环淤滞的部分以及血浆外渗的部分。休克时正确的补液原则是：需多少，补多少。所谓需多少应包含：向体外丧失的部分体液；血管床容量扩大的部分；微循环淤滞的部分以及血浆外渗的部分。休克时正确的补液原则是：需多少，补多少。所谓需多少应包含：向体外丧失的部分体液；血管床容量扩大的部分；微循环淤滞的部分以及血浆外渗的部分。"
                     android:textColor="@color/error_tv"
                     android:textSize="15sp" />
             </LinearLayout>

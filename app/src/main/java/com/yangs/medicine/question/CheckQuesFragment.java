@@ -1,7 +1,12 @@
 package com.yangs.medicine.question;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,7 +18,7 @@ import com.yangs.medicine.fragment.LazyLoadFragment;
  * 判断题Fragment
  */
 
-public class CheckQuesFragment extends LazyLoadFragment implements View.OnClickListener {
+public class CheckQuesFragment extends Fragment implements View.OnClickListener {
     private View mLay;
     private TextView tv_ques;
     //A选项
@@ -32,23 +37,15 @@ public class CheckQuesFragment extends LazyLoadFragment implements View.OnClickL
     private LinearLayout ll_jiexi;
     private TextView ll_jiexi2;
 
+    @Nullable
     @Override
-    protected int setContentView() {
-        return R.layout.checkquesfrgament;
-    }
-
-    @Override
-    protected void lazyLoad() {
-        if (isInit) {
-            if (!isLoad) {
-                initView();
-            }
-        }
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mLay = inflater.inflate(R.layout.checkquesfrgament, container, false);
+        initView();
+        return mLay;
     }
 
     private void initView() {
-        mLay = getContentView();
         tv_ques = (TextView) mLay.findViewById(R.id.checkquesfrag_tv_ques);
         ll_A = (LinearLayout) mLay.findViewById(R.id.checkquesfrag_ll_A);
         ll_B = (LinearLayout) mLay.findViewById(R.id.checkquesfrag_ll_B);
@@ -64,6 +61,10 @@ public class CheckQuesFragment extends LazyLoadFragment implements View.OnClickL
         ll_jiexi2 = (TextView) mLay.findViewById(R.id.checkquesfrag_ll_jiexi2);
         ll_A.setOnClickListener(this);
         ll_B.setOnClickListener(this);
+        if (getArguments() != null) {
+            int index = (int) getArguments().getSerializable("index");
+            tv_ques.setText(index + 1 + ".判断题");
+        }
     }
 
     private int a = 0;

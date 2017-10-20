@@ -10,6 +10,15 @@ public class TimuList implements Serializable {
     private int index;          //序号
     private String status;      //状态 :  对,错,没做
     private String type = "";
+    private int fragIndex = 0;
+
+    public int getFragIndex() {
+        return fragIndex;
+    }
+
+    public void setFragIndex(int fragIndex) {
+        this.fragIndex = fragIndex;
+    }
 
     public String getType() {
         return type;

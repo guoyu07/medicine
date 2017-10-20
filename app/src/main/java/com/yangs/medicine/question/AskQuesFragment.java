@@ -1,8 +1,13 @@
 package com.yangs.medicine.question;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.adapter.AskAdapter;
@@ -17,32 +22,28 @@ import java.util.List;
  * 问答题Fragment
  */
 
-public class AskQuesFragment extends LazyLoadFragment implements AskAdapter.OnItemClickListener {
+public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickListener {
     private View mLay;
     private RecyclerView recyclerView;
     private AskAdapter askAdapter;
     private List<ExplainList> lists;
 
+    @Nullable
     @Override
-    protected int setContentView() {
-        return R.layout.askfrag_layout;
-    }
-
-    @Override
-    protected void lazyLoad() {
-        if (isInit) {
-            if (!isLoad) {
-                initView();
-                initData();
-            }
-        }
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mLay = inflater.inflate(R.layout.askfrag_layout, container, false);
+        initView();
+        initData();
+        return mLay;
     }
 
     private void initData() {
         lists.clear();
+        if (getArguments() == null)
+            return;
+        int index = (int) getArguments().getSerializable("index");
         ExplainList explainList = new ExplainList();
-        explainList.setIndex(1);
+        explainList.setIndex(index + 1);
         explainList.setName("磺胺药与甲氧苄啶合用为什么能增强疗效");
         explainList.setExplain("磺胺药作用于二氢叶酸合成酶,干扰合成叶酸的第一步,甲氧苄啶作用于叶酸合成代谢的第二步,选择性抑制二氢叶酸还原酶的作用,二者合用可使细菌的叶酸代谢受到双重阻断.协同抗菌作用较单药增强。");
         explainList.setClick(false);
@@ -50,7 +51,6 @@ public class AskQuesFragment extends LazyLoadFragment implements AskAdapter.OnIt
     }
 
     private void initView() {
-        mLay = getContentView();
         recyclerView = (RecyclerView) mLay.findViewById(R.id.askfrag_rv);
         lists = new ArrayList<>();
         askAdapter = new AskAdapter(lists, getContext());

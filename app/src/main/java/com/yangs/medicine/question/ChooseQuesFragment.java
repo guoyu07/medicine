@@ -21,7 +21,7 @@ import com.yangs.medicine.model.TimuList;
  * 复杂界面,后期模块化
  */
 
-public class ChooseQuesFragment extends LazyLoadFragment implements View.OnClickListener {
+public class ChooseQuesFragment extends Fragment implements View.OnClickListener {
     private View mLay;
     //问题
     public TextView tv_ques;
@@ -59,19 +59,12 @@ public class ChooseQuesFragment extends LazyLoadFragment implements View.OnClick
     private LinearLayout ll_jiexi;
     private TextView ll_jiexi2;
 
+    @Nullable
     @Override
-    protected int setContentView() {
-        return R.layout.choosequesfrgament;
-    }
-
-    @Override
-    protected void lazyLoad() {
-        if (isInit) {
-            if (!isLoad) {
-                initView();
-            }
-        }
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mLay = inflater.inflate(R.layout.choosequesfrgament, container, false);
+        initView();
+        return mLay;
     }
 
     private void initView() {
@@ -109,8 +102,8 @@ public class ChooseQuesFragment extends LazyLoadFragment implements View.OnClick
         ll_D.setOnClickListener(this);
         ll_E.setOnClickListener(this);
         if (getArguments() != null) {
-            TimuList timuList = (TimuList) getArguments().getSerializable("question");
-            updateQuestion(timuList);
+            int index = (int) getArguments().getSerializable("index");
+            updateQuestion(index);
         }
     }
 
@@ -160,8 +153,8 @@ public class ChooseQuesFragment extends LazyLoadFragment implements View.OnClick
         }
     }
 
-    public void updateQuestion(TimuList timuList) {
-        tv_ques.setText(timuList.getIndex() + ".问题");
+    public void updateQuestion(int index) {
+        tv_ques.setText(index + 1 + ".选择题");
         ll_A_4.setText("无");
         ll_B_4.setText("无");
         ll_C_4.setText("无");

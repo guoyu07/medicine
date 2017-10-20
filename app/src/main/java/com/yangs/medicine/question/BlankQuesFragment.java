@@ -1,8 +1,13 @@
 package com.yangs.medicine.question;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.adapter.BlankAdapter;
@@ -17,77 +22,39 @@ import java.util.List;
  * 填空题Fragment
  */
 
-public class BlankQuesFragment extends LazyLoadFragment implements BlankAdapter.OnItemClickListener {
+public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemClickListener {
     private View mLay;
     private RecyclerView recyclerView;
     private BlankAdapter blankAdapter;
     private List<BlankList> lists;
 
+    @Nullable
     @Override
-    protected int setContentView() {
-        return R.layout.blankfrag_layout;
-    }
-
-    @Override
-    protected void lazyLoad() {
-        if (isInit) {
-            if (!isLoad) {
-                initView();
-                initData();
-            }
-        }
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mLay = inflater.inflate(R.layout.blankfrag_layout, container, false);
+        initView();
+        initData();
+        return mLay;
     }
 
     private void initData() {
         lists.clear();
-        BlankList blankList = new BlankList();
-        blankList.setClick(false);
-        blankList.setIndex(21);
-        blankList.setQuestion("健康定义从原来医学的生物学模式转变成$,$,$模式");
-        blankList.setAnswer("生物;心理;社会");
-        lists.add(blankList);
-        blankList = new BlankList();
-        blankList.setClick(false);
-        blankList.setIndex(22);
-        blankList.setQuestion("健康定义从原来医学的生物学模式转变成$模式");
-        blankList.setAnswer("生物-心理-社会");
-        lists.add(blankList);
-        blankList = new BlankList();
-        blankList.setClick(false);
-        blankList.setIndex(23);
-        blankList.setQuestion("健康定义从原来医学的生物学模式转变成$模式");
-        blankList.setAnswer("生物-心理-社会");
-        lists.add(blankList);
-        blankList = new BlankList();
-        blankList.setClick(false);
-        blankList.setIndex(24);
-        blankList.setQuestion("健康定义从原来医学的生物学模式转变成$模式");
-        blankList.setAnswer("生物-心理-社会");
-        lists.add(blankList);
-        blankList = new BlankList();
-        blankList.setClick(false);
-        blankList.setIndex(25);
-        blankList.setQuestion("健康定义从原来医学的生物学模式转变成$模式");
-        blankList.setAnswer("生物-心理-社会");
-        lists.add(blankList);
-        blankList = new BlankList();
-        blankList.setClick(false);
-        blankList.setIndex(26);
-        blankList.setQuestion("健康定义从原来医学的生物学模式转变成$模式");
-        blankList.setAnswer("生物-心理-社会");
-        lists.add(blankList);
-        blankList = new BlankList();
-        blankList.setClick(false);
-        blankList.setIndex(27);
-        blankList.setQuestion("健康定义从原来医学的生物学模式转变成$模式");
-        blankList.setAnswer("生物-心理-社会");
-        lists.add(blankList);
+        if (getArguments() == null)
+            return;
+        int start = (int) getArguments().getSerializable("start");
+        int end = (int) getArguments().getSerializable("end");
+        for (int i = start; i <= end; i++) {
+            BlankList blankList = new BlankList();
+            blankList.setClick(false);
+            blankList.setIndex(i + 1);
+            blankList.setQuestion("健康定义从原来医学的生物学模式转变成$,$,$模式");
+            blankList.setAnswer("生物;心理;社会");
+            lists.add(blankList);
+        }
         blankAdapter.notifyDataSetChanged();
     }
 
     private void initView() {
-        mLay = getContentView();
         recyclerView = (RecyclerView) mLay.findViewById(R.id.blankfrag_rv);
         lists = new ArrayList<>();
         blankAdapter = new BlankAdapter(lists, getContext());

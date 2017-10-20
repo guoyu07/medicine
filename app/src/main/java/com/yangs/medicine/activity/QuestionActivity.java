@@ -30,7 +30,9 @@ import com.yangs.medicine.question.ExplainQuesFragment;
 import com.yangs.medicine.util.FitStatusBar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangs on 2017/9/24 0024.
@@ -51,8 +53,14 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private DialogOnClickListener timuListener;
     private List<TimuList> timuLists;
     private List<ChooseList> chooseLists;
-    private Boolean isInitOk = false;
-    private int offset = 2;
+    private int choose_count = 15;
+    private int blank_count = 12;
+    private int check_count = 8;
+    private int ask_count = 5;
+    private int explain_count = 3;
+    private int cursor_count = 0;           //游标
+    private Map<String, Integer> map = new HashMap<>();
+    private List<Map<String, Integer>> list = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,16 +72,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                TimuList timuList = timuLists.get(position + offset);
-                if (!"".equals(timuList.getType())) {   //title
-                    offset++;
-                    timuList = timuLists.get(position + offset);
-                }
-                ChooseQuesFragment chooseQuesFragment = new ChooseQuesFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("question", timuList);
-                chooseQuesFragment.setArguments(bundle);
-                return chooseQuesFragment;
+                return frag_list.get(position);
             }
 
             @Override
@@ -105,71 +104,140 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initData() {
-        timuLists.clear();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                isInitOk = false;
-                initTitle();
-                initChoose();
-                isInitOk = true;
-            }
-        }).start();
-    }
-
-    private void initTitle() {
         TimuList timuList = new TimuList();
         timuList.setType("生理学 第一章");
         timuLists.add(timuList);
-    }
-
-    /*
-    初始化选择题
-     */
-    private void initChoose() {
-        TimuList timuList = new TimuList();
-        timuList.setType("选择题");
-        timuLists.add(timuList);
-        for (int i = 1; i < 11; i++) {
-            if (i == 5) {
-                timuList = new TimuList();
-                timuList.setIndex(i);
-                timuList.setStatus("错");
-            } else if (i >= 8) {
-                timuList = new TimuList();
-                timuList.setIndex(i);
-                timuList.setStatus("未做");
-            } else {
-                timuList = new TimuList();
-                timuList.setIndex(i);
-                timuList.setStatus("对");
+        if (choose_count != 0) {
+            timuList = new TimuList();
+            timuList.setType("选择题");
+            timuLists.add(timuList);
+            for (int i = 0; i < choose_count; i++) {
+                if (i == 3 || i == 5 || i == 10) {
+                    timuList = new TimuList();
+                    timuList.setIndex(i + cursor_count + 1);
+                    timuList.setStatus("错");
+                } else if (i >= 12) {
+                    timuList = new TimuList();
+                    timuList.setIndex(i + cursor_count + 1);
+                    timuList.setStatus("未做");
+                } else {
+                    timuList = new TimuList();
+                    timuList.setIndex(i + cursor_count + 1);
+                    timuList.setStatus("对");
+                }
+                timuList.setFragIndex(frag_list.size());
+                timuLists.add(timuList);
+                ChooseQuesFragment chooseQuesFragment = new ChooseQuesFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("index", i + cursor_count);
+                chooseQuesFragment.setArguments(bundle);
+                frag_list.add(chooseQuesFragment);
             }
-            timuLists.add(timuList);
+            cursor_count += choose_count;
         }
-        timuList = new TimuList();
-        timuList.setType("填空题");
-        timuLists.add(timuList);
-        for (int i = 11; i < 21; i++) {
+        if (blank_count != 0) {
             timuList = new TimuList();
-            timuList.setIndex(i);
-            timuList.setStatus("未做");
+            timuList.setType("填空题");
             timuLists.add(timuList);
+            Boolean flag = false;
+            for (int i = 1; i <= blank_count; i++) {
+                if (i % 5 == 0) {
+                    flag = true;
+                }
+                timuList = new TimuList();
+                timuList.setIndex(i + cursor_count);
+                timuList.setStatus("未做");
+                timuList.setFragIndex(frag_list.size());
+                timuLists.add(timuList);
+                if ((blank_count - i == 0) && !flag) {
+                    BlankQuesFragment blankQuesFragment = new BlankQuesFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("start", (i / 5) * 5 + cursor_count);
+                    bundle.putSerializable("end", i - 1 + cursor_count);
+                    blankQuesFragment.setArguments(bundle);
+                    frag_list.add(blankQuesFragment);
+                }
+                if (flag) {
+                    BlankQuesFragment blankQuesFragment = new BlankQuesFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("start", i - 5 + cursor_count);
+                    bundle.putSerializable("end", i - 1 + cursor_count);
+                    blankQuesFragment.setArguments(bundle);
+                    frag_list.add(blankQuesFragment);
+                    flag = false;
+                }
+            }
+            cursor_count += blank_count;
         }
-        timuList = new TimuList();
-        timuList.setType("判断题");
-        timuLists.add(timuList);
-        for (int i = 21; i < 31; i++) {
+        if (check_count != 0) {
             timuList = new TimuList();
-            timuList.setIndex(i);
-            timuList.setStatus("未做");
+            timuList.setType("判断题");
             timuLists.add(timuList);
+            for (int i = 0; i < check_count; i++) {
+                timuList = new TimuList();
+                timuList.setIndex(i + cursor_count + 1);
+                timuList.setStatus("未做");
+                timuLists.add(timuList);
+                timuList.setFragIndex(frag_list.size());
+                CheckQuesFragment checkQuesFragment = new CheckQuesFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("index", i + cursor_count);
+                checkQuesFragment.setArguments(bundle);
+                frag_list.add(checkQuesFragment);
+            }
+            cursor_count += check_count;
         }
-        for (int i = 0; i < timuLists.size(); i++) {
-            ChooseQuesFragment chooseQuesFragment = new ChooseQuesFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("question", timuLists.get(i));
-            chooseQuesFragment.setArguments(bundle);
-            frag_list.add(chooseQuesFragment);
+        if (explain_count != 0) {
+            timuList = new TimuList();
+            timuList.setType("名词解释题");
+            timuLists.add(timuList);
+            Boolean flag = false;
+            for (int i = 1; i <= explain_count; i++) {
+                if (i % 5 == 0) {
+                    flag = true;
+                }
+                timuList = new TimuList();
+                timuList.setIndex(i + cursor_count);
+                timuList.setStatus("未做");
+                timuList.setFragIndex(frag_list.size());
+                timuLists.add(timuList);
+                if ((explain_count - i == 0) && !flag) {
+                    ExplainQuesFragment explainQuesFragment = new ExplainQuesFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("start", (i / 5) * 5 + cursor_count);
+                    bundle.putSerializable("end", i - 1 + cursor_count);
+                    explainQuesFragment.setArguments(bundle);
+                    frag_list.add(explainQuesFragment);
+                }
+                if (flag) {
+                    ExplainQuesFragment explainQuesFragment = new ExplainQuesFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("start", i - 5 + cursor_count);
+                    bundle.putSerializable("end", i - 1 + cursor_count);
+                    explainQuesFragment.setArguments(bundle);
+                    frag_list.add(explainQuesFragment);
+                    flag = false;
+                }
+            }
+            cursor_count += explain_count;
+        }
+        if (ask_count != 0) {
+            timuList = new TimuList();
+            timuList.setType("问答题");
+            timuLists.add(timuList);
+            for (int i = 0; i < ask_count; i++) {
+                timuList = new TimuList();
+                timuList.setIndex(i + cursor_count + 1);
+                timuList.setStatus("未做");
+                timuLists.add(timuList);
+                timuList.setFragIndex(frag_list.size());
+                AskQuesFragment askQuesFragment = new AskQuesFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("index", i + cursor_count);
+                askQuesFragment.setArguments(bundle);
+                frag_list.add(askQuesFragment);
+            }
+            cursor_count += ask_count;
         }
     }
 
@@ -200,10 +268,6 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 APPlication.showToast("讨论", 0);
                 break;
             case R.id.questionactivity_iv_timu:
-                if (!isInitOk) {
-                    APPlication.showToast("题目未初始化完成", 0);
-                    return;
-                }
                 if (timuDialog == null) {
                     timuListener = new DialogOnClickListener();
                     timuDialog = new Dialog(QuestionActivity.this, R.style.my_dialog);
@@ -248,7 +312,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void timuOnClick(int index) {
-        viewPager.setCurrentItem(index - 1, false);
+        viewPager.setCurrentItem(timuLists.get(index - 1).getFragIndex(), false);
         if (timuDialog != null) {
             timuDialog.cancel();
         }
