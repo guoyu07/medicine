@@ -3,6 +3,7 @@ package com.yangs.medicine.activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -16,6 +17,8 @@ public class APPlication extends Application {
     public static SharedPreferences save;
     public static String grade;
     public static String subject;
+    public static Boolean DEBUG;
+    public static SQLiteDatabase db;
 
     @Override
     public void onCreate() {
@@ -23,8 +26,10 @@ public class APPlication extends Application {
         context = getApplicationContext();
         Fresco.initialize(this);
         save = getSharedPreferences("Medicine", MODE_PRIVATE);
+        db = context.openOrCreateDatabase("medicine.db", Context.MODE_PRIVATE, null);
         grade = save.getString("grade", "");
         subject = save.getString("subject", "");
+        DEBUG = true;
     }
 
     public static void showToast(String msg, int time) {

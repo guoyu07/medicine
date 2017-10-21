@@ -116,12 +116,14 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
         ll_A_1.setBackgroundResource(R.drawable.ques_selector_blue);
         ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
         a = 1;
+        QuestionActivity.timuLists.get(dialogIndex).setAnswer("a");
     }
 
     private void setBClick() {
         ll_B_1.setBackgroundResource(R.drawable.ques_selector_blue);
         ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
         b = 1;
+        QuestionActivity.timuLists.get(dialogIndex).setAnswer("b");
     }
 
     private void setATrue() {

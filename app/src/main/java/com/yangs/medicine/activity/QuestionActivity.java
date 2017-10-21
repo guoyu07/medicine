@@ -51,11 +51,11 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private Dialog timuDialog;
     private DialogOnClickListener timuListener;
     public static List<TimuList> timuLists;
-    private int choose_count = 15;
-    private int blank_count = 12;
-    private int check_count = 8;
+    private int choose_count = 10;
+    private int blank_count = 10;
+    private int check_count = 5;
     private int ask_count = 5;
-    private int explain_count = 12;
+    private int explain_count = 6;
     private int cursor_count = 0;           //游标
     private TimuDialogAdapter timuDialogAdapter;
     private RecyclerView timuDialog_rv;
