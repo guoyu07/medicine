@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ChooseList;
 import com.yangs.medicine.model.TimuList;
@@ -23,6 +25,8 @@ import com.yangs.medicine.model.TimuList;
 
 public class ChooseQuesFragment extends Fragment implements View.OnClickListener {
     private View mLay;
+    private OnResultListener onResultListener;
+    private static final String TAG = "ChooseQuesFragment";
     //问题
     public TextView tv_ques;
     //A选项
@@ -206,5 +210,20 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
             ll_D_3.setVisibility(View.VISIBLE);
         }
         ll_jiexi.setVisibility(View.VISIBLE);
+        if (getArguments() != null && onResultListener != null) {
+            int dialogIndex = (int) getArguments().getSerializable("dialogIndex");
+            if (b == 1)
+                onResultListener.onResult(dialogIndex, 1);
+            else
+                onResultListener.onResult(dialogIndex, 0);
+        }
+    }
+
+    public void setOnResultListener(OnResultListener onResultListener) {
+        this.onResultListener = onResultListener;
+    }
+
+    public interface OnResultListener {
+        void onResult(int dialogIndex, int status);
     }
 }

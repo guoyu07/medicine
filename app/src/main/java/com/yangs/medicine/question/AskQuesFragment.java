@@ -27,6 +27,7 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
     private RecyclerView recyclerView;
     private AskAdapter askAdapter;
     private List<ExplainList> lists;
+    private OnResultListener onResultListener;
 
     @Nullable
     @Override
@@ -61,7 +62,23 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
 
     @Override
     public void onItemClick(View v, int position) {
-        lists.get(position).setClick(true);
+        Boolean click = lists.get(position).getClick();
+        if (click)
+            lists.get(position).setClick(false);
+        else
+            lists.get(position).setClick(true);
         askAdapter.notifyDataSetChanged();
+        if (getArguments() != null && onResultListener != null) {
+            int dialogIndex = (int) getArguments().getSerializable("dialogIndex");
+            onResultListener.onResult(dialogIndex, click ? 0 : 1);
+        }
+    }
+
+    public void setOnResultListener(OnResultListener onResultListener) {
+        this.onResultListener = onResultListener;
+    }
+
+    public interface OnResultListener {
+        void onResult(int dialogIndex, int status);
     }
 }

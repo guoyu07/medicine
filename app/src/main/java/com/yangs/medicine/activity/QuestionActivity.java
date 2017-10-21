@@ -48,19 +48,17 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private ImageView iv_timu;
     private ViewPager viewPager;
     private List<Fragment> frag_list;
-    private ChooseQuesFragment chooseQuesFragment;
     private Dialog timuDialog;
     private DialogOnClickListener timuListener;
     private List<TimuList> timuLists;
-    private List<ChooseList> chooseLists;
     private int choose_count = 15;
     private int blank_count = 12;
     private int check_count = 8;
     private int ask_count = 5;
-    private int explain_count = 3;
+    private int explain_count = 12;
     private int cursor_count = 0;           //游标
-    private Map<String, Integer> map = new HashMap<>();
-    private List<Map<String, Integer>> list = new ArrayList<>();
+    private TimuDialogAdapter timuDialogAdapter;
+    private RecyclerView timuDialog_rv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,7 +98,6 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         iv_timu.setOnClickListener(this);
         frag_list = new ArrayList<>();
         timuLists = new ArrayList<>();
-        chooseLists = new ArrayList<>();
     }
 
     private void initData() {
@@ -112,26 +109,17 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
             timuList.setType("选择题");
             timuLists.add(timuList);
             for (int i = 0; i < choose_count; i++) {
-                if (i == 3 || i == 5 || i == 10) {
-                    timuList = new TimuList();
-                    timuList.setIndex(i + cursor_count + 1);
-                    timuList.setStatus("错");
-                } else if (i >= 12) {
-                    timuList = new TimuList();
-                    timuList.setIndex(i + cursor_count + 1);
-                    timuList.setStatus("未做");
-                } else {
-                    timuList = new TimuList();
-                    timuList.setIndex(i + cursor_count + 1);
-                    timuList.setStatus("对");
-                }
+                timuList = new TimuList();
+                timuList.setIndex(i + cursor_count + 1);
+                timuList.setStatus("未做");
                 timuList.setFragIndex(frag_list.size());
-                timuLists.add(timuList);
                 ChooseQuesFragment chooseQuesFragment = new ChooseQuesFragment();
                 Bundle bundle = new Bundle();
+                bundle.putSerializable("dialogIndex", timuLists.size());
                 bundle.putSerializable("index", i + cursor_count);
                 chooseQuesFragment.setArguments(bundle);
                 frag_list.add(chooseQuesFragment);
+                timuLists.add(timuList);
             }
             cursor_count += choose_count;
         }
@@ -148,24 +136,50 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 timuList.setIndex(i + cursor_count);
                 timuList.setStatus("未做");
                 timuList.setFragIndex(frag_list.size());
-                timuLists.add(timuList);
                 if ((blank_count - i == 0) && !flag) {
                     BlankQuesFragment blankQuesFragment = new BlankQuesFragment();
+                    blankQuesFragment.setOnResultListener(new BlankQuesFragment.OnResultListener() {
+                        @Override
+                        public void onResult(int dialogIndex, int status) {
+                            if (status == 1)
+                                timuLists.get(dialogIndex).setStatus("对");
+                            else if (status == 0)
+                                timuLists.get(dialogIndex).setStatus("未做");
+                            if (timuDialog_rv != null && timuDialogAdapter != null)
+                                timuDialogAdapter.notifyDataSetChanged();
+                        }
+                    });
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("start", (i / 5) * 5 + cursor_count);
-                    bundle.putSerializable("end", i - 1 + cursor_count);
+                    int start = (i / 5) * 5 + cursor_count;
+                    int end = i - 1 + cursor_count;
+                    bundle.putSerializable("start", start);
+                    bundle.putSerializable("end", end);
+                    bundle.putSerializable("dialogIndex", timuLists.size() - start + end - 2);
                     blankQuesFragment.setArguments(bundle);
                     frag_list.add(blankQuesFragment);
                 }
                 if (flag) {
                     BlankQuesFragment blankQuesFragment = new BlankQuesFragment();
+                    blankQuesFragment.setOnResultListener(new BlankQuesFragment.OnResultListener() {
+                        @Override
+                        public void onResult(int dialogIndex, int status) {
+                            if (status == 1)
+                                timuLists.get(dialogIndex).setStatus("对");
+                            else if (status == 0)
+                                timuLists.get(dialogIndex).setStatus("未做");
+                            if (timuDialog_rv != null && timuDialogAdapter != null)
+                                timuDialogAdapter.notifyDataSetChanged();
+                        }
+                    });
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("start", i - 5 + cursor_count);
                     bundle.putSerializable("end", i - 1 + cursor_count);
+                    bundle.putSerializable("dialogIndex", timuLists.size() - 4);
                     blankQuesFragment.setArguments(bundle);
                     frag_list.add(blankQuesFragment);
                     flag = false;
                 }
+                timuLists.add(timuList);
             }
             cursor_count += blank_count;
         }
@@ -177,13 +191,14 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 timuList = new TimuList();
                 timuList.setIndex(i + cursor_count + 1);
                 timuList.setStatus("未做");
-                timuLists.add(timuList);
                 timuList.setFragIndex(frag_list.size());
                 CheckQuesFragment checkQuesFragment = new CheckQuesFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("index", i + cursor_count);
+                bundle.putSerializable("dialogIndex", timuLists.size());
                 checkQuesFragment.setArguments(bundle);
                 frag_list.add(checkQuesFragment);
+                timuLists.add(timuList);
             }
             cursor_count += check_count;
         }
@@ -200,24 +215,51 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 timuList.setIndex(i + cursor_count);
                 timuList.setStatus("未做");
                 timuList.setFragIndex(frag_list.size());
-                timuLists.add(timuList);
                 if ((explain_count - i == 0) && !flag) {
                     ExplainQuesFragment explainQuesFragment = new ExplainQuesFragment();
+                    explainQuesFragment.setOnResultListener(new ExplainQuesFragment.OnResultListener() {
+                        @Override
+                        public void onResult(int dialogIndex, int status) {
+                            if (status == 1)
+                                timuLists.get(dialogIndex).setStatus("对");
+                            else if (status == 0)
+                                timuLists.get(dialogIndex).setStatus("未做");
+                            if (timuDialog_rv != null && timuDialogAdapter != null)
+                                timuDialogAdapter.notifyDataSetChanged();
+                        }
+                    });
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("start", (i / 5) * 5 + cursor_count);
-                    bundle.putSerializable("end", i - 1 + cursor_count);
+                    int start = (i / 5) * 5 + cursor_count;
+                    int end = i - 1 + cursor_count;
+                    int pice = i % 5;
+                    bundle.putSerializable("start", start);
+                    bundle.putSerializable("end", end);
+                    bundle.putSerializable("dialogIndex", timuLists.size() - pice + 1);
                     explainQuesFragment.setArguments(bundle);
                     frag_list.add(explainQuesFragment);
                 }
                 if (flag) {
                     ExplainQuesFragment explainQuesFragment = new ExplainQuesFragment();
+                    explainQuesFragment.setOnResultListener(new ExplainQuesFragment.OnResultListener() {
+                        @Override
+                        public void onResult(int dialogIndex, int status) {
+                            if (status == 1)
+                                timuLists.get(dialogIndex).setStatus("对");
+                            else if (status == 0)
+                                timuLists.get(dialogIndex).setStatus("未做");
+                            if (timuDialog_rv != null && timuDialogAdapter != null)
+                                timuDialogAdapter.notifyDataSetChanged();
+                        }
+                    });
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("start", i - 5 + cursor_count);
                     bundle.putSerializable("end", i - 1 + cursor_count);
+                    bundle.putSerializable("dialogIndex", timuLists.size() - 4);
                     explainQuesFragment.setArguments(bundle);
                     frag_list.add(explainQuesFragment);
                     flag = false;
                 }
+                timuLists.add(timuList);
             }
             cursor_count += explain_count;
         }
@@ -229,13 +271,25 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 timuList = new TimuList();
                 timuList.setIndex(i + cursor_count + 1);
                 timuList.setStatus("未做");
-                timuLists.add(timuList);
                 timuList.setFragIndex(frag_list.size());
                 AskQuesFragment askQuesFragment = new AskQuesFragment();
+                askQuesFragment.setOnResultListener(new AskQuesFragment.OnResultListener() {
+                    @Override
+                    public void onResult(int dialogIndex, int status) {
+                        if (status == 1)
+                            timuLists.get(dialogIndex).setStatus("对");
+                        else if (status == 0)
+                            timuLists.get(dialogIndex).setStatus("未做");
+                        if (timuDialog_rv != null && timuDialogAdapter != null)
+                            timuDialogAdapter.notifyDataSetChanged();
+                    }
+                });
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("index", i + cursor_count);
+                bundle.putSerializable("dialogIndex", timuLists.size());
                 askQuesFragment.setArguments(bundle);
                 frag_list.add(askQuesFragment);
+                timuLists.add(timuList);
             }
             cursor_count += ask_count;
         }
@@ -254,6 +308,37 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.questionactivity_head_ok:
+                int index = viewPager.getCurrentItem();
+                Fragment tmp_frag = frag_list.get(index);
+                if (tmp_frag instanceof ChooseQuesFragment) {
+                    ChooseQuesFragment real_frag = (ChooseQuesFragment) tmp_frag;
+                    real_frag.setOnResultListener(new ChooseQuesFragment.OnResultListener() {
+                        @Override
+                        public void onResult(int dialogIndex, int status) {
+                            if (status == 1)
+                                timuLists.get(dialogIndex).setStatus("对");
+                            else if (status == 0)
+                                timuLists.get(dialogIndex).setStatus("错");
+                            if (timuDialog_rv != null && timuDialogAdapter != null)
+                                timuDialogAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    real_frag.checkOK();
+                } else if (tmp_frag instanceof CheckQuesFragment) {
+                    CheckQuesFragment real_frag = (CheckQuesFragment) tmp_frag;
+                    real_frag.setOnResultListener(new CheckQuesFragment.OnResultListener() {
+                        @Override
+                        public void onResult(int dialogIndex, int status) {
+                            if (status == 1)
+                                timuLists.get(dialogIndex).setStatus("对");
+                            else if (status == 0)
+                                timuLists.get(dialogIndex).setStatus("错");
+                            if (timuDialog_rv != null && timuDialogAdapter != null)
+                                timuDialogAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    real_frag.checkOK();
+                }
                 break;
             case R.id.questionactivity_ll:
                 APPlication.showToast("评论", 0);
@@ -277,10 +362,10 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                     timuDialog_ll.findViewById(R.id.timudialog_iv_share).setOnClickListener(timuListener);
                     timuDialog_ll.findViewById(R.id.timudialog_iv_talk).setOnClickListener(timuListener);
                     timuDialog_ll.findViewById(R.id.timudialog_iv_timu).setOnClickListener(timuListener);
-                    RecyclerView timu_rv = (RecyclerView) timuDialog_ll.findViewById(R.id.timudialog_rv);
-                    TimuDialogAdapter timuDialogAdapter = new TimuDialogAdapter(timuLists, this);
+                    timuDialog_rv = (RecyclerView) timuDialog_ll.findViewById(R.id.timudialog_rv);
+                    timuDialogAdapter = new TimuDialogAdapter(timuLists, this);
                     timuDialogAdapter.setTimuOnClickListener(this);
-                    timu_rv.setAdapter(timuDialogAdapter);
+                    timuDialog_rv.setAdapter(timuDialogAdapter);
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 8);
                     gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                         @Override
@@ -291,7 +376,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                                 return 1;
                         }
                     });
-                    timu_rv.setLayoutManager(gridLayoutManager);
+                    timuDialog_rv.setLayoutManager(gridLayoutManager);
                     timuDialog.setContentView(timuDialog_ll);
                     Window dialogWindow = timuDialog.getWindow();
                     dialogWindow.setGravity(Gravity.BOTTOM);

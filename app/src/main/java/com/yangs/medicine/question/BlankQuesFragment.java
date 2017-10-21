@@ -27,6 +27,7 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
     private RecyclerView recyclerView;
     private BlankAdapter blankAdapter;
     private List<BlankList> lists;
+    private OnResultListener onResultListener;
 
     @Nullable
     @Override
@@ -65,7 +66,23 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
 
     @Override
     public void onItemClick(View v, int position) {
-        lists.get(position).setClick(true);
+        Boolean click = lists.get(position).getClick();
+        if (click)
+            lists.get(position).setClick(false);
+        else
+            lists.get(position).setClick(true);
         blankAdapter.notifyDataSetChanged();
+        if (getArguments() != null && onResultListener != null) {
+            int dialogIndex = (int) getArguments().getSerializable("dialogIndex") + position;
+            onResultListener.onResult(dialogIndex, click ? 0 : 1);
+        }
+    }
+
+    public void setOnResultListener(OnResultListener onResultListener) {
+        this.onResultListener = onResultListener;
+    }
+
+    public interface OnResultListener {
+        void onResult(int dialogIndex, int status);
     }
 }

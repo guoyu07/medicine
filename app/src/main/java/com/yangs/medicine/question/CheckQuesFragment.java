@@ -36,6 +36,7 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
     //解析
     private LinearLayout ll_jiexi;
     private TextView ll_jiexi2;
+    private OnResultListener onResultListener;
 
     @Nullable
     @Override
@@ -108,5 +109,20 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
             ll_A_3.setVisibility(View.VISIBLE);
         }
         ll_jiexi.setVisibility(View.VISIBLE);
+        if (getArguments() != null && onResultListener != null) {
+            int dialogIndex = (int) getArguments().getSerializable("dialogIndex");
+            if (b == 1)
+                onResultListener.onResult(dialogIndex, 1);
+            else
+                onResultListener.onResult(dialogIndex, 0);
+        }
+    }
+
+    public void setOnResultListener(OnResultListener onResultListener) {
+        this.onResultListener = onResultListener;
+    }
+
+    public interface OnResultListener {
+        void onResult(int dialogIndex, int status);
     }
 }

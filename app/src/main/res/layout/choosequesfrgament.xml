@@ -50,6 +50,7 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/selector_white_7dp"
                         android:gravity="center"
+                        android:text="A"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
@@ -127,6 +128,7 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/selector_white_7dp"
                         android:gravity="center"
+                        android:text="B"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
@@ -175,6 +177,7 @@
                         android:layout_width="35dp"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:text="C"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
@@ -239,6 +242,7 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/selector_white_7dp"
                         android:gravity="center"
+                        android:text="D"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
@@ -301,6 +305,7 @@
                         android:layout_width="35dp"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:text="E"
                         android:textColor="@color/error_tv"
                         android:textSize="16sp"
                         android:visibility="visible" />
