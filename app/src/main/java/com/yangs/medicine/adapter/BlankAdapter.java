@@ -61,7 +61,7 @@ public class BlankAdapter extends RecyclerView.Adapter<BlankAdapter.ViewHolder> 
     @Override
     public void onClick(View v) {
         if (onItemClickListener != null)
-            onItemClickListener.onItemClick(v, (int) v.getTag());
+            onItemClickListener.onItemClick((int) v.getTag());
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -69,7 +69,7 @@ public class BlankAdapter extends RecyclerView.Adapter<BlankAdapter.ViewHolder> 
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View v, int position);
+        public void onItemClick(int position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

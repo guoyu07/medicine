@@ -7,10 +7,12 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 
 /**
@@ -21,6 +23,7 @@ import com.yangs.medicine.fragment.LazyLoadFragment;
 public class CheckQuesFragment extends Fragment implements View.OnClickListener {
     private View mLay;
     private TextView tv_ques;
+    private int dialogIndex;
     //A选项
     private LinearLayout ll_A;
     private TextView ll_A_1;
@@ -37,6 +40,7 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
     private LinearLayout ll_jiexi;
     private TextView ll_jiexi2;
     private OnResultListener onResultListener;
+    private Button bt_sub;
 
     @Nullable
     @Override
@@ -60,12 +64,23 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
         ll_B_4 = (TextView) mLay.findViewById(R.id.checkquesfrag_ll_B_4);
         ll_jiexi = (LinearLayout) mLay.findViewById(R.id.checkquesfrag_ll_jiexi);
         ll_jiexi2 = (TextView) mLay.findViewById(R.id.checkquesfrag_ll_jiexi2);
+        bt_sub = (Button) mLay.findViewById(R.id.checkquesfrag_bt_sub);
         ll_A.setOnClickListener(this);
         ll_B.setOnClickListener(this);
+        bt_sub.setOnClickListener(this);
         if (getArguments() != null) {
             int index = (int) getArguments().getSerializable("index");
             tv_ques.setText(index + 1 + ".判断题");
         }
+        dialogIndex = (int) getArguments().getSerializable("dialogIndex");
+        String answer = QuestionActivity.timuLists.get(dialogIndex).getAnswer();
+        if ("a".equals(answer)) {
+            setAClick();
+        } else if ("b".equals(answer)) {
+            setBClick();
+        }
+        if (QuestionActivity.timuLists.get(dialogIndex).getSubmmit())
+            checkOK();
     }
 
     private int a = 0;
@@ -76,15 +91,14 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.checkquesfrag_ll_A:
                 reset();
-                ll_A_1.setBackgroundResource(R.drawable.ques_selector_blue);
-                ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                a = 1;
+                setAClick();
                 break;
             case R.id.checkquesfrag_ll_B:
                 reset();
-                ll_B_1.setBackgroundResource(R.drawable.ques_selector_blue);
-                ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                b = 1;
+                setBClick();
+                break;
+            case R.id.checkquesfrag_bt_sub:
+                checkOK();
                 break;
         }
     }
@@ -98,19 +112,53 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
         b = 0;
     }
 
+    private void setAClick() {
+        ll_A_1.setBackgroundResource(R.drawable.ques_selector_blue);
+        ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        a = 1;
+    }
+
+    private void setBClick() {
+        ll_B_1.setBackgroundResource(R.drawable.ques_selector_blue);
+        ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        b = 1;
+    }
+
+    private void setATrue() {
+        ll_A_1.setVisibility(View.GONE);
+        ll_A_2.setVisibility(View.VISIBLE);
+        ll_A_3.setVisibility(View.GONE);
+    }
+
+    private void setAFalse() {
+        ll_A_1.setVisibility(View.GONE);
+        ll_A_2.setVisibility(View.GONE);
+        ll_A_3.setVisibility(View.VISIBLE);
+    }
+
+    private void setBTrue() {
+        ll_B_1.setVisibility(View.GONE);
+        ll_B_2.setVisibility(View.VISIBLE);
+        ll_B_3.setVisibility(View.GONE);
+    }
+
+    private void setBFalse() {
+        ll_B_1.setVisibility(View.GONE);
+        ll_B_2.setVisibility(View.GONE);
+        ll_B_3.setVisibility(View.VISIBLE);
+    }
+
     public void checkOK() {
+        bt_sub.setVisibility(View.GONE);
+        QuestionActivity.timuLists.get(dialogIndex).setSubmmit(true);
         if (b == 1) {
-            ll_B_1.setVisibility(View.GONE);
-            ll_B_2.setVisibility(View.VISIBLE);
-            ll_B_3.setVisibility(View.GONE);
+            setBTrue();
         } else if (a == 1) {
-            ll_A_1.setVisibility(View.GONE);
-            ll_A_2.setVisibility(View.GONE);
-            ll_A_3.setVisibility(View.VISIBLE);
+            setAFalse();
         }
         ll_jiexi.setVisibility(View.VISIBLE);
         if (getArguments() != null && onResultListener != null) {
-            int dialogIndex = (int) getArguments().getSerializable("dialogIndex");
+            dialogIndex = (int) getArguments().getSerializable("dialogIndex");
             if (b == 1)
                 onResultListener.onResult(dialogIndex, 1);
             else

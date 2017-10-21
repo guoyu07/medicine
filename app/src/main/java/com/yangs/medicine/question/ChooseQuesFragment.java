@@ -8,11 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.APPlication;
+import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ChooseList;
 import com.yangs.medicine.model.TimuList;
@@ -27,6 +29,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private View mLay;
     private OnResultListener onResultListener;
     private static final String TAG = "ChooseQuesFragment";
+    private int dialogindex;
     //问题
     public TextView tv_ques;
     //A选项
@@ -62,6 +65,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     //解析
     private LinearLayout ll_jiexi;
     private TextView ll_jiexi2;
+    private Button bt_sub;
 
     @Nullable
     @Override
@@ -98,6 +102,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_C_4 = (TextView) mLay.findViewById(R.id.choosequesfrag_ll_C_4);
         ll_D_4 = (TextView) mLay.findViewById(R.id.choosequesfrag_ll_D_4);
         ll_E_4 = (TextView) mLay.findViewById(R.id.choosequesfrag_ll_E_4);
+        bt_sub = (Button) mLay.findViewById(R.id.choosequesfrag_bt_sub);
         ll_jiexi = (LinearLayout) mLay.findViewById(R.id.choosequesfrag_ll_jiexi);
         ll_jiexi2 = (TextView) mLay.findViewById(R.id.choosequesfrag_ll_jiexi2);
         ll_A.setOnClickListener(this);
@@ -105,10 +110,34 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_C.setOnClickListener(this);
         ll_D.setOnClickListener(this);
         ll_E.setOnClickListener(this);
+        bt_sub.setOnClickListener(this);
         if (getArguments() != null) {
             int index = (int) getArguments().getSerializable("index");
             updateQuestion(index);
         }
+        dialogindex = (int) getArguments().getSerializable("dialogIndex");
+        String answer = QuestionActivity.timuLists.get(dialogindex).getAnswer();
+        if (!"".equals(answer)) {
+            switch (answer) {
+                case "a":
+                    setA();
+                    break;
+                case "b":
+                    setB();
+                    break;
+                case "c":
+                    setC();
+                    break;
+                case "d":
+                    setD();
+                    break;
+                case "e":
+                    setE();
+                    break;
+            }
+        }
+        if (QuestionActivity.timuLists.get(dialogindex).getSubmmit())
+            checkOK();
     }
 
     private int b = 0;
@@ -117,54 +146,78 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private int c = 0;
     private int e = 0;
 
+    private void setA() {
+        ll_A_1.setBackgroundResource(R.drawable.ques_selector_blue);
+        ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        a = 1;
+    }
+
+    private void setB() {
+        ll_B_1.setBackgroundResource(R.drawable.ques_selector_blue);
+        ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        b = 1;
+    }
+
+    private void setC() {
+        ll_C_1.setBackgroundResource(R.drawable.ques_selector_blue);
+        ll_C_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        c = 1;
+    }
+
+    private void setD() {
+        ll_D_1.setBackgroundResource(R.drawable.ques_selector_blue);
+        ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        d = 1;
+    }
+
+    private void setE() {
+        ll_E_1.setBackgroundResource(R.drawable.ques_selector_blue);
+        ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        e = 1;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.choosequesfrag_ll_A:
                 reset();
-                ll_A_1.setBackgroundResource(R.drawable.ques_selector_blue);
-                ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                a = 1;
+                setA();
+                QuestionActivity.timuLists.get(dialogindex).setAnswer("a");
                 break;
             case R.id.choosequesfrag_ll_B:
                 reset();
-                ll_B_1.setBackgroundResource(R.drawable.ques_selector_blue);
-                ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                b = 1;
+                setB();
+                QuestionActivity.timuLists.get(dialogindex).setAnswer("b");
                 break;
             case R.id.choosequesfrag_ll_C:
                 reset();
-                ll_C_1.setBackgroundResource(R.drawable.ques_selector_blue);
-                ll_C_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                c = 1;
+                setC();
+                QuestionActivity.timuLists.get(dialogindex).setAnswer("c");
                 break;
             case R.id.choosequesfrag_ll_D:
                 reset();
-                ll_D_1.setBackgroundResource(R.drawable.ques_selector_blue);
-                ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                d = 1;
+                setD();
+                QuestionActivity.timuLists.get(dialogindex).setAnswer("d");
                 break;
             case R.id.choosequesfrag_ll_E:
                 reset();
-                ll_E_1.setBackgroundResource(R.drawable.ques_selector_blue);
-                ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                e = 1;
+                setE();
+                QuestionActivity.timuLists.get(dialogindex).setAnswer("e");
                 break;
-            case R.id.questionactivity_head_ok:
+            case R.id.choosequesfrag_bt_sub:
                 checkOK();
                 break;
-
         }
     }
 
     public void updateQuestion(int index) {
         tv_ques.setText(index + 1 + ".选择题");
-        ll_A_4.setText("无");
-        ll_B_4.setText("无");
-        ll_C_4.setText("无");
-        ll_D_4.setText("无");
-        ll_E_4.setText("无");
-        ll_jiexi2.setText("无");
+        ll_A_4.setText("A选项");
+        ll_B_4.setText("B选项");
+        ll_C_4.setText("C选项");
+        ll_D_4.setText("D选项");
+        ll_E_4.setText("E选项");
+        ll_jiexi2.setText("暂无");
     }
 
     private void reset() {
@@ -186,6 +239,8 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     }
 
     public void checkOK() {
+        QuestionActivity.timuLists.get(dialogindex).setSubmmit(true);
+        bt_sub.setVisibility(View.GONE);
         ll_B_1.setVisibility(View.GONE);
         ll_B_2.setVisibility(View.VISIBLE);
         ll_B_3.setVisibility(View.GONE);

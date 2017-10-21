@@ -166,6 +166,19 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <Button
+                android:id="@+id/checkquesfrag_bt_sub"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/choose_bt_lay"
+                android:gravity="center"
+                android:text="查看答案"
+                android:textColor="@color/error_tv"
+                android:textSize="14sp" />
+
             <LinearLayout
                 android:id="@+id/checkquesfrag_ll_jiexi"
                 android:layout_width="match_parent"

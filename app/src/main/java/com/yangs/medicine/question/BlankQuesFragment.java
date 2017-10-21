@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.BlankAdapter;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.BlankList;
@@ -28,6 +29,9 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
     private BlankAdapter blankAdapter;
     private List<BlankList> lists;
     private OnResultListener onResultListener;
+    private int dialogIndex;
+    private int start;
+    private int end;
 
     @Nullable
     @Override
@@ -42,8 +46,8 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
         lists.clear();
         if (getArguments() == null)
             return;
-        int start = (int) getArguments().getSerializable("start");
-        int end = (int) getArguments().getSerializable("end");
+        start = (int) getArguments().getSerializable("start");
+        end = (int) getArguments().getSerializable("end");
         for (int i = start; i <= end; i++) {
             BlankList blankList = new BlankList();
             blankList.setClick(false);
@@ -53,6 +57,15 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
             lists.add(blankList);
         }
         blankAdapter.notifyDataSetChanged();
+        for (int i = 0; i <= (end - start); i++) {
+            int real = i + (int) getArguments().getSerializable("dialogIndex");
+            if ("1".equals(QuestionActivity.timuLists.get(real).getAnswer())) {
+                lists.get(i).setClick(true);
+            } else {
+                lists.get(i).setClick(false);
+            }
+            blankAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initView() {
@@ -65,17 +78,18 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
     }
 
     @Override
-    public void onItemClick(View v, int position) {
+    public void onItemClick(int position) {
+        dialogIndex = (int) getArguments().getSerializable("dialogIndex") + position;
         Boolean click = lists.get(position).getClick();
-        if (click)
+        if (click) {
             lists.get(position).setClick(false);
-        else
+            QuestionActivity.timuLists.get(dialogIndex).setAnswer("0");
+        } else {
             lists.get(position).setClick(true);
-        blankAdapter.notifyDataSetChanged();
-        if (getArguments() != null && onResultListener != null) {
-            int dialogIndex = (int) getArguments().getSerializable("dialogIndex") + position;
-            onResultListener.onResult(dialogIndex, click ? 0 : 1);
+            QuestionActivity.timuLists.get(dialogIndex).setAnswer("1");
         }
+        blankAdapter.notifyDataSetChanged();
+        onResultListener.onResult(dialogIndex, click ? 0 : 1);
     }
 
     public void setOnResultListener(OnResultListener onResultListener) {

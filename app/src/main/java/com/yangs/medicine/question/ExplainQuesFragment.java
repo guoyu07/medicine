@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.ExplainAdapter;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ExplainList;
@@ -28,6 +29,9 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
     private List<ExplainList> lists;
     private ExplainAdapter explainAdapter;
     private OnResultListener onResultListener;
+    private int start;
+    private int end;
+    private int dialogIndex;
 
     @Nullable
     @Override
@@ -42,8 +46,8 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
         lists.clear();
         if (getArguments() == null)
             return;
-        int start = (int) getArguments().getSerializable("start");
-        int end = (int) getArguments().getSerializable("end");
+        start = (int) getArguments().getSerializable("start");
+        end = (int) getArguments().getSerializable("end");
         for (int i = start; i <= end; i++) {
             ExplainList explainList = new ExplainList();
             explainList.setIndex(i + 1);
@@ -53,6 +57,15 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
             lists.add(explainList);
         }
         explainAdapter.notifyDataSetChanged();
+        for (int i = 0; i <= (end - start); i++) {
+            int real = i + (int) getArguments().getSerializable("dialogIndex");
+            if ("1".equals(QuestionActivity.timuLists.get(real).getAnswer())) {
+                lists.get(i).setClick(true);
+            } else {
+                lists.get(i).setClick(false);
+            }
+            explainAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initView() {
@@ -67,13 +80,17 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
     @Override
     public void onItemClick(View v, int position) {
         Boolean click = lists.get(position).getClick();
-        if (click)
+        dialogIndex = (int) getArguments().getSerializable("dialogIndex") + position;
+        if (click) {
             lists.get(position).setClick(false);
-        else
+            QuestionActivity.timuLists.get(dialogIndex).setAnswer("0");
+        } else {
             lists.get(position).setClick(true);
+            QuestionActivity.timuLists.get(dialogIndex).setAnswer("1");
+        }
         explainAdapter.notifyDataSetChanged();
         if (getArguments() != null && onResultListener != null) {
-            int dialogIndex = (int) getArguments().getSerializable("dialogIndex") + position;
+            dialogIndex = (int) getArguments().getSerializable("dialogIndex") + position;
             onResultListener.onResult(dialogIndex, click ? 0 : 1);
         }
     }

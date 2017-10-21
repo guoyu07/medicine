@@ -11,6 +11,24 @@ public class TimuList implements Serializable {
     private String status;      //状态 :  对,错,没做
     private String type = "";
     private int fragIndex = 0;
+    private String answer = "";
+    private Boolean isSubmmit = false;
+
+    public Boolean getSubmmit() {
+        return isSubmmit;
+    }
+
+    public void setSubmmit(Boolean submmit) {
+        isSubmmit = submmit;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 
     public int getFragIndex() {
         return fragIndex;

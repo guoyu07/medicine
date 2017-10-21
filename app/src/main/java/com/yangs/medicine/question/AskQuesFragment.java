@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.AskAdapter;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ExplainList;
@@ -28,6 +29,7 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
     private AskAdapter askAdapter;
     private List<ExplainList> lists;
     private OnResultListener onResultListener;
+    private int dialogIndex;
 
     @Nullable
     @Override
@@ -49,6 +51,12 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
         explainList.setExplain("磺胺药作用于二氢叶酸合成酶,干扰合成叶酸的第一步,甲氧苄啶作用于叶酸合成代谢的第二步,选择性抑制二氢叶酸还原酶的作用,二者合用可使细菌的叶酸代谢受到双重阻断.协同抗菌作用较单药增强。");
         explainList.setClick(false);
         lists.add(explainList);
+        if ("1".equals(QuestionActivity.timuLists.get(dialogIndex).getAnswer())) {
+            lists.get(0).setClick(true);
+        } else if ("0".equals(QuestionActivity.timuLists.get(dialogIndex).getAnswer())) {
+            lists.get(0).setClick(false);
+        }
+        askAdapter.notifyDataSetChanged();
     }
 
     private void initView() {
@@ -62,14 +70,17 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
 
     @Override
     public void onItemClick(View v, int position) {
+        dialogIndex = (int) getArguments().getSerializable("dialogIndex");
         Boolean click = lists.get(position).getClick();
-        if (click)
+        if (click) {
             lists.get(position).setClick(false);
-        else
+            QuestionActivity.timuLists.get(dialogIndex).setAnswer("0");
+        } else {
             lists.get(position).setClick(true);
+            QuestionActivity.timuLists.get(dialogIndex).setAnswer("1");
+        }
         askAdapter.notifyDataSetChanged();
         if (getArguments() != null && onResultListener != null) {
-            int dialogIndex = (int) getArguments().getSerializable("dialogIndex");
             onResultListener.onResult(dialogIndex, click ? 0 : 1);
         }
     }

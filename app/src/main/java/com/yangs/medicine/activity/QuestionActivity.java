@@ -50,7 +50,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private List<Fragment> frag_list;
     private Dialog timuDialog;
     private DialogOnClickListener timuListener;
-    private List<TimuList> timuLists;
+    public static List<TimuList> timuLists;
     private int choose_count = 15;
     private int blank_count = 12;
     private int check_count = 8;
@@ -114,6 +114,17 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 timuList.setStatus("未做");
                 timuList.setFragIndex(frag_list.size());
                 ChooseQuesFragment chooseQuesFragment = new ChooseQuesFragment();
+                chooseQuesFragment.setOnResultListener(new ChooseQuesFragment.OnResultListener() {
+                    @Override
+                    public void onResult(int dialogIndex, int status) {
+                        if (status == 1)
+                            timuLists.get(dialogIndex).setStatus("对");
+                        else if (status == 0)
+                            timuLists.get(dialogIndex).setStatus("错");
+                        if (timuDialog_rv != null && timuDialogAdapter != null)
+                            timuDialogAdapter.notifyDataSetChanged();
+                    }
+                });
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("dialogIndex", timuLists.size());
                 bundle.putSerializable("index", i + cursor_count);
@@ -193,6 +204,17 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 timuList.setStatus("未做");
                 timuList.setFragIndex(frag_list.size());
                 CheckQuesFragment checkQuesFragment = new CheckQuesFragment();
+                checkQuesFragment.setOnResultListener(new CheckQuesFragment.OnResultListener() {
+                    @Override
+                    public void onResult(int dialogIndex, int status) {
+                        if (status == 1)
+                            timuLists.get(dialogIndex).setStatus("对");
+                        else if (status == 0)
+                            timuLists.get(dialogIndex).setStatus("错");
+                        if (timuDialog_rv != null && timuDialogAdapter != null)
+                            timuDialogAdapter.notifyDataSetChanged();
+                    }
+                });
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("index", i + cursor_count);
                 bundle.putSerializable("dialogIndex", timuLists.size());
@@ -308,37 +330,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.questionactivity_head_ok:
-                int index = viewPager.getCurrentItem();
-                Fragment tmp_frag = frag_list.get(index);
-                if (tmp_frag instanceof ChooseQuesFragment) {
-                    ChooseQuesFragment real_frag = (ChooseQuesFragment) tmp_frag;
-                    real_frag.setOnResultListener(new ChooseQuesFragment.OnResultListener() {
-                        @Override
-                        public void onResult(int dialogIndex, int status) {
-                            if (status == 1)
-                                timuLists.get(dialogIndex).setStatus("对");
-                            else if (status == 0)
-                                timuLists.get(dialogIndex).setStatus("错");
-                            if (timuDialog_rv != null && timuDialogAdapter != null)
-                                timuDialogAdapter.notifyDataSetChanged();
-                        }
-                    });
-                    real_frag.checkOK();
-                } else if (tmp_frag instanceof CheckQuesFragment) {
-                    CheckQuesFragment real_frag = (CheckQuesFragment) tmp_frag;
-                    real_frag.setOnResultListener(new CheckQuesFragment.OnResultListener() {
-                        @Override
-                        public void onResult(int dialogIndex, int status) {
-                            if (status == 1)
-                                timuLists.get(dialogIndex).setStatus("对");
-                            else if (status == 0)
-                                timuLists.get(dialogIndex).setStatus("错");
-                            if (timuDialog_rv != null && timuDialogAdapter != null)
-                                timuDialogAdapter.notifyDataSetChanged();
-                        }
-                    });
-                    real_frag.checkOK();
-                }
+                APPlication.showToast("未完成!", 0);
                 break;
             case R.id.questionactivity_ll:
                 APPlication.showToast("评论", 0);
