@@ -1,6 +1,7 @@
 package com.yangs.medicine.fragment;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.activity.SearchActivity;
 import com.yangs.medicine.adapter.TopicAdapter;
 import com.yangs.medicine.model.TopicList;
+import com.yangs.medicine.source.QuestionSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,58 +79,30 @@ public class TopicFragment extends LazyLoadFragment implements View.OnClickListe
 
     private void initData() {
         list = new ArrayList<>();
-        TopicList topic = new TopicList();
-        topic.setIndex(1 + "");
-        topic.setName("生理学");
-        topic.setLock("unlock");
-        list.add(topic);
-        topic = new TopicList();
-        topic.setIndex(2 + "");
-        topic.setName("病理学");
-        topic.setLock("unlock");
-        list.add(topic);
-        topic = new TopicList();
-        topic.setIndex(3 + "");
-        topic.setName("生物化学");
-        topic.setLock("unlock");
-        list.add(topic);
-        topic = new TopicList();
-        topic.setIndex(4 + "");
-        topic.setName("内外妇儿");
-        topic.setLock("lock");
-        topic.setOperation("qq");
-        list.add(topic);
-        topic = new TopicList();
-        topic.setIndex(5 + "");
-        topic.setName("系统解剖学");
-        topic.setLock("unlock");
-        list.add(topic);
-        topic = new TopicList();
-        topic.setIndex(6 + "");
-        topic.setName("病理学");
-        topic.setLock("unlock");
-        list.add(topic);
-        topic = new TopicList();
-        topic.setIndex(7 + "");
-        topic.setName("诊断学");
-        topic.setLock("unlock");
-        list.add(topic);
-        topic = new TopicList();
-        topic.setIndex(8 + "");
-        topic.setName("临床心理学");
-        topic.setLock("lock");
-        topic.setOperation("wechat");
-        list.add(topic);
-        topic = new TopicList();
-        topic.setIndex(9 + "");
-        topic.setName("免疫学");
-        topic.setLock("unlock");
-        list.add(topic);
-        topic = new TopicList();
-        topic.setIndex(10 + "");
-        topic.setName("组织胚胎学");
-        topic.setLock("unlock");
-        list.add(topic);
+        String sql = "select * from " + QuestionSource.SUBJECT_TABLE_NAME;
+        int count = 0;
+        Cursor cursor = null;
+        try {
+            cursor = APPlication.db.rawQuery(sql, null);
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    do {
+                        count++;
+                        TopicList topic = new TopicList();
+                        topic.setIndex(count + "");
+                        topic.setName(cursor.getString(1));
+                        topic.setLock("unlock");
+                        topic.setRealIndex(cursor.getInt(0) + "");
+                        list.add(topic);
+                    } while (cursor.moveToNext());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
     }
 
     @Override
@@ -150,7 +124,8 @@ public class TopicFragment extends LazyLoadFragment implements View.OnClickListe
             return;
         }
         Bundle bundle = new Bundle();
-        bundle.putInt("index", position);     //科目类别
+        bundle.putString("SP", list.get(position).getRealIndex());
+        bundle.putString("Cha", "1");
         Intent intent = new Intent(getActivity(), QuestionActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);

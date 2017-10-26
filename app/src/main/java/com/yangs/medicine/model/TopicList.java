@@ -8,6 +8,16 @@ public class TopicList {
     private String index;       //序号
     private String name;        //科目
 
+    public String getRealIndex() {
+        return realIndex;
+    }
+
+    public void setRealIndex(String realIndex) {
+        this.realIndex = realIndex;
+    }
+
+    private String realIndex;
+
     public String getIndex() {
         return index;
     }

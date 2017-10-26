@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.BlankAdapter;
+import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.BlankList;
+import com.yangs.medicine.model.Question;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +51,12 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
         start = (int) getArguments().getSerializable("start");
         end = (int) getArguments().getSerializable("end");
         for (int i = start; i <= end; i++) {
+            Question question = QuestionUtil.getQuestionByID(i + 1);
             BlankList blankList = new BlankList();
             blankList.setClick(false);
             blankList.setIndex(i + 1);
-            blankList.setQuestion("健康定义从原来医学的生物学模式转变成$,$,$模式");
-            blankList.setAnswer("生物;心理;社会");
+            blankList.setQuestion(question.getQuestion());
+            blankList.setAnswer(question.getAnswer());
             lists.add(blankList);
         }
         blankAdapter.notifyDataSetChanged();

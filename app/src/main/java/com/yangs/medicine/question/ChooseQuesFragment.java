@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,10 @@ import android.widget.TextView;
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.activity.QuestionActivity;
+import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ChooseList;
+import com.yangs.medicine.model.Question;
 import com.yangs.medicine.model.TimuList;
 
 /**
@@ -66,6 +69,8 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private LinearLayout ll_jiexi;
     private TextView ll_jiexi2;
     private Button bt_sub;
+    private String your_answer;
+    private Question question;
 
     @Nullable
     @Override
@@ -140,40 +145,34 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
             checkOK();
     }
 
-    private int b = 0;
-    private int d = 0;
-    private int a = 0;
-    private int c = 0;
-    private int e = 0;
-
     private void setA() {
         ll_A_1.setBackgroundResource(R.drawable.ques_selector_blue);
         ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        a = 1;
+        your_answer = "A";
     }
 
     private void setB() {
         ll_B_1.setBackgroundResource(R.drawable.ques_selector_blue);
         ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        b = 1;
+        your_answer = "B";
     }
 
     private void setC() {
         ll_C_1.setBackgroundResource(R.drawable.ques_selector_blue);
         ll_C_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        c = 1;
+        your_answer = "C";
     }
 
     private void setD() {
         ll_D_1.setBackgroundResource(R.drawable.ques_selector_blue);
         ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        d = 1;
+        your_answer = "D";
     }
 
     private void setE() {
         ll_E_1.setBackgroundResource(R.drawable.ques_selector_blue);
         ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        e = 1;
+        your_answer = "E";
     }
 
     @Override
@@ -211,13 +210,15 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     }
 
     public void updateQuestion(int index) {
-        tv_ques.setText(index + 1 + ".选择题");
-        ll_A_4.setText("A选项");
-        ll_B_4.setText("B选项");
-        ll_C_4.setText("C选项");
-        ll_D_4.setText("D选项");
-        ll_E_4.setText("E选项");
-        ll_jiexi2.setText("暂无");
+        question = QuestionUtil.getQuestionByID(index + 1);
+        tv_ques.setText(question.getId() + "." + question.getQuestion());
+        ll_A_4.setText(question.getA());
+        ll_B_4.setText(question.getB());
+        ll_C_4.setText(question.getC());
+        ll_D_4.setText(question.getD());
+        ll_E_4.setText(question.getE());
+        String ex = question.getExplains();
+        ll_jiexi2.setText(TextUtils.isEmpty(ex) ? "暂无" : ex);
     }
 
     private void reset() {
@@ -231,43 +232,108 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
         ll_E_1.setBackgroundResource(R.drawable.selector_white_7dp);
         ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
-        b = 0;
-        d = 0;
-        a = 0;
-        c = 0;
-        e = 0;
+        your_answer = "";
     }
 
     public void checkOK() {
         QuestionActivity.timuLists.get(dialogindex).setSubmmit(true);
         bt_sub.setVisibility(View.GONE);
-        ll_B_1.setVisibility(View.GONE);
-        ll_B_2.setVisibility(View.VISIBLE);
-        ll_B_3.setVisibility(View.GONE);
-        if (a == 1) {
-            ll_A_1.setVisibility(View.GONE);
-            ll_A_2.setVisibility(View.GONE);
-            ll_A_3.setVisibility(View.VISIBLE);
+        Boolean check = your_answer.equalsIgnoreCase(question.getAnswer());
+        switch (your_answer) {
+            case "A":
+            case "a":
+                ll_A_1.setVisibility(View.GONE);
+                if (check) {
+                    ll_A_2.setVisibility(View.VISIBLE);
+                    ll_A_3.setVisibility(View.GONE);
+                } else {
+                    ll_A_2.setVisibility(View.GONE);
+                    ll_A_3.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "B":
+            case "b":
+                ll_B_1.setVisibility(View.GONE);
+                if (check) {
+                    ll_B_2.setVisibility(View.VISIBLE);
+                    ll_B_3.setVisibility(View.GONE);
+                } else {
+                    ll_B_2.setVisibility(View.GONE);
+                    ll_B_3.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "C":
+            case "c":
+                ll_C_1.setVisibility(View.GONE);
+                if (check) {
+                    ll_C_2.setVisibility(View.VISIBLE);
+                    ll_C_3.setVisibility(View.GONE);
+                } else {
+                    ll_C_2.setVisibility(View.GONE);
+                    ll_C_3.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "D":
+            case "d":
+                ll_D_1.setVisibility(View.GONE);
+                if (check) {
+                    ll_D_2.setVisibility(View.VISIBLE);
+                    ll_D_3.setVisibility(View.GONE);
+                } else {
+                    ll_D_2.setVisibility(View.GONE);
+                    ll_D_3.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "E":
+            case "e":
+                ll_E_1.setVisibility(View.GONE);
+                if (check) {
+                    ll_E_2.setVisibility(View.VISIBLE);
+                    ll_E_3.setVisibility(View.GONE);
+                } else {
+                    ll_E_2.setVisibility(View.GONE);
+                    ll_E_3.setVisibility(View.VISIBLE);
+                }
+                break;
         }
-        if (e == 1) {
-            ll_E_1.setVisibility(View.GONE);
-            ll_E_2.setVisibility(View.GONE);
-            ll_E_3.setVisibility(View.VISIBLE);
-        }
-        if (c == 1) {
-            ll_C_1.setVisibility(View.GONE);
-            ll_C_2.setVisibility(View.GONE);
-            ll_C_3.setVisibility(View.VISIBLE);
-        }
-        if (d == 1) {
-            ll_D_1.setVisibility(View.GONE);
-            ll_D_2.setVisibility(View.GONE);
-            ll_D_3.setVisibility(View.VISIBLE);
+        if (!check) {
+            switch (question.getAnswer()) {
+                case "A":
+                case "a":
+                    ll_A_1.setVisibility(View.GONE);
+                    ll_A_2.setVisibility(View.VISIBLE);
+                    ll_A_3.setVisibility(View.GONE);
+                    break;
+                case "B":
+                case "b":
+                    ll_B_1.setVisibility(View.GONE);
+                    ll_B_2.setVisibility(View.VISIBLE);
+                    ll_B_3.setVisibility(View.GONE);
+                    break;
+                case "C":
+                case "c":
+                    ll_C_1.setVisibility(View.GONE);
+                    ll_C_2.setVisibility(View.VISIBLE);
+                    ll_C_3.setVisibility(View.GONE);
+                    break;
+                case "D":
+                case "d":
+                    ll_D_1.setVisibility(View.GONE);
+                    ll_D_2.setVisibility(View.VISIBLE);
+                    ll_D_3.setVisibility(View.GONE);
+                    break;
+                case "E":
+                case "e":
+                    ll_E_1.setVisibility(View.GONE);
+                    ll_E_2.setVisibility(View.VISIBLE);
+                    ll_E_3.setVisibility(View.GONE);
+                    break;
+            }
         }
         ll_jiexi.setVisibility(View.VISIBLE);
         if (getArguments() != null && onResultListener != null) {
             int dialogIndex = (int) getArguments().getSerializable("dialogIndex");
-            if (b == 1)
+            if (check)
                 onResultListener.onResult(dialogIndex, 1);
             else
                 onResultListener.onResult(dialogIndex, 0);

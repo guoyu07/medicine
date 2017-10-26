@@ -2,6 +2,8 @@ package com.yangs.medicine.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -31,12 +33,15 @@ public class SelectSubActivity extends BaseActivity implements View.OnClickListe
     private Button selectsubactivity_bt;
     private String grade;
     private String sub;
+    private Handler handler;
+    private int code;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selectsubactivity_layout);
         initView();
+        setHandler();
     }
 
     private void initView() {
@@ -65,6 +70,25 @@ public class SelectSubActivity extends BaseActivity implements View.OnClickListe
         selectsubactivity_sub_tv5.setOnClickListener(this);
         selectsubactivity_sub_tv6.setOnClickListener(this);
         selectsubactivity_bt.setOnClickListener(this);
+    }
+
+    private void setHandler() {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 0:
+                        if (code == 0) {
+                            startActivity(new Intent(SelectSubActivity.this, MainActivity.class));
+                        } else {
+                            APPlication.showToast("获取科目失败,请检查网络!", 1);
+                        }
+                        finish();
+                        break;
+                }
+            }
+        };
     }
 
     private void resetGradeView() {
@@ -158,8 +182,13 @@ public class SelectSubActivity extends BaseActivity implements View.OnClickListe
                         .putString("subject", sub).apply();
                 APPlication.grade = grade;
                 APPlication.subject = sub;
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        code = APPlication.questionSource.getSubject(APPlication.subject);
+                        handler.sendEmptyMessage(0);
+                    }
+                }).start();
                 break;
         }
     }

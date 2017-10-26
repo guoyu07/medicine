@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yangs.medicine.activity.APPlication;
-import com.yangs.medicine.model.ChooseList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,9 @@ public class QuestionSource {
     private static final String CHECK_USER_URL = "http://";
     private static final String CHECK_STATUS_URL = "http://";
     private static final String GET_QUESTION_URL = "http://120.55.46.93:8080/medicine/action.GetQuestion";
-    private static final String TABLE_NAME = "题目_tmp";
+    private static final String GET_SUBJECT_URL = "http://120.55.46.93:8080/medicine/action.selectSM";
+    public static final String QUESTION_TABLE_NAME = "题目_tmp";
+    public static final String SUBJECT_TABLE_NAME = "科目_tmp";
     private int cursor_index = 1;
     private String SP;
     private String Cha;
@@ -128,24 +129,68 @@ public class QuestionSource {
         }
     }
 
-    private void initTable(String s) {
+    public int getSubject(String pro) {
         String sql = "select count(*) as c from Sqlite_master  where type ='table' " +
-                "and name ='" + TABLE_NAME + "' ";
+                "and name ='" + SUBJECT_TABLE_NAME + "' ";
         Cursor cursor = APPlication.db.rawQuery(sql, null);
         try {
             if (cursor.moveToNext()) {
                 int count = cursor.getInt(0);
                 if (count > 0) {
-                    APPlication.db.execSQL("drop table " + TABLE_NAME);
+                    APPlication.db.execSQL("drop table " + SUBJECT_TABLE_NAME);
                 }
             }
         } catch (Exception e) {
-            APPlication.showToast("清空题目缓存表: " + TABLE_NAME + "失败!\n" + e.getMessage(), 1);
+            APPlication.showToast("清空缓存表: " + SUBJECT_TABLE_NAME + "失败!\n" + e.getMessage(), 1);
         } finally {
             if (cursor != null)
                 cursor.close();
         }
-        APPlication.db.execSQL("create table " + TABLE_NAME + " (id INTEGER PRIMARY KEY AUTOINCREMENT,question text not null,answer text not null,A text,B text,C text,D text,E text,explains text,type text,Cha int,SP int,RealIndex int);");
+        APPlication.db.execSQL("create table " + SUBJECT_TABLE_NAME + " (id int not null,sub text not null,pro text not null);");
+        if (DEBUG)
+            Log.i(TAG, "getSubject start...");
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "getSub").add("pro", pro);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(GET_SUBJECT_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            JSONObject jsonObject = JSON.parseObject(response.body().string());
+            JSONArray jsonArray = jsonObject.getJSONArray("pro");
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject jo = (JSONObject) jsonArray.get(i);
+                ContentValues cv = new ContentValues();
+                cv.put("id", jo.getInteger("index"));
+                cv.put("sub", jo.getString("name"));
+                cv.put("pro", pro);
+                APPlication.db.insert(SUBJECT_TABLE_NAME, null, cv);
+            }
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    private void initTable(String s) {
+        String sql = "select count(*) as c from Sqlite_master  where type ='table' " +
+                "and name ='" + QUESTION_TABLE_NAME + "' ";
+        Cursor cursor = APPlication.db.rawQuery(sql, null);
+        try {
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(0);
+                if (count > 0) {
+                    APPlication.db.execSQL("drop table " + QUESTION_TABLE_NAME);
+                }
+            }
+        } catch (Exception e) {
+            APPlication.showToast("清空题目缓存表: " + QUESTION_TABLE_NAME + "失败!\n" + e.getMessage(), 1);
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        APPlication.db.execSQL("create table " + QUESTION_TABLE_NAME + " (id INTEGER PRIMARY KEY AUTOINCREMENT,question text not null,answer text not null,A text,B text,C text,D text,E text,explains text,type text,Cha int,SP int,RealIndex int);");
         JSONObject jsonObject = JSON.parseObject(s);
         List<String> list = new ArrayList<>();
         list.add("选择题");
@@ -165,12 +210,12 @@ public class QuestionSource {
                 cv.put("C", jo.getString("C"));
                 cv.put("D", jo.getString("D"));
                 cv.put("E", jo.getString("E"));
-                cv.put("explains", jo.getString("explains"));
+                cv.put("explains", jo.getString("explain"));
                 cv.put("type", type);
                 cv.put("Cha", this.Cha);
                 cv.put("SP", this.SP);
                 cv.put("RealIndex", jo.getString("id"));
-                APPlication.db.insert(TABLE_NAME, null, cv);
+                APPlication.db.insert(QUESTION_TABLE_NAME, null, cv);
             }
         }
     }

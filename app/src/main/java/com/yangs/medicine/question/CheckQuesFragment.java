@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.QuestionActivity;
+import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
+import com.yangs.medicine.model.Question;
 
 /**
  * Created by yangs on 2017/10/10 0010.
@@ -41,6 +44,8 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
     private TextView ll_jiexi2;
     private OnResultListener onResultListener;
     private Button bt_sub;
+    private Question question;
+    private String your_answer = "";
 
     @Nullable
     @Override
@@ -70,21 +75,19 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
         bt_sub.setOnClickListener(this);
         if (getArguments() != null) {
             int index = (int) getArguments().getSerializable("index");
-            tv_ques.setText(index + 1 + ".判断题");
+            question = QuestionUtil.getQuestionByID(index + 1);
+            tv_ques.setText(question.getId() + "." + question.getQuestion());
         }
         dialogIndex = (int) getArguments().getSerializable("dialogIndex");
         String answer = QuestionActivity.timuLists.get(dialogIndex).getAnswer();
-        if ("a".equals(answer)) {
+        if ("对".equals(answer)) {
             setAClick();
-        } else if ("b".equals(answer)) {
+        } else if ("错".equals(answer)) {
             setBClick();
         }
         if (QuestionActivity.timuLists.get(dialogIndex).getSubmmit())
             checkOK();
     }
-
-    private int a = 0;
-    private int b = 0;
 
     @Override
     public void onClick(View v) {
@@ -108,22 +111,21 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
         ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
         ll_B_1.setBackgroundResource(R.drawable.selector_white_7dp);
         ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
-        a = 0;
-        b = 0;
+        your_answer = "";
     }
 
     private void setAClick() {
         ll_A_1.setBackgroundResource(R.drawable.ques_selector_blue);
         ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        a = 1;
-        QuestionActivity.timuLists.get(dialogIndex).setAnswer("a");
+        your_answer = "对";
+        QuestionActivity.timuLists.get(dialogIndex).setAnswer("对");
     }
 
     private void setBClick() {
         ll_B_1.setBackgroundResource(R.drawable.ques_selector_blue);
         ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        b = 1;
-        QuestionActivity.timuLists.get(dialogIndex).setAnswer("b");
+        your_answer = "错";
+        QuestionActivity.timuLists.get(dialogIndex).setAnswer("错");
     }
 
     private void setATrue() {
@@ -152,16 +154,35 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
 
     public void checkOK() {
         bt_sub.setVisibility(View.GONE);
+        Boolean check = your_answer.equals(question.getAnswer());
         QuestionActivity.timuLists.get(dialogIndex).setSubmmit(true);
-        if (b == 1) {
-            setBTrue();
-        } else if (a == 1) {
-            setAFalse();
+        if (check) {
+            switch (your_answer) {
+                case "对":
+                    setATrue();
+                    break;
+                case "错":
+                    setBTrue();
+                    break;
+            }
+        } else {
+            switch (question.getAnswer()) {
+                case "对":
+                    setATrue();
+                    setBFalse();
+                    break;
+                case "错":
+                    setAFalse();
+                    setBTrue();
+                    break;
+            }
         }
+        String ex = question.getExplains();
+        ll_jiexi2.setText(TextUtils.isEmpty(ex) ? "暂无" : ex);
         ll_jiexi.setVisibility(View.VISIBLE);
         if (getArguments() != null && onResultListener != null) {
             dialogIndex = (int) getArguments().getSerializable("dialogIndex");
-            if (b == 1)
+            if (check)
                 onResultListener.onResult(dialogIndex, 1);
             else
                 onResultListener.onResult(dialogIndex, 0);

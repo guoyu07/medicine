@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.AskAdapter;
+import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ExplainList;
+import com.yangs.medicine.model.Question;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
     private List<ExplainList> lists;
     private OnResultListener onResultListener;
     private int dialogIndex;
+    private Question question;
 
     @Nullable
     @Override
@@ -45,10 +48,11 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
         if (getArguments() == null)
             return;
         int index = (int) getArguments().getSerializable("index");
+        question = QuestionUtil.getQuestionByID(index + 1);
         ExplainList explainList = new ExplainList();
         explainList.setIndex(index + 1);
-        explainList.setName("磺胺药与甲氧苄啶合用为什么能增强疗效");
-        explainList.setExplain("磺胺药作用于二氢叶酸合成酶,干扰合成叶酸的第一步,甲氧苄啶作用于叶酸合成代谢的第二步,选择性抑制二氢叶酸还原酶的作用,二者合用可使细菌的叶酸代谢受到双重阻断.协同抗菌作用较单药增强。");
+        explainList.setName(question.getQuestion());
+        explainList.setExplain(question.getAnswer());
         explainList.setClick(false);
         lists.add(explainList);
         if ("1".equals(QuestionActivity.timuLists.get(dialogIndex).getAnswer())) {

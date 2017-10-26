@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.ExplainAdapter;
+import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ExplainList;
+import com.yangs.medicine.model.Question;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,7 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
     private int start;
     private int end;
     private int dialogIndex;
+    private Question question;
 
     @Nullable
     @Override
@@ -49,10 +52,11 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
         start = (int) getArguments().getSerializable("start");
         end = (int) getArguments().getSerializable("end");
         for (int i = start; i <= end; i++) {
+            question = QuestionUtil.getQuestionByID(i + 1);
             ExplainList explainList = new ExplainList();
             explainList.setIndex(i + 1);
-            explainList.setName("肠肝循环");
-            explainList.setExplain("物质（如胆盐等）从肠道吸收后经门静脉进入肝脏，随肝脏分泌胆汁排入肠内补再次吸收，如此周而复始的循环过程。");
+            explainList.setName(question.getQuestion());
+            explainList.setExplain(question.getAnswer());
             explainList.setClick(false);
             lists.add(explainList);
         }

@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.adapter.TimuDialogAdapter;
+import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.model.ChooseList;
 import com.yangs.medicine.model.TimuList;
 import com.yangs.medicine.question.AskQuesFragment;
@@ -54,17 +56,21 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private Dialog timuDialog;
     private DialogOnClickListener timuListener;
     public static List<TimuList> timuLists;
-    private int choose_count = 10;
-    private int blank_count = 10;
-    private int check_count = 5;
-    private int ask_count = 5;
-    private int explain_count = 6;
+
+    private int choose_count;
+    private int blank_count;
+    private int check_count;
+    private int ask_count;
+    private int explain_count;
+
     private int cursor_count = 0;           //游标
     private TimuDialogAdapter timuDialogAdapter;
     private RecyclerView timuDialog_rv;
     private ProgressDialog progressDialog;
     private Handler handler;
     private int get_question_code;
+    private String SP;
+    private String Cha;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,23 +78,14 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.questionactivity_layout);
         FitStatusBar.addStatusBarView(this);
         initView();
-        initData();
         setHandler();
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return frag_list.get(position);
-            }
-
-            @Override
-            public int getCount() {
-                return frag_list.size();
-            }
-        });
         init();
     }
 
     private void initView() {
+        Bundle bundle = getIntent().getExtras();
+        SP = bundle.getString("SP");
+        Cha = bundle.getString("Cha");
         bt_back = (Button) findViewById(R.id.questionactivity_head_back);
         bt_ok = (Button) findViewById(R.id.questionactivity_head_ok);
         ll_chat = (LinearLayout) findViewById(R.id.questionactivity_ll);
@@ -109,15 +106,20 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void init() {
-//        progressDialog = new ProgressDialog(this);
-//        progressDialog.setCancelable(false);
-//        progressDialog.setTitle("获取题目数据中...");
-//        progressDialog.show();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle("获取题目数据中...");
+        progressDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                get_question_code = APPlication.questionSource.getQuestion("2", "1");
-                //handler.sendEmptyMessage(0);
+                get_question_code = APPlication.questionSource.getQuestion(SP, Cha);
+                choose_count = QuestionUtil.getQuestionCount("选择题");
+                blank_count = QuestionUtil.getQuestionCount("填空题");
+                check_count = QuestionUtil.getQuestionCount("判断题");
+                explain_count = QuestionUtil.getQuestionCount("名词解释题");
+                ask_count = QuestionUtil.getQuestionCount("问答题");
+                handler.sendEmptyMessage(0);
             }
         }).start();
     }
@@ -132,7 +134,18 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                         if (progressDialog.isShowing())
                             progressDialog.cancel();
                         if (get_question_code == 0) {
+                            initData();
+                            viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+                                @Override
+                                public Fragment getItem(int position) {
+                                    return frag_list.get(position);
+                                }
 
+                                @Override
+                                public int getCount() {
+                                    return frag_list.size();
+                                }
+                            });
                         } else {
                             APPlication.showToast("网络出错,获取失败", 0);
                         }
