@@ -1,7 +1,10 @@
 package com.yangs.medicine.activity;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -59,6 +62,9 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private int cursor_count = 0;           //游标
     private TimuDialogAdapter timuDialogAdapter;
     private RecyclerView timuDialog_rv;
+    private ProgressDialog progressDialog;
+    private Handler handler;
+    private int get_question_code;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +73,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         FitStatusBar.addStatusBarView(this);
         initView();
         initData();
+        setHandler();
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -78,6 +85,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 return frag_list.size();
             }
         });
+        init();
     }
 
     private void initView() {
@@ -98,6 +106,40 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         iv_timu.setOnClickListener(this);
         frag_list = new ArrayList<>();
         timuLists = new ArrayList<>();
+    }
+
+    private void init() {
+//        progressDialog = new ProgressDialog(this);
+//        progressDialog.setCancelable(false);
+//        progressDialog.setTitle("获取题目数据中...");
+//        progressDialog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                get_question_code = APPlication.questionSource.getQuestion("2", "1");
+                //handler.sendEmptyMessage(0);
+            }
+        }).start();
+    }
+
+    private void setHandler() {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 0:
+                        if (progressDialog.isShowing())
+                            progressDialog.cancel();
+                        if (get_question_code == 0) {
+
+                        } else {
+                            APPlication.showToast("网络出错,获取失败", 0);
+                        }
+                        break;
+                }
+            }
+        };
     }
 
     private void initData() {
