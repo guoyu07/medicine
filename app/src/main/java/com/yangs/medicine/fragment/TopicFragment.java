@@ -2,10 +2,8 @@ package com.yangs.medicine.fragment;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +21,9 @@ import com.yangs.medicine.model.TopicList;
 import com.yangs.medicine.source.QuestionSource;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangs on 2017/9/23 0023.
@@ -39,6 +39,7 @@ public class TopicFragment extends LazyLoadFragment implements View.OnClickListe
     private TopicAdapter mAdapter;
     private List<TopicList> list;
     private Toolbar toolbar;
+    private Map<String, List<TopicList>> map;
 
     @Override
     protected int setContentView() {
@@ -79,20 +80,23 @@ public class TopicFragment extends LazyLoadFragment implements View.OnClickListe
 
     private void initData() {
         list = new ArrayList<>();
+        map = new HashMap<>();
         String sql = "select * from " + QuestionSource.SUBJECT_TABLE_NAME;
-        int count = 0;
+        int index = 0;
         Cursor cursor = null;
         try {
             cursor = APPlication.db.rawQuery(sql, null);
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     do {
-                        count++;
+                        index++;
                         TopicList topic = new TopicList();
-                        topic.setIndex(count + "");
                         topic.setName(cursor.getString(1));
                         topic.setLock("unlock");
-                        topic.setRealIndex(cursor.getInt(0) + "");
+                        topic.setType("big");
+                        topic.setIndex(index + "");
+                        topic.setClick(false);
+                        topic.setSP(cursor.getInt(0) + "");
                         list.add(topic);
                     } while (cursor.moveToNext());
                 }
@@ -119,13 +123,49 @@ public class TopicFragment extends LazyLoadFragment implements View.OnClickListe
 
     @Override
     public void onItemClick(View view, int position) {
-        if (list.get(position).getLock().equals("lock")) {
-            APPlication.showToast("分享后解锁哦", 0);
+        if (list.get(position).getType().equals("big")) {
+            if (list.get(position).getLock().equals("lock")) {
+                APPlication.showToast("分享后解锁哦", 0);
+                return;
+            }
+            if (list.get(position).getClick()) {
+                list.get(position).setClick(false);
+                list.removeAll(map.get(list.get(position).getName()));
+            } else {
+                List<TopicList> lists2 = new ArrayList<>();
+                TopicList topic = new TopicList();
+                topic.setIndex("第1章");
+                topic.setName("认识生理学");
+                topic.setType("small");
+                topic.setSP(list.get(position).getSP());
+                topic.setNumber("0/20");
+                lists2.add(topic);
+                topic = new TopicList();
+                topic.setIndex("第2章");
+                topic.setName("生理的作用");
+                topic.setType("small");
+                topic.setSP(list.get(position).getSP());
+                topic.setNumber("0/15");
+                lists2.add(topic);
+                topic = new TopicList();
+                topic.setIndex("* ");
+                topic.setName("外科学重点题");
+                topic.setType("small");
+                topic.setSP(list.get(position).getSP());
+                topic.setNumber("0/60");
+                lists2.add(topic);
+                map.put(list.get(position).getName(), lists2);
+                list.addAll(position + 1, lists2);
+                list.get(position).setClick(true);
+            }
+            mAdapter.notifyDataSetChanged();
             return;
         }
         Bundle bundle = new Bundle();
-        bundle.putString("SP", list.get(position).getRealIndex());
-        bundle.putString("Cha", "1");
+        bundle.putString("SP", list.get(position).getSP());
+        bundle.putString("Cha", list.get(position).getIndex().replace("第", "")
+                .replace("章", "").replace("* ", ""));
+        bundle.putString("Name", list.get(position).getName());
         Intent intent = new Intent(getActivity(), QuestionActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);

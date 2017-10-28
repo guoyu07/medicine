@@ -42,7 +42,7 @@ public class ExplainAdapter extends RecyclerView.Adapter<ExplainAdapter.ViewHold
         String src = lists.get(position).getIndex() + "." + lists.get(position).getName() +
                 ":&nbsp;";
         if (lists.get(position).getClick()) {
-            src = src + "&nbsp;&nbsp;<font><small>" + lists.get(position).getExplain() + "</small></font>";
+            src = src + "&nbsp;&nbsp;<font>" + lists.get(position).getExplain() + "</font>";
         }
         holder.tv.setText(Html.fromHtml(src));
     }

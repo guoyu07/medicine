@@ -204,7 +204,10 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
                 QuestionActivity.timuLists.get(dialogindex).setAnswer("e");
                 break;
             case R.id.choosequesfrag_bt_sub:
-                checkOK();
+                if (TextUtils.isEmpty(your_answer))
+                    APPlication.showToast("要自己先做了才能查看答案哦!", 0);
+                else
+                    checkOK();
                 break;
         }
     }

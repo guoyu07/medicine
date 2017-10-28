@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
@@ -101,7 +102,10 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
                 setBClick();
                 break;
             case R.id.checkquesfrag_bt_sub:
-                checkOK();
+                if (TextUtils.isEmpty(your_answer))
+                    APPlication.showToast("要自己先做了才能查看答案哦!", 0);
+                else
+                    checkOK();
                 break;
         }
     }

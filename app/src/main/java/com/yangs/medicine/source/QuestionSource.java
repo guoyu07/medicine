@@ -6,9 +6,11 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.yangs.medicine.activity.APPlication;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,10 +124,58 @@ public class QuestionSource {
                 .post(requestBody).build();
         try {
             Response response = mOkHttpClient.newCall(request).execute();
-            initTable(response.body().string());
+            String sql = "select count(*) as c from Sqlite_master  where type ='table' " +
+                    "and name ='" + QUESTION_TABLE_NAME + "' ";
+            Cursor cursor = APPlication.db.rawQuery(sql, null);
+            try {
+                if (cursor.moveToNext()) {
+                    int count = cursor.getInt(0);
+                    if (count > 0) {
+                        APPlication.db.execSQL("drop table " + QUESTION_TABLE_NAME);
+                    }
+                }
+            } catch (Exception e) {
+                APPlication.showToast("清空题目缓存表: " + QUESTION_TABLE_NAME + "失败!\n" + e.getMessage(), 1);
+            } finally {
+                if (cursor != null)
+                    cursor.close();
+            }
+            APPlication.db.execSQL("create table " + QUESTION_TABLE_NAME + " (id INTEGER PRIMARY KEY AUTOINCREMENT,question text not null,answer text not null,A text,B text,C text,D text,E text,explains text,type text,Cha int,SP int,RealIndex int);");
+            String s = response.body().string();
+            JSONObject jsonObject = JSON.parseObject(s);
+            List<String> list = new ArrayList<>();
+            list.add("选择题");
+            list.add("填空题");
+            list.add("判断题");
+            list.add("名词解释题");
+            list.add("问答题");
+            for (String type : list) {
+                JSONArray jsonArray = jsonObject.getJSONArray(type);
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject jo = (JSONObject) jsonArray.get(i);
+                    ContentValues cv = new ContentValues();
+                    cv.put("question", jo.getString("question"));
+                    cv.put("answer", jo.getString("answer"));
+                    cv.put("A", jo.getString("A"));
+                    cv.put("B", jo.getString("B"));
+                    cv.put("C", jo.getString("C"));
+                    cv.put("D", jo.getString("D"));
+                    cv.put("E", jo.getString("E"));
+                    cv.put("explains", jo.getString("explain"));
+                    cv.put("type", type);
+                    cv.put("Cha", this.Cha);
+                    cv.put("SP", this.SP);
+                    cv.put("RealIndex", jo.getString("id"));
+                    APPlication.db.insert(QUESTION_TABLE_NAME, null, cv);
+                }
+            }
             return 0;
-        } catch (Exception e) {
+        } catch (JSONException e) {
+            e.printStackTrace();
             return -1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -2;
         }
     }
 
@@ -170,53 +220,6 @@ public class QuestionSource {
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
-        }
-    }
-
-    private void initTable(String s) {
-        String sql = "select count(*) as c from Sqlite_master  where type ='table' " +
-                "and name ='" + QUESTION_TABLE_NAME + "' ";
-        Cursor cursor = APPlication.db.rawQuery(sql, null);
-        try {
-            if (cursor.moveToNext()) {
-                int count = cursor.getInt(0);
-                if (count > 0) {
-                    APPlication.db.execSQL("drop table " + QUESTION_TABLE_NAME);
-                }
-            }
-        } catch (Exception e) {
-            APPlication.showToast("清空题目缓存表: " + QUESTION_TABLE_NAME + "失败!\n" + e.getMessage(), 1);
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        APPlication.db.execSQL("create table " + QUESTION_TABLE_NAME + " (id INTEGER PRIMARY KEY AUTOINCREMENT,question text not null,answer text not null,A text,B text,C text,D text,E text,explains text,type text,Cha int,SP int,RealIndex int);");
-        JSONObject jsonObject = JSON.parseObject(s);
-        List<String> list = new ArrayList<>();
-        list.add("选择题");
-        list.add("填空题");
-        list.add("判断题");
-        list.add("名词解释题");
-        list.add("问答题");
-        for (String type : list) {
-            JSONArray jsonArray = jsonObject.getJSONArray(type);
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JSONObject jo = (JSONObject) jsonArray.get(i);
-                ContentValues cv = new ContentValues();
-                cv.put("question", jo.getString("question"));
-                cv.put("answer", jo.getString("answer"));
-                cv.put("A", jo.getString("A"));
-                cv.put("B", jo.getString("B"));
-                cv.put("C", jo.getString("C"));
-                cv.put("D", jo.getString("D"));
-                cv.put("E", jo.getString("E"));
-                cv.put("explains", jo.getString("explain"));
-                cv.put("type", type);
-                cv.put("Cha", this.Cha);
-                cv.put("SP", this.SP);
-                cv.put("RealIndex", jo.getString("id"));
-                APPlication.db.insert(QUESTION_TABLE_NAME, null, cv);
-            }
         }
     }
 }

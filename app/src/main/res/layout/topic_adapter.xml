@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
@@ -14,29 +15,31 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/topic_adapter_tv_1"
+            android:id="@+id/topic_adapter_1_tv_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="25dp"
             android:gravity="center"
-            android:text="1"
+            android:text="1   生理学"
             android:textColor="@color/me_tv_color"
-            android:textSize="20sp" />
+            android:textSize="18dp"
+            android:visibility="visible" />
 
         <TextView
-            android:id="@+id/topic_adapter_tv_2"
+            android:id="@+id/topic_adapter_2_tv_name"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="35dp"
             android:gravity="center"
-            android:text="生理学"
+            android:text="第一章 认识生理学"
             android:textColor="@color/me_tv_color"
-            android:textSize="18dp" />
+            android:textSize="16sp"
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/topic_adapter_tv_3"
+            android:id="@+id/topic_adapter_1_tv_share"
             android:layout_width="0dp"
             android:layout_height="44dp"
             android:layout_marginLeft="10dp"
@@ -48,18 +51,44 @@
             android:textSize="12sp"
             android:visibility="invisible" />
 
+        <View
+            android:id="@+id/topic_adapter_2_v"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
         <ImageView
-            android:id="@+id/topic_adapter_iv"
+            android:id="@+id/topic_adapter_1_iv"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_gravity="right|center_vertical" />
+            android:layout_gravity="right|center_vertical"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/topic_adapter_2_tv_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="0/20"
+            android:textColor="@color/me_tv_color"
+            android:textSize="12sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <View
-        android:id="@+id/topic_adapter_v"
+        android:id="@+id/topic_adapter_v1"
+        android:layout_width="match_parent"
+        android:layout_height="11dp"
+        android:background="@color/me_white"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/topic_adapter_v2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="40dp"
         android:background="@color/error_gray"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 </LinearLayout>

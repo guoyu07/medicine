@@ -43,22 +43,52 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.itemView.setTag(position);
-        holder.tv_1.setText(list.get(position).getIndex());
-        holder.tv_2.setText(list.get(position).getName());
-        if (position != list.size() - 1)
-            holder.v.setVisibility(View.VISIBLE);
-        if (list.get(position).getLock().equals("lock")) {
-            holder.iv.setBackgroundResource(R.drawable.icon_suo);
-            holder.tv_3.setVisibility(View.VISIBLE);
-            if (list.get(position).getOperation().contains("qq"))
-                holder.tv_3.setText("分享QQ群 解锁4-7");
-            else if (list.get(position).getOperation().contains("wechat"))
-                holder.tv_3.setText("分享朋友圈 解锁8-10");
-            else
-                holder.tv_3.setText("未定义解锁方式");
+        if (list.get(position).getType().equals("big")) {
+            if (position != list.size() - 1 && list.get(position + 1).getType().equals("small")) {
+                holder.v1.setVisibility(View.GONE);
+                holder.v2.setVisibility(View.VISIBLE);
+            } else {
+                holder.v1.setVisibility(View.VISIBLE);
+            }
+            holder.v2.setVisibility(View.GONE);
+            holder.ada_1_tv_name.setVisibility(View.VISIBLE);
+            holder.ada_1_iv.setVisibility(View.VISIBLE);
+            holder.ada_2_tv_name.setVisibility(View.GONE);
+            holder.ada_2_v.setVisibility(View.GONE);
+            holder.ada_2_tv_number.setVisibility(View.GONE);
+            holder.ada_1_tv_name.setText(list.get(position).getIndex() + "   " + list.get(position).getName());
+            if (list.get(position).getLock().equals("lock")) {
+                holder.ada_1_tv_share.setVisibility(View.VISIBLE);
+                holder.ada_1_iv.setBackgroundResource(R.drawable.icon_suo);
+                if (list.get(position).getOperation().contains("qq"))
+                    holder.ada_1_tv_share.setText("分享QQ群 解锁4-7");
+                else if (list.get(position).getOperation().contains("wechat"))
+                    holder.ada_1_tv_share.setText("分享朋友圈 解锁8-10");
+                else
+                    holder.ada_1_tv_share.setText("未定义解锁方式");
+            } else {
+                holder.ada_1_tv_share.setVisibility(View.INVISIBLE);
+                if (list.get(position).getClick())
+                    holder.ada_1_iv.setBackgroundResource(R.drawable.ic_keyboard_arrow_down_gray_24dp);
+                else
+                    holder.ada_1_iv.setBackgroundResource(R.drawable.ic_keyboard_arrow_right_white_24dp);
+            }
         } else {
-            holder.iv.setBackgroundResource(R.drawable.icon_return);
-            holder.tv_3.setText("");
+            if (position != list.size() - 1 && list.get(position + 1).getType().equals("big")) {
+                holder.v1.setVisibility(View.VISIBLE);
+                holder.v2.setVisibility(View.GONE);
+            } else {
+                holder.v1.setVisibility(View.GONE);
+                holder.v2.setVisibility(View.VISIBLE);
+            }
+            holder.ada_1_tv_name.setVisibility(View.GONE);
+            holder.ada_1_iv.setVisibility(View.GONE);
+            holder.ada_1_tv_share.setVisibility(View.GONE);
+            holder.ada_2_tv_name.setVisibility(View.VISIBLE);
+            holder.ada_2_v.setVisibility(View.VISIBLE);
+            holder.ada_2_tv_number.setVisibility(View.VISIBLE);
+            holder.ada_2_tv_name.setText(list.get(position).getIndex() + " " + list.get(position).getName());
+            holder.ada_2_tv_number.setText(list.get(position).getNumber());
         }
     }
 
@@ -83,19 +113,25 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_1;
-        TextView tv_2;
-        TextView tv_3;
-        ImageView iv;
-        View v;
+        TextView ada_1_tv_name;
+        TextView ada_1_tv_share;
+        ImageView ada_1_iv;
+        TextView ada_2_tv_name;
+        View ada_2_v;
+        TextView ada_2_tv_number;
+        View v1;
+        View v2;
 
         public MyViewHolder(View view) {
             super(view);
-            tv_1 = (TextView) view.findViewById(R.id.topic_adapter_tv_1);
-            tv_2 = (TextView) view.findViewById(R.id.topic_adapter_tv_2);
-            tv_3 = (TextView) view.findViewById(R.id.topic_adapter_tv_3);
-            iv = (ImageView) view.findViewById(R.id.topic_adapter_iv);
-            v = view.findViewById(R.id.topic_adapter_v);
+            ada_1_tv_name = (TextView) view.findViewById(R.id.topic_adapter_1_tv_name);
+            ada_1_tv_share = (TextView) view.findViewById(R.id.topic_adapter_1_tv_share);
+            ada_1_iv = (ImageView) view.findViewById(R.id.topic_adapter_1_iv);
+            ada_2_tv_name = (TextView) view.findViewById(R.id.topic_adapter_2_tv_name);
+            ada_2_v = view.findViewById(R.id.topic_adapter_2_v);
+            ada_2_tv_number = (TextView) view.findViewById(R.id.topic_adapter_2_tv_number);
+            v1 = view.findViewById(R.id.topic_adapter_v1);
+            v2 = view.findViewById(R.id.topic_adapter_v2);
         }
     }
 }

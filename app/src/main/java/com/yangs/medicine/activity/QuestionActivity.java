@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.adapter.TimuDialogAdapter;
@@ -46,6 +47,7 @@ import java.util.Map;
 public class QuestionActivity extends BaseActivity implements View.OnClickListener, TimuDialogAdapter.TimuOnClickListener {
     private Button bt_back;
     private Button bt_ok;
+    private TextView head_title;
     private LinearLayout ll_chat;
     private ImageView iv_love;
     private ImageView iv_share;
@@ -67,10 +69,10 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private TimuDialogAdapter timuDialogAdapter;
     private RecyclerView timuDialog_rv;
     private ProgressDialog progressDialog;
-    private Handler handler;
     private int get_question_code;
     private String SP;
     private String Cha;
+    private String Subject;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +80,6 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.questionactivity_layout);
         FitStatusBar.addStatusBarView(this);
         initView();
-        setHandler();
         init();
     }
 
@@ -86,6 +87,8 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         Bundle bundle = getIntent().getExtras();
         SP = bundle.getString("SP");
         Cha = bundle.getString("Cha");
+        Subject = bundle.getString("Name");
+        head_title = (TextView) findViewById(R.id.questionactivity_head_title);
         bt_back = (Button) findViewById(R.id.questionactivity_head_back);
         bt_ok = (Button) findViewById(R.id.questionactivity_head_ok);
         ll_chat = (LinearLayout) findViewById(R.id.questionactivity_ll);
@@ -103,6 +106,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         iv_timu.setOnClickListener(this);
         frag_list = new ArrayList<>();
         timuLists = new ArrayList<>();
+        head_title.setText(Subject);
     }
 
     private void init() {
@@ -124,16 +128,16 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         }).start();
     }
 
-    private void setHandler() {
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what) {
-                    case 0:
-                        if (progressDialog.isShowing())
-                            progressDialog.cancel();
-                        if (get_question_code == 0) {
+    private Handler handler = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    if (progressDialog.isShowing())
+                        progressDialog.cancel();
+                    switch (get_question_code) {
+                        case 0:
                             initData();
                             viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
                                 @Override
@@ -146,14 +150,19 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                                     return frag_list.size();
                                 }
                             });
-                        } else {
-                            APPlication.showToast("网络出错,获取失败", 0);
-                        }
-                        break;
-                }
+                            break;
+                        case -1:
+                            APPlication.showToast("解析题目数据时发生了错误,请反馈!", 1);
+                            break;
+                        case -2:
+                            APPlication.showToast("连接服务器失败!", 0);
+                            break;
+                    }
+                    break;
             }
-        };
-    }
+            return false;
+        }
+    });
 
     private void initData() {
         TimuList timuList = new TimuList();

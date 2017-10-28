@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,15 +15,15 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="left">
+            android:gravity="start">
 
             <Button
                 android:id="@+id/questionactivity_head_back"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_gravity="left|center_vertical"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/ic_chevron_left_white_24dp" />
         </LinearLayout>
@@ -32,8 +31,9 @@
         <TextView
             android:id="@+id/questionactivity_head_title"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
             android:layout_weight="2"
             android:gravity="center"
             android:text="生理学"
@@ -42,15 +42,16 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="right">
+            android:gravity="end">
 
             <Button
                 android:id="@+id/questionactivity_head_ok"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="交卷"
                 android:textColor="@color/me_white"

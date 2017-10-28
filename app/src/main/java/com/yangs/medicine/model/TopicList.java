@@ -5,18 +5,11 @@ package com.yangs.medicine.model;
  */
 
 public class TopicList {
+    private String name;        //名称
+    private String type;        //类型
+
+    private Boolean isClick;   //是否点击
     private String index;       //序号
-    private String name;        //科目
-
-    public String getRealIndex() {
-        return realIndex;
-    }
-
-    public void setRealIndex(String realIndex) {
-        this.realIndex = realIndex;
-    }
-
-    private String realIndex;
 
     public String getIndex() {
         return index;
@@ -25,6 +18,42 @@ public class TopicList {
     public void setIndex(String index) {
         this.index = index;
     }
+
+    public Boolean getClick() {
+        return isClick;
+    }
+
+    public void setClick(Boolean click) {
+        isClick = click;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    private String number;      //题目数量
+
+    public String getSP() {
+        return SP;
+    }
+
+    public void setSP(String SP) {
+        this.SP = SP;
+    }
+
+    private String SP;
 
     public String getName() {
         return name;
