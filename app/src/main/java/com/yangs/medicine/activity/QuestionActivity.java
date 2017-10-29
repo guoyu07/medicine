@@ -2,6 +2,7 @@ package com.yangs.medicine.activity;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +28,7 @@ import com.yangs.medicine.R;
 import com.yangs.medicine.adapter.TimuDialogAdapter;
 import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.model.ChooseList;
+import com.yangs.medicine.model.Question;
 import com.yangs.medicine.model.TimuList;
 import com.yangs.medicine.question.AskQuesFragment;
 import com.yangs.medicine.question.BlankQuesFragment;
@@ -406,7 +408,13 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 APPlication.showToast("分享", 0);
                 break;
             case R.id.questionactivity_iv_talk:
-                APPlication.showToast("讨论", 0);
+                Question question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1);
+                Bundle bundle = new Bundle();
+                bundle.putString("realIndex", question.getRealID());
+                Intent intent = new Intent(QuestionActivity.this, DiscussActivity.class);
+                intent.putExtras(bundle);
+                APPlication.showToast("" + question.getRealID(), 0);
+                startActivity(intent);
                 break;
             case R.id.questionactivity_iv_timu:
                 if (timuDialog == null) {

@@ -1,11 +1,15 @@
 package com.yangs.medicine;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +37,10 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+        }
         if (APPlication.save.getBoolean("login_status", false)) {
             handler = new Handler();
             new Thread(new Runnable() {
@@ -42,10 +50,16 @@ public class Splash extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (code == 0) {
-                                startActivity(new Intent(Splash.this, MainActivity.class));
-                            } else {
-                                APPlication.showToast("获取科目失败,请检查网络!", 1);
+                            switch (code) {
+                                case 0:
+                                    startActivity(new Intent(Splash.this, MainActivity.class));
+                                    break;
+                                case -1:
+                                    APPlication.showToast("解析题目数据时发生了错误,请反馈!", 1);
+                                    break;
+                                case -2:
+                                    APPlication.showToast("获取科目失败,请检查网络!", 1);
+                                    break;
                             }
                             finish();
                         }

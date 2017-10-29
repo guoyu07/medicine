@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="15dp"
             android:gravity="center"
             android:text="1   生理学"
             android:textColor="@color/me_tv_color"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="35dp"
+            android:layout_marginLeft="25dp"
             android:gravity="center"
             android:text="第一章 认识生理学"
             android:textColor="@color/me_tv_color"
@@ -88,7 +88,7 @@
         android:id="@+id/topic_adapter_v2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="30dp"
         android:background="@color/error_gray"
         android:visibility="gone" />
 </LinearLayout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/me_white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.yangs.medicine.activity.QuestionActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_topic_top"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="start">
+
+            <Button
+                android:id="@+id/discussactivity_head_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_chevron_left_white_24dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/discussactivity_head_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="全部评论"
+            android:textColor="@color/me_white"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/discussactivity_srl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/discussactivity_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/selector_2dp_white" />
+
+            <TextView
+                android:id="@+id/discussactivity_tv_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="还没有评论"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22sp"
+                android:visibility="gone" />
+        </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

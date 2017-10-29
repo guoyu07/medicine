@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.yangs.medicine.ui.MyScrollview xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/me_white"
@@ -393,7 +393,29 @@
                     android:layout_marginRight="18dp"
                     android:textColor="@color/error_tv"
                     android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="精彩评论:"
+                    android:textColor="@color/error_tv"
+                    android:textSize="18sp" />
+
+                <ProgressBar
+                    android:id="@+id/choosequesfrag_pb"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center" />
+
+                <com.yangs.medicine.ui.MyRecylerview
+                    android:id="@+id/choosequesfrag_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
             </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</com.yangs.medicine.ui.MyScrollview>

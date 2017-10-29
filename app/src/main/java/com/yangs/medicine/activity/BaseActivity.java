@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -27,6 +28,10 @@ public class BaseActivity extends AppCompatActivity {
             WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
             localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
         }
+    }
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override

@@ -39,6 +39,7 @@ public class QuestionSource {
     private static final String GET_SUBJECT_URL = "http://120.55.46.93:8080/medicine/action.selectSM";
     public static final String QUESTION_TABLE_NAME = "题目_tmp";
     public static final String SUBJECT_TABLE_NAME = "科目_tmp";
+    public static final String CHA_TABLE_NAME = "章节_tmp";
     private int cursor_index = 1;
     private String SP;
     private String Cha;
@@ -217,9 +218,79 @@ public class QuestionSource {
                 APPlication.db.insert(SUBJECT_TABLE_NAME, null, cv);
             }
             return 0;
-        } catch (Exception e) {
+        } catch (JSONException e) {
             e.printStackTrace();
             return -1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -2;
+        }
+    }
+
+    public int getCha(String pro) {
+        String sql = "select count(*) as c from Sqlite_master  where type ='table' " +
+                "and name ='" + CHA_TABLE_NAME + "' ";
+        Cursor cursor = APPlication.db.rawQuery(sql, null);
+        try {
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(0);
+                if (count > 0) {
+                    APPlication.db.execSQL("drop table " + CHA_TABLE_NAME);
+                }
+            }
+        } catch (Exception e) {
+            APPlication.showToast("清空缓存表: " + CHA_TABLE_NAME + "失败!\n" + e.getMessage(), 1);
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        APPlication.db.execSQL("create table " + CHA_TABLE_NAME
+                + " (id INTEGER PRIMARY KEY AUTOINCREMENT,name text,number int,count int,SP int);");
+        if (DEBUG)
+            Log.i(TAG, "getCha start...");
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "getChaNameAll").add("pro", pro);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(GET_SUBJECT_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            JSONObject jsonObject = JSON.parseObject(response.body().string());
+            sql = "select * from " + QuestionSource.SUBJECT_TABLE_NAME;
+            cursor = APPlication.db.rawQuery(sql, null);
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    do {
+                        String subject = cursor.getString(1);
+                        int SP = cursor.getInt(0);
+                        JSONArray jsonArray = jsonObject.getJSONArray(subject);
+                        for (int i = 0; i < jsonArray.size(); i++) {
+                            JSONObject jo = (JSONObject) jsonArray.get(i);
+                            String name = jo.getString("name");
+                            String index = jo.getString("index");
+                            int count = jo.getInteger("number");
+                            if (name == null || name.equals("") || name.equals("null"))
+                                name = "暂无";
+                            ContentValues cv = new ContentValues();
+                            cv.put("name", name);
+                            cv.put("number", index);
+                            cv.put("count", count);
+                            cv.put("SP", SP);
+                            APPlication.db.insert(CHA_TABLE_NAME, null, cv);
+                        }
+                    } while (cursor.moveToNext());
+                }
+            }
+            return 0;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return -2;
+        } finally {
+            if (cursor != null)
+                cursor.close();
         }
     }
 }

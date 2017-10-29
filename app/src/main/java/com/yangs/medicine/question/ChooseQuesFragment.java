@@ -1,9 +1,12 @@
 package com.yangs.medicine.question;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +14,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.activity.QuestionActivity;
+import com.yangs.medicine.adapter.DiscussAdapter;
 import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ChooseList;
+import com.yangs.medicine.model.DiscussList;
 import com.yangs.medicine.model.Question;
 import com.yangs.medicine.model.TimuList;
+import com.yangs.medicine.ui.FullyLinearLayoutManager;
+import com.yangs.medicine.ui.MyRecylerview;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by yangs on 2017/10/10 0010.
@@ -71,6 +82,10 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private Button bt_sub;
     private String your_answer;
     private Question question;
+    private List<DiscussList> lists;
+    private MyRecylerview dis_rv;
+    private DiscussAdapter discussAdapter;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -110,6 +125,8 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         bt_sub = (Button) mLay.findViewById(R.id.choosequesfrag_bt_sub);
         ll_jiexi = (LinearLayout) mLay.findViewById(R.id.choosequesfrag_ll_jiexi);
         ll_jiexi2 = (TextView) mLay.findViewById(R.id.choosequesfrag_ll_jiexi2);
+        dis_rv = (MyRecylerview) mLay.findViewById(R.id.choosequesfrag_rv);
+        progressBar = (ProgressBar) mLay.findViewById(R.id.choosequesfrag_pb);
         ll_A.setOnClickListener(this);
         ll_B.setOnClickListener(this);
         ll_C.setOnClickListener(this);
@@ -143,6 +160,52 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         }
         if (QuestionActivity.timuLists.get(dialogindex).getSubmmit())
             checkOK();
+        lists = new ArrayList<>();
+        DiscussList discussList = new DiscussList();
+        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_zhangsan);
+        discussList.setUser("张三");
+        discussList.setTime("2017-10-30 21:10");
+        discussList.setStar(5);
+        discussList.setContent("还不错!");
+        lists.add(discussList);
+        discussList = new DiscussList();
+        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
+        discussList.setUser("李四");
+        discussList.setTime("2017-10-30 21:08");
+        discussList.setStar(2);
+        discussList.setContent("又做错了.");
+        lists.add(discussList);
+        discussList = new DiscussList();
+        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
+        discussList.setUser("李四");
+        discussList.setTime("2017-10-30 21:08");
+        discussList.setStar(2);
+        discussList.setContent("又做错了.");
+        lists.add(discussList);
+        discussList = new DiscussList();
+        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
+        discussList.setUser("李四");
+        discussList.setTime("2017-10-30 21:08");
+        discussList.setStar(2);
+        discussList.setContent("又做错了.");
+        lists.add(discussList);
+        discussList = new DiscussList();
+        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
+        discussList.setUser("李四");
+        discussList.setTime("2017-10-30 21:08");
+        discussList.setStar(2);
+        discussList.setContent("又做错了.");
+        lists.add(discussList);
+        discussList = new DiscussList();
+        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
+        discussList.setUser("李四");
+        discussList.setTime("2017-10-30 21:08");
+        discussList.setStar(2);
+        discussList.setContent("又做错了.");
+        lists.add(discussList);
+        discussAdapter = new DiscussAdapter(lists, getContext());
+        dis_rv.setLayoutManager(new FullyLinearLayoutManager(getContext()));
+        dis_rv.setAdapter(discussAdapter);
     }
 
     private void setA() {
@@ -341,6 +404,14 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
             else
                 onResultListener.onResult(dialogIndex, 0);
         }
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                dis_rv.setVisibility(View.VISIBLE);
+            }
+        }, 2000);
     }
 
     public void setOnResultListener(OnResultListener onResultListener) {

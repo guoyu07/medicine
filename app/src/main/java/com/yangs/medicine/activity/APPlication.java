@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.yangs.medicine.source.QuestionSource;
+import com.yangs.medicine.util.CrashHandler;
 
 /**
  * Created by yangs on 2017/9/23 0023.
@@ -25,7 +26,7 @@ public class APPlication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DEBUG = true;
+        DEBUG = false;
         context = getApplicationContext();
         Fresco.initialize(this);
         save = getSharedPreferences("Medicine", MODE_PRIVATE);
@@ -33,6 +34,10 @@ public class APPlication extends Application {
         grade = save.getString("grade", "");
         subject = save.getString("subject", "");
         questionSource = new QuestionSource("yangs", "12345");
+        if (!DEBUG) {
+            CrashHandler crashHandler = CrashHandler.getInstance();
+            crashHandler.init(getApplicationContext());
+        }
     }
 
     public static void showToast(String msg, int time) {
