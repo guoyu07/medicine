@@ -2,6 +2,7 @@ package com.yangs.medicine.question;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -39,11 +41,12 @@ import java.util.List;
  * 复杂界面,后期模块化
  */
 
-public class ChooseQuesFragment extends Fragment implements View.OnClickListener {
+public class ChooseQuesFragment extends Fragment implements View.OnClickListener, DiscussAdapter.OnThumbUpListener {
     private View mLay;
     private OnResultListener onResultListener;
     private static final String TAG = "ChooseQuesFragment";
     private int dialogindex;
+    private int index;
     //问题
     public TextView tv_ques;
     //A选项
@@ -86,6 +89,10 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private MyRecylerview dis_rv;
     private DiscussAdapter discussAdapter;
     private ProgressBar progressBar;
+    private ImageView iv_noreply;
+    private TextView tv_noreply;
+    private int star_code;
+    private int thumb_click_position;
 
     @Nullable
     @Override
@@ -127,6 +134,8 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_jiexi2 = (TextView) mLay.findViewById(R.id.choosequesfrag_ll_jiexi2);
         dis_rv = (MyRecylerview) mLay.findViewById(R.id.choosequesfrag_rv);
         progressBar = (ProgressBar) mLay.findViewById(R.id.choosequesfrag_pb);
+        iv_noreply = (ImageView) mLay.findViewById(R.id.choosequesfrag_iv_noreply);
+        tv_noreply = (TextView) mLay.findViewById(R.id.choosequesfrag_tv_noreply);
         ll_A.setOnClickListener(this);
         ll_B.setOnClickListener(this);
         ll_C.setOnClickListener(this);
@@ -134,7 +143,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_E.setOnClickListener(this);
         bt_sub.setOnClickListener(this);
         if (getArguments() != null) {
-            int index = (int) getArguments().getSerializable("index");
+            index = (int) getArguments().getSerializable("index");
             updateQuestion(index);
         }
         dialogindex = (int) getArguments().getSerializable("dialogIndex");
@@ -161,51 +170,10 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         if (QuestionActivity.timuLists.get(dialogindex).getSubmmit())
             checkOK();
         lists = new ArrayList<>();
-        DiscussList discussList = new DiscussList();
-        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_zhangsan);
-        discussList.setUser("张三");
-        discussList.setTime("2017-10-30 21:10");
-        discussList.setStar(5);
-        discussList.setContent("还不错!");
-        lists.add(discussList);
-        discussList = new DiscussList();
-        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-        discussList.setUser("李四");
-        discussList.setTime("2017-10-30 21:08");
-        discussList.setStar(2);
-        discussList.setContent("又做错了.");
-        lists.add(discussList);
-        discussList = new DiscussList();
-        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-        discussList.setUser("李四");
-        discussList.setTime("2017-10-30 21:08");
-        discussList.setStar(2);
-        discussList.setContent("又做错了.");
-        lists.add(discussList);
-        discussList = new DiscussList();
-        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-        discussList.setUser("李四");
-        discussList.setTime("2017-10-30 21:08");
-        discussList.setStar(2);
-        discussList.setContent("又做错了.");
-        lists.add(discussList);
-        discussList = new DiscussList();
-        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-        discussList.setUser("李四");
-        discussList.setTime("2017-10-30 21:08");
-        discussList.setStar(2);
-        discussList.setContent("又做错了.");
-        lists.add(discussList);
-        discussList = new DiscussList();
-        discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-        discussList.setUser("李四");
-        discussList.setTime("2017-10-30 21:08");
-        discussList.setStar(2);
-        discussList.setContent("又做错了.");
-        lists.add(discussList);
         discussAdapter = new DiscussAdapter(lists, getContext());
         dis_rv.setLayoutManager(new FullyLinearLayoutManager(getContext()));
         dis_rv.setAdapter(discussAdapter);
+        discussAdapter.setOnThumbUpListener(this);
     }
 
     private void setA() {
@@ -283,8 +251,6 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_C_4.setText(question.getC());
         ll_D_4.setText(question.getD());
         ll_E_4.setText(question.getE());
-        String ex = question.getExplains();
-        ll_jiexi2.setText(TextUtils.isEmpty(ex) ? "暂无" : ex);
     }
 
     private void reset() {
@@ -304,6 +270,10 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     public void checkOK() {
         QuestionActivity.timuLists.get(dialogindex).setSubmmit(true);
         bt_sub.setVisibility(View.GONE);
+        dis_rv.setVisibility(View.GONE);
+        tv_noreply.setVisibility(View.GONE);
+        iv_noreply.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
         Boolean check = your_answer.equalsIgnoreCase(question.getAnswer());
         switch (your_answer) {
             case "A":
@@ -396,6 +366,8 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
                     break;
             }
         }
+        String ex = question.getExplains();
+        ll_jiexi2.setText(TextUtils.isEmpty(ex) ? "暂无" : ex);
         ll_jiexi.setVisibility(View.VISIBLE);
         if (getArguments() != null && onResultListener != null) {
             int dialogIndex = (int) getArguments().getSerializable("dialogIndex");
@@ -404,18 +376,86 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
             else
                 onResultListener.onResult(dialogIndex, 0);
         }
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                progressBar.setVisibility(View.GONE);
-                dis_rv.setVisibility(View.VISIBLE);
+                lists = APPlication.questionSource.getDiscussList(question.getRealID(), 0);
+                if (lists.size() > 0) {
+                    handler.sendEmptyMessage(0);
+                } else {
+                    handler.sendEmptyMessage(1);
+                }
             }
-        }, 2000);
+        }).start();
     }
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    discussAdapter.clear();
+                    discussAdapter.addAll(lists);
+                    progressBar.setVisibility(View.GONE);
+                    dis_rv.setVisibility(View.VISIBLE);
+                    discussAdapter.notifyDataSetChanged();
+                    break;
+                case 1:
+                    discussAdapter.clear();
+                    discussAdapter.addAll(lists);
+                    progressBar.setVisibility(View.GONE);
+                    dis_rv.setVisibility(View.GONE);
+                    iv_noreply.setVisibility(View.VISIBLE);
+                    tv_noreply.setVisibility(View.VISIBLE);
+                    discussAdapter.notifyDataSetChanged();
+                    break;
+                case 2:
+                    switch (star_code) {
+                        case 0:
+                            int count = Integer.parseInt(lists.get(thumb_click_position).getStar());
+                            count++;
+                            lists.get(thumb_click_position).setStar(count + "");
+                            lists.get(thumb_click_position).setIsYouStar("1");
+                            discussAdapter.notifyDataSetChanged();
+                            break;
+                        case 1:
+                            count = Integer.parseInt(lists.get(thumb_click_position).getStar());
+                            count--;
+                            lists.get(thumb_click_position).setStar(count + "");
+                            lists.get(thumb_click_position).setIsYouStar("0");
+                            discussAdapter.notifyDataSetChanged();
+                            break;
+                        case -2:
+                            APPlication.showToast("网络出错!", 0);
+                            break;
+                    }
+                    break;
+            }
+            return true;
+        }
+    });
 
     public void setOnResultListener(OnResultListener onResultListener) {
         this.onResultListener = onResultListener;
+    }
+
+    @Override
+    public void onThumbUp(final int position) {
+        final DiscussList discussList = lists.get(position);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String action;
+                if (discussList.getIsYouStar().equals("0"))
+                    action = "addStar";
+                else
+                    action = "removeStar";
+                star_code = APPlication.questionSource.discussStar(action, discussList.getId(),
+                        APPlication.user);
+                thumb_click_position = position;
+                handler.sendEmptyMessage(2);
+            }
+        }).start();
     }
 
     public interface OnResultListener {

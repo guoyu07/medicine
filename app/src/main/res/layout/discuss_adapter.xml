@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fresco="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -22,7 +22,7 @@
                 android:id="@+id/discuss_adapter_sdv"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/img_zhangsan"
+                android:layout_gravity="center"
                 fresco:actualImageScaleType="centerCrop"
                 fresco:placeholderImage="@drawable/img_touxiang"
                 fresco:placeholderImageScaleType="centerCrop"
@@ -61,8 +61,7 @@
                 android:id="@+id/discuss_adapter_iv_thumb"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_thumb_up" />
+                android:layout_gravity="center"/>
 
             <TextView
                 android:id="@+id/discuss_adapter_tv_star"

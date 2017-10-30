@@ -22,6 +22,7 @@ public class APPlication extends Application {
     public static Boolean DEBUG;
     public static SQLiteDatabase db;
     public static QuestionSource questionSource;
+    public static String user;
 
     @Override
     public void onCreate() {
@@ -38,6 +39,7 @@ public class APPlication extends Application {
             CrashHandler crashHandler = CrashHandler.getInstance();
             crashHandler.init(getApplicationContext());
         }
+        user = "yangs";
     }
 
     public static void showToast(String msg, int time) {

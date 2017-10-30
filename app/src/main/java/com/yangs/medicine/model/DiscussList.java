@@ -5,12 +5,47 @@ package com.yangs.medicine.model;
  */
 
 public class DiscussList {
-    private int id;
+    private String id;
     private String content;
     private String user;
-    private int star;
     private String time;
+    private String star;
+    private String isYouStar;
+
+    public String getIsYouStar() {
+        return isYouStar;
+    }
+
+    public void setIsYouStar(String isYouStar) {
+        this.isYouStar = isYouStar;
+    }
+
+    public String getStar() {
+        return star;
+    }
+
+    public void setStar(String star) {
+        this.star = star;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     private String imgUrl;
+    private String type = "";
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getImgUrl() {
         return imgUrl;
@@ -18,14 +53,6 @@ public class DiscussList {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getContent() {
@@ -42,14 +69,6 @@ public class DiscussList {
 
     public void setUser(String user) {
         this.user = user;
-    }
-
-    public int getStar() {
-        return star;
-    }
-
-    public void setStar(int star) {
-        this.star = star;
     }
 
     public String getTime() {
@@ -72,19 +91,20 @@ public class DiscussList {
         return model;
     }
 
+    public String getRealIndex() {
+        return realIndex;
+    }
+
+    public void setRealIndex(String realIndex) {
+        this.realIndex = realIndex;
+    }
+
     public void setModel(String model) {
         this.model = model;
     }
 
-    public int getRealIndex() {
-        return realIndex;
-    }
-
-    public void setRealIndex(int realIndex) {
-        this.realIndex = realIndex;
-    }
+    private String realIndex;
 
     private String ip;
     private String model;
-    private int realIndex;
 }

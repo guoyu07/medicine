@@ -8,7 +8,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.yangs.medicine.R;
 import com.yangs.medicine.activity.APPlication;
+import com.yangs.medicine.model.DiscussList;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +39,9 @@ public class QuestionSource {
     private static final String CHECK_STATUS_URL = "http://";
     private static final String GET_QUESTION_URL = "http://120.55.46.93:8080/medicine/action.GetQuestion";
     private static final String GET_SUBJECT_URL = "http://120.55.46.93:8080/medicine/action.selectSM";
+    private static final String GET_DISCUSS_URL = "http://120.55.46.93:8080/medicine/action.GetDiscuss";
+    private static final String POST_DISCUSS_URL = "http://120.55.46.93:8080/medicine/action.PostDiscuss";
+    private static final String DISCUSS_STAR_URL = "http://120.55.46.93:8080/medicine/action.DiscussStar";
     public static final String QUESTION_TABLE_NAME = "题目_tmp";
     public static final String SUBJECT_TABLE_NAME = "科目_tmp";
     public static final String CHA_TABLE_NAME = "章节_tmp";
@@ -170,6 +175,7 @@ public class QuestionSource {
                     APPlication.db.insert(QUESTION_TABLE_NAME, null, cv);
                 }
             }
+            response.close();
             return 0;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -217,6 +223,7 @@ public class QuestionSource {
                 cv.put("pro", pro);
                 APPlication.db.insert(SUBJECT_TABLE_NAME, null, cv);
             }
+            response.close();
             return 0;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -281,6 +288,7 @@ public class QuestionSource {
                     } while (cursor.moveToNext());
                 }
             }
+            response.close();
             return 0;
         } catch (IOException e) {
             e.printStackTrace();
@@ -292,5 +300,104 @@ public class QuestionSource {
             if (cursor != null)
                 cursor.close();
         }
+    }
+
+    public List<DiscussList> getDiscussList(String realIndex, int start) {
+        List<DiscussList> lists = new ArrayList<>();
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("realIndex", realIndex + "").add("start", start + "")
+                .add("user", APPlication.user);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(GET_DISCUSS_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            String re = response.body().string();
+            JSONObject jsonObject = JSON.parseObject(re);
+            JSONArray jsonArray = jsonObject.getJSONArray("discuss");
+            for (int i = 0, j = jsonArray.size(); i < j; i++) {
+                DiscussList discussList;
+                JSONObject jo = (JSONObject) jsonArray.get(i);
+                discussList = new DiscussList();
+                discussList.setId(jo.getString("id"));
+                discussList.setContent(jo.getString("content"));
+                discussList.setUser(jo.getString("user"));
+                discussList.setStar(jo.getString("star"));
+                discussList.setTime(jo.getString("time"));
+                discussList.setIp(jo.getString("ip"));
+                discussList.setModel(jo.getString("model"));
+                discussList.setIsYouStar(jo.getString("getIsYouStar"));
+                discussList.setRealIndex(jo.getString("realIndex"));
+                discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_touxiang);
+                lists.add(discussList);
+            }
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return lists;
+    }
+
+    public int postDiscuss(String content, String realIndex) {
+        String model = android.os.Build.MODEL + ";" + android.os.Build.VERSION.SDK + ";"
+                + android.os.Build.VERSION.RELEASE;
+        String user = "yangs";
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("realIndex", realIndex).add("content", content)
+                .add("user", user).add("model", model);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(POST_DISCUSS_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            String re = response.body().string();
+            response.close();
+            if ("评论成功".equals(re))
+                return 0;
+            else
+                return -1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -2;
+        }
+    }
+
+    public int discussStar(String action, String id, String user) {
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", action).add("id", id).add("user", user);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(DISCUSS_STAR_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            String re = response.body().string();
+            response.close();
+            if (re == null)
+                return -2;
+            switch (re) {
+                case "赞成功":
+                    return 0;
+                case "没有这条评论":
+                    APPlication.showToast("没有这条评论", 1);
+                    break;
+                case "已经赞过":
+                    APPlication.showToast("已经赞过", 1);
+                    break;
+                case "服务器错误":
+                    APPlication.showToast("服务器错误", 1);
+                    break;
+                case "取消赞成功":
+                    return 1;
+                case "取消赞失败":
+                    APPlication.showToast("取消赞失败", 1);
+                    break;
+            }
+            return -1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -2;
     }
 }

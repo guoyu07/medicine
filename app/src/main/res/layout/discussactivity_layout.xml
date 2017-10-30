@@ -51,8 +51,7 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/discussactivity_srl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -64,7 +63,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/selector_2dp_white" />
+                android:background="@drawable/selector_2dp_white"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/discussactivity_tv_empty"
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="还没有评论"
+                android:text="暂时还没有人评论!"
                 android:textColor="@color/colorPrimary"
                 android:textSize="22sp"
                 android:visibility="gone" />

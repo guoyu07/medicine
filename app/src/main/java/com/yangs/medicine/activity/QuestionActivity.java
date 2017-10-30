@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,8 +21,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.yangs.medicine.R;
@@ -58,6 +61,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private ViewPager viewPager;
     private List<Fragment> frag_list;
     private Dialog timuDialog;
+    private AlertDialog disscussDialog;
     private DialogOnClickListener timuListener;
     public static List<TimuList> timuLists;
 
@@ -71,10 +75,12 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private TimuDialogAdapter timuDialogAdapter;
     private RecyclerView timuDialog_rv;
     private ProgressDialog progressDialog;
+    private ProgressBar dis_pb;
     private int get_question_code;
     private String SP;
     private String Cha;
     private String Subject;
+    private int postDiscussCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -158,6 +164,27 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                             break;
                         case -2:
                             APPlication.showToast("连接服务器失败!", 0);
+                            break;
+                    }
+                    break;
+                case 1:
+                    if (dis_pb != null)
+                        dis_pb.setVisibility(View.INVISIBLE);
+                    switch (postDiscussCode) {
+                        case 0:
+                            APPlication.showToast("提交成功!", 0);
+                            if (disscussDialog != null)
+                                disscussDialog.cancel();
+                            Fragment fragment = frag_list.get(viewPager.getCurrentItem());
+                            if (fragment instanceof ChooseQuesFragment) {
+                                ((ChooseQuesFragment) fragment).checkOK();
+                            }
+                            break;
+                        case -1:
+                            APPlication.showToast("服务器出错,评论失败!", 0);
+                            break;
+                        case -2:
+                            APPlication.showToast("评论失败,网络出错!", 0);
                             break;
                     }
                     break;
@@ -399,7 +426,44 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 APPlication.showToast("未完成!", 0);
                 break;
             case R.id.questionactivity_ll:
-                APPlication.showToast("评论", 0);
+                if (disscussDialog == null) {
+                    View view = LayoutInflater.from(QuestionActivity.this).inflate(R.layout.discussdialog_layout, null);
+                    ImageView iv_close = (ImageView) view.findViewById(R.id.discussdialog_iv_close);
+                    final EditText et_content = (EditText) view.findViewById(R.id.discussdialog_et_content);
+                    dis_pb = (ProgressBar) view.findViewById(R.id.discussdialog_pb);
+                    Button bt_sub = (Button) view.findViewById(R.id.discussdialog_bt_sub);
+                    disscussDialog = new AlertDialog.Builder(QuestionActivity.this).setCancelable(false)
+                            .setView(view).create();
+                    iv_close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (disscussDialog != null)
+                                disscussDialog.cancel();
+                        }
+                    });
+                    bt_sub.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (dis_pb != null)
+                                dis_pb.setVisibility(View.VISIBLE);
+                            final String s = et_content.getText().toString().trim();
+                            if ("".equals(s)) {
+                                APPlication.showToast("请输入评论内容", 0);
+                                return;
+                            }
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Question question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1);
+                                    postDiscussCode = APPlication.questionSource
+                                            .postDiscuss(s, question.getRealID());
+                                    handler.sendEmptyMessage(1);
+                                }
+                            }).start();
+                        }
+                    });
+                }
+                disscussDialog.show();
                 break;
             case R.id.questionactivity_iv_love:
                 APPlication.showToast("收藏", 0);
@@ -413,8 +477,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 bundle.putString("realIndex", question.getRealID());
                 Intent intent = new Intent(QuestionActivity.this, DiscussActivity.class);
                 intent.putExtras(bundle);
-                APPlication.showToast("" + question.getRealID(), 0);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 break;
             case R.id.questionactivity_iv_timu:
                 if (timuDialog == null) {
@@ -455,6 +518,23 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                     dialogWindow.setAttributes(lp);
                 }
                 timuDialog.show();
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                if (data != null) {
+                    String isChanged = data.getExtras().getString("isChanged");
+                    if ("true".equals(isChanged)) {
+                        Fragment fragment = frag_list.get(viewPager.getCurrentItem());
+                        if (fragment instanceof ChooseQuesFragment) {
+                            ((ChooseQuesFragment) fragment).checkOK();
+                        }
+                    }
+                }
                 break;
         }
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.yangs.medicine.ui.MyScrollview xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/me_white"
@@ -7,7 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -395,27 +397,53 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/choosequesfrag_tv_dis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="10dp"
-                    android:text="精彩评论:"
-                    android:textColor="@color/error_tv"
-                    android:textSize="18sp" />
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/hot_discuss_tv_bg"
+                    android:gravity="center"
+                    android:text="精彩评论"
+                    android:textColor="@color/me_white"
+                    android:textSize="14sp" />
 
                 <ProgressBar
                     android:id="@+id/choosequesfrag_pb"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/choosequesfrag_iv_noreply"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_info_outline_black_24dp" />
+
+                <TextView
+                    android:id="@+id/choosequesfrag_tv_noreply"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="暂时还没有人评论!"
+                    android:textColor="@color/error_tv"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
 
                 <com.yangs.medicine.ui.MyRecylerview
                     android:id="@+id/choosequesfrag_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>
+
     </LinearLayout>
 </com.yangs.medicine.ui.MyScrollview>

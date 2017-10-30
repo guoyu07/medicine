@@ -1,12 +1,15 @@
 package com.yangs.medicine.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,7 +26,7 @@ import java.util.List;
  * Created by yangs on 2017/10/29 0029.
  */
 
-public class DiscussActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class DiscussActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, DiscussAdapter.OnThumbUpListener {
     private String realIndex;
     private RecyclerView recyclerView;
     private DiscussAdapter discussAdapter;
@@ -31,6 +34,9 @@ public class DiscussActivity extends BaseActivity implements SwipeRefreshLayout.
     private List<DiscussList> lists;
     private Button head_back;
     private TextView tv_empty;
+    private int star_code;
+    private int thumb_click_position;
+    private Intent back_intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +47,8 @@ public class DiscussActivity extends BaseActivity implements SwipeRefreshLayout.
     }
 
     private void initView() {
+        back_intent = new Intent();
+        back_intent.putExtra("isChanged", "false");
         FitStatusBar.addStatusBarView(this);
         head_back = (Button) findViewById(R.id.discussactivity_head_back);
         recyclerView = (RecyclerView) findViewById(R.id.discussactivity_rv);
@@ -54,66 +62,93 @@ public class DiscussActivity extends BaseActivity implements SwipeRefreshLayout.
         discussAdapter = new DiscussAdapter(lists, DiscussActivity.this);
         recyclerView.setLayoutManager(new FullyLinearLayoutManager(DiscussActivity.this));
         recyclerView.setAdapter(discussAdapter);
+        discussAdapter.setOnThumbUpListener(this);
         onRefresh();
     }
 
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         realIndex = bundle.getString("realIndex");
-        lists.clear();
     }
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    discussAdapter.clear();
+                    if (lists.size() > 0) {
+                        DiscussList discussList = new DiscussList();
+                        discussList.setType("head");
+                        discussList.setStar(lists.size() + "");
+                        lists.add(0, discussList);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        tv_empty.setVisibility(View.GONE);
+                        discussAdapter.addAll(lists);
+                        discussAdapter.notifyDataSetChanged();
+                    } else {
+                        recyclerView.setVisibility(View.GONE);
+                        tv_empty.setVisibility(View.VISIBLE);
+                    }
+                    srl.setRefreshing(false);
+                    break;
+                case 2:
+                    switch (star_code) {
+                        case 0:
+                            int count = Integer.parseInt(lists.get(thumb_click_position).getStar());
+                            count++;
+                            lists.get(thumb_click_position).setStar(count + "");
+                            lists.get(thumb_click_position).setIsYouStar("1");
+                            discussAdapter.notifyDataSetChanged();
+                            back_intent.putExtra("isChanged", "true");
+                            setResult(0, back_intent);
+                            break;
+                        case 1:
+                            count = Integer.parseInt(lists.get(thumb_click_position).getStar());
+                            count--;
+                            lists.get(thumb_click_position).setStar(count + "");
+                            lists.get(thumb_click_position).setIsYouStar("0");
+                            discussAdapter.notifyDataSetChanged();
+                            back_intent.putExtra("isChanged", "true");
+                            setResult(0, back_intent);
+                            break;
+                        case -2:
+                            APPlication.showToast("网络出错!", 0);
+                            break;
+                    }
+                    break;
+            }
+            return true;
+        }
+    });
 
     @Override
     public void onRefresh() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                DiscussList discussList = new DiscussList();
-                discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_zhangsan);
-                discussList.setUser("张三");
-                discussList.setTime("2017-10-30 21:10");
-                discussList.setStar(5);
-                discussList.setContent("还不错!");
-                lists.add(discussList);
-                discussList = new DiscussList();
-                discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-                discussList.setUser("李四");
-                discussList.setTime("2017-10-30 21:08");
-                discussList.setStar(2);
-                discussList.setContent("又做错了.");
-                lists.add(discussList);
-                discussList = new DiscussList();
-                discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-                discussList.setUser("李四");
-                discussList.setTime("2017-10-30 21:08");
-                discussList.setStar(2);
-                discussList.setContent("又做错了.");
-                lists.add(discussList);
-                discussList = new DiscussList();
-                discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-                discussList.setUser("李四");
-                discussList.setTime("2017-10-30 21:08");
-                discussList.setStar(2);
-                discussList.setContent("又做错了.");
-                lists.add(discussList);
-                discussList = new DiscussList();
-                discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-                discussList.setUser("李四");
-                discussList.setTime("2017-10-30 21:08");
-                discussList.setStar(2);
-                discussList.setContent("又做错了.");
-                lists.add(discussList);
-                discussList = new DiscussList();
-                discussList.setImgUrl("res://com.yangs.medicine/" + R.drawable.img_lisi);
-                discussList.setUser("李四");
-                discussList.setTime("2017-10-30 21:08");
-                discussList.setStar(2);
-                discussList.setContent("又做错了.");
-                lists.add(discussList);
-                discussAdapter.notifyDataSetChanged();
-                srl.setRefreshing(false);
+                lists = APPlication.questionSource.getDiscussList(realIndex, 0);
+                handler.sendEmptyMessage(0);
             }
-        }, 2000);
+        }).start();
+    }
+
+    @Override
+    public void onThumbUp(final int position) {
+        final DiscussList discussList = lists.get(position);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String action;
+                if (discussList.getIsYouStar().equals("0"))
+                    action = "addStar";
+                else
+                    action = "removeStar";
+                star_code = APPlication.questionSource.discussStar(action, discussList.getId(),
+                        APPlication.user);
+                thumb_click_position = position;
+                handler.sendEmptyMessage(2);
+            }
+        }).start();
     }
 }
