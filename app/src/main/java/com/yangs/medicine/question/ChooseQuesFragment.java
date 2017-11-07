@@ -6,10 +6,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +21,8 @@ import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.DiscussAdapter;
 import com.yangs.medicine.db.QuestionUtil;
-import com.yangs.medicine.fragment.LazyLoadFragment;
-import com.yangs.medicine.model.ChooseList;
 import com.yangs.medicine.model.DiscussList;
 import com.yangs.medicine.model.Question;
-import com.yangs.medicine.model.TimuList;
 import com.yangs.medicine.ui.FullyLinearLayoutManager;
 import com.yangs.medicine.ui.MyRecylerview;
 
@@ -274,7 +268,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         tv_noreply.setVisibility(View.GONE);
         iv_noreply.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        Boolean check = your_answer.equalsIgnoreCase(question.getAnswer());
+        final Boolean check = your_answer.equalsIgnoreCase(question.getAnswer());
         switch (your_answer) {
             case "A":
             case "a":
@@ -379,6 +373,9 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         new Thread(new Runnable() {
             @Override
             public void run() {
+                String result = check ? "对" : "错";
+                APPlication.questionSource.uploadRecord(
+                        APPlication.user, "做题", question.getRealID() + "", result);
                 lists = APPlication.questionSource.getDiscussList(question.getRealID(), 0);
                 if (lists.size() > 0) {
                     handler.sendEmptyMessage(0);

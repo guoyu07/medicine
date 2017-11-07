@@ -1,5 +1,6 @@
 package com.yangs.medicine.source;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.model.DiscussList;
+import com.yangs.medicine.util.IntenetUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class QuestionSource {
     private static final String GET_SUBJECT_URL = "http://120.55.46.93:8080/medicine2/SubjectServlet";
     private static final String GET_CHA_URL = "http://120.55.46.93:8080/medicine2/ChaServlet";
     private static final String DISCUSS_URL = "http://120.55.46.93:8080/medicine2/DiscussServlet";
+    private static final String RECORD_URL = "http://120.55.46.93:8080/medicine2/RecordServlet";
     public static final String QUESTION_TABLE_NAME = "题目_tmp";
     public static final String SUBJECT_TABLE_NAME = "科目_tmp";
     public static final String CHA_TABLE_NAME = "章节_tmp";
@@ -341,8 +344,7 @@ public class QuestionSource {
     }
 
     public int postDiscuss(String content, String realIndex) {
-        String model = android.os.Build.MODEL + ";" + android.os.Build.VERSION.SDK + ";"
-                + android.os.Build.VERSION.RELEASE;
+        String model = APPlication.getModel();
         String user = "yangs";
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
                 .add("action", "postDiscuss").add("realIndex", realIndex)
@@ -399,5 +401,24 @@ public class QuestionSource {
             e.printStackTrace();
         }
         return -2;
+    }
+
+    public void uploadRecord(String user, String operate, String realID, String result) {
+        String network = IntenetUtil.getNetworkState(APPlication.getContext());
+        String model = APPlication.getModel();
+        String version = APPlication.getVersion();
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "addRecord").add("user", user)
+                .add("operate", operate).add("realID", realID)
+                .add("result", result).add("network", network)
+                .add("model", model).add("version", version);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(RECORD_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            mOkHttpClient.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
