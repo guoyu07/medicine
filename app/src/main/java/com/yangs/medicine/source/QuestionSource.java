@@ -37,11 +37,10 @@ public class QuestionSource {
     private static final String TAG = "QuestionSource";
     private static final String CHECK_USER_URL = "http://";
     private static final String CHECK_STATUS_URL = "http://";
-    private static final String GET_QUESTION_URL = "http://120.55.46.93:8080/medicine/action.GetQuestion";
-    private static final String GET_SUBJECT_URL = "http://120.55.46.93:8080/medicine/action.selectSM";
-    private static final String GET_DISCUSS_URL = "http://120.55.46.93:8080/medicine/action.GetDiscuss";
-    private static final String POST_DISCUSS_URL = "http://120.55.46.93:8080/medicine/action.PostDiscuss";
-    private static final String DISCUSS_STAR_URL = "http://120.55.46.93:8080/medicine/action.DiscussStar";
+    private static final String GET_QUESTION_URL = "http://120.55.46.93:8080/medicine2/QuestionServlet";
+    private static final String GET_SUBJECT_URL = "http://120.55.46.93:8080/medicine2/SubjectServlet";
+    private static final String GET_CHA_URL = "http://120.55.46.93:8080/medicine2/ChaServlet";
+    private static final String DISCUSS_URL = "http://120.55.46.93:8080/medicine2/DiscussServlet";
     public static final String QUESTION_TABLE_NAME = "题目_tmp";
     public static final String SUBJECT_TABLE_NAME = "科目_tmp";
     public static final String CHA_TABLE_NAME = "章节_tmp";
@@ -124,7 +123,8 @@ public class QuestionSource {
         this.SP = SP;
         this.Cha = Cha;
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
-                .add("SP", SP).add("Cha", Cha).add("isClient", "true");
+                .add("action", "getQuestionList").add("client", "android")
+                .add("SP", SP).add("Cha", Cha);
         RequestBody requestBody = formBodyBuilder.build();
         Request request = new Request.Builder().url(GET_QUESTION_URL).headers(requestHeaders)
                 .post(requestBody).build();
@@ -207,19 +207,19 @@ public class QuestionSource {
         if (DEBUG)
             Log.i(TAG, "getSubject start...");
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
-                .add("action", "getSub").add("pro", pro);
+                .add("action", "getSubjectList").add("pro", pro);
         RequestBody requestBody = formBodyBuilder.build();
         Request request = new Request.Builder().url(GET_SUBJECT_URL).headers(requestHeaders)
                 .post(requestBody).build();
         try {
             Response response = mOkHttpClient.newCall(request).execute();
             JSONObject jsonObject = JSON.parseObject(response.body().string());
-            JSONArray jsonArray = jsonObject.getJSONArray("pro");
+            JSONArray jsonArray = jsonObject.getJSONArray("subject");
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject jo = (JSONObject) jsonArray.get(i);
                 ContentValues cv = new ContentValues();
-                cv.put("id", jo.getInteger("index"));
-                cv.put("sub", jo.getString("name"));
+                cv.put("id", jo.getInteger("SP"));
+                cv.put("sub", jo.getString("Sub"));
                 cv.put("pro", pro);
                 APPlication.db.insert(SUBJECT_TABLE_NAME, null, cv);
             }
@@ -258,7 +258,7 @@ public class QuestionSource {
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
                 .add("action", "getChaNameAll").add("pro", pro);
         RequestBody requestBody = formBodyBuilder.build();
-        Request request = new Request.Builder().url(GET_SUBJECT_URL).headers(requestHeaders)
+        Request request = new Request.Builder().url(GET_CHA_URL).headers(requestHeaders)
                 .post(requestBody).build();
         try {
             Response response = mOkHttpClient.newCall(request).execute();
@@ -305,10 +305,10 @@ public class QuestionSource {
     public List<DiscussList> getDiscussList(String realIndex, int start) {
         List<DiscussList> lists = new ArrayList<>();
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
-                .add("realIndex", realIndex + "").add("start", start + "")
-                .add("user", APPlication.user);
+                .add("action", "getDiscussList").add("realIndex", realIndex + "")
+                .add("start", start + "").add("user", APPlication.user);
         RequestBody requestBody = formBodyBuilder.build();
-        Request request = new Request.Builder().url(GET_DISCUSS_URL).headers(requestHeaders)
+        Request request = new Request.Builder().url(DISCUSS_URL).headers(requestHeaders)
                 .post(requestBody).build();
         try {
             Response response = mOkHttpClient.newCall(request).execute();
@@ -345,10 +345,10 @@ public class QuestionSource {
                 + android.os.Build.VERSION.RELEASE;
         String user = "yangs";
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
-                .add("realIndex", realIndex).add("content", content)
-                .add("user", user).add("model", model);
+                .add("action", "postDiscuss").add("realIndex", realIndex)
+                .add("content", content).add("user", user).add("model", model);
         RequestBody requestBody = formBodyBuilder.build();
-        Request request = new Request.Builder().url(POST_DISCUSS_URL).headers(requestHeaders)
+        Request request = new Request.Builder().url(DISCUSS_URL).headers(requestHeaders)
                 .post(requestBody).build();
         try {
             Response response = mOkHttpClient.newCall(request).execute();
@@ -368,7 +368,7 @@ public class QuestionSource {
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
                 .add("action", action).add("id", id).add("user", user);
         RequestBody requestBody = formBodyBuilder.build();
-        Request request = new Request.Builder().url(DISCUSS_STAR_URL).headers(requestHeaders)
+        Request request = new Request.Builder().url(DISCUSS_URL).headers(requestHeaders)
                 .post(requestBody).build();
         try {
             Response response = mOkHttpClient.newCall(request).execute();
