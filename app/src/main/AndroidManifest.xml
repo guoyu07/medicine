@@ -31,6 +31,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.SelectSubActivity" />
         <activity android:name=".activity.DiscussActivity" />
+        <activity android:name=".activity.RegisterActivity" />
     </application>
 
 </manifest>

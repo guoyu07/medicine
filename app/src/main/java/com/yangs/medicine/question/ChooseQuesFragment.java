@@ -162,7 +162,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
             }
         }
         if (QuestionActivity.timuLists.get(dialogindex).getSubmmit())
-            checkOK();
+            checkOK(true);
         lists = new ArrayList<>();
         discussAdapter = new DiscussAdapter(lists, getContext());
         dis_rv.setLayoutManager(new FullyLinearLayoutManager(getContext()));
@@ -232,7 +232,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
                 if (TextUtils.isEmpty(your_answer))
                     APPlication.showToast("要自己先做了才能查看答案哦!", 0);
                 else
-                    checkOK();
+                    checkOK(false);
                 break;
         }
     }
@@ -261,7 +261,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         your_answer = "";
     }
 
-    public void checkOK() {
+    public void checkOK(final Boolean isRedo) {
         QuestionActivity.timuLists.get(dialogindex).setSubmmit(true);
         bt_sub.setVisibility(View.GONE);
         dis_rv.setVisibility(View.GONE);
@@ -373,9 +373,11 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String result = check ? "对" : "错";
-                APPlication.questionSource.uploadRecord(
-                        APPlication.user, "做题", question.getRealID() + "", result);
+                if (!isRedo && !APPlication.DEBUG) {
+                    String result = check ? "对" : "错";
+                    APPlication.questionSource.uploadRecord(
+                            APPlication.user, "做题", question.getRealID() + "", result);
+                }
                 lists = APPlication.questionSource.getDiscussList(question.getRealID(), 0);
                 if (lists.size() > 0) {
                     handler.sendEmptyMessage(0);

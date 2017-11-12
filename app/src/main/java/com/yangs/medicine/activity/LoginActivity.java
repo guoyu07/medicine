@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 APPlication.showToast("未开放,请等待!", 0);
                 break;
             case R.id.loginactivity_tv_register:
-                APPlication.showToast("目前未开放注册,请等待!", 0);
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
             case R.id.loginactivity_bt_login:
                 user = et_user.getText().toString().trim();

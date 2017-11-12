@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yangs.medicine.R;
@@ -32,7 +33,7 @@ public class DiscussActivity extends BaseActivity implements SwipeRefreshLayout.
     private DiscussAdapter discussAdapter;
     private SwipeRefreshLayout srl;
     private List<DiscussList> lists;
-    private Button head_back;
+    private ImageView head_back;
     private TextView tv_empty;
     private int star_code;
     private int thumb_click_position;
@@ -50,7 +51,7 @@ public class DiscussActivity extends BaseActivity implements SwipeRefreshLayout.
         back_intent = new Intent();
         back_intent.putExtra("isChanged", "false");
         FitStatusBar.addStatusBarView(this);
-        head_back = (Button) findViewById(R.id.discussactivity_head_back);
+        head_back = (ImageView) findViewById(R.id.discussactivity_head_back);
         recyclerView = (RecyclerView) findViewById(R.id.discussactivity_rv);
         srl = (SwipeRefreshLayout) findViewById(R.id.discussactivity_srl);
         tv_empty = (TextView) findViewById(R.id.discussactivity_tv_empty);

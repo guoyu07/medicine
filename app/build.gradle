@@ -34,4 +34,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.alibaba:fastjson:1.1.64.android'
     testCompile 'junit:junit:4.12'
+    implementation files('libs/aliyun-java-sdk-core-3.3.1.jar')
+    implementation files('libs/aliyun-java-sdk-dysmsapi-1.0.0.jar')
 }

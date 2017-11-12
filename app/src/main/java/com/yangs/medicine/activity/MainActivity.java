@@ -48,12 +48,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.mainactivity_layout);
         init();
         switchFragment(1);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                APPlication.questionSource.uploadRecord(APPlication.user, "启动", "", "");
-            }
-        }).start();
+        if (!APPlication.DEBUG) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    APPlication.questionSource.uploadRecord(APPlication.user, "启动", "", "");
+                }
+            }).start();
+        }
     }
 
     private void init() {

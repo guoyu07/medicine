@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -55,8 +57,14 @@ public class APPlication extends Application {
         }
     }
 
-    public static void showToast(String msg, int time) {
-        Toast.makeText(context, msg, time).show();
+    public static void showToast(final String msg, final int time) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, msg, time).show();
+            }
+        });
     }
 
     public static Context getContext() {

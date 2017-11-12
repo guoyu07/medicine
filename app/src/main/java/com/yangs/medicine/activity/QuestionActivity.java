@@ -50,7 +50,7 @@ import java.util.Map;
  */
 
 public class QuestionActivity extends BaseActivity implements View.OnClickListener, TimuDialogAdapter.TimuOnClickListener {
-    private Button bt_back;
+    private ImageView iv_back;
     private Button bt_ok;
     private TextView head_title;
     private LinearLayout ll_chat;
@@ -97,7 +97,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         Cha = bundle.getString("Cha");
         Subject = bundle.getString("Name");
         head_title = (TextView) findViewById(R.id.questionactivity_head_title);
-        bt_back = (Button) findViewById(R.id.questionactivity_head_back);
+        iv_back = (ImageView) findViewById(R.id.questionactivity_head_back);
         bt_ok = (Button) findViewById(R.id.questionactivity_head_ok);
         ll_chat = (LinearLayout) findViewById(R.id.questionactivity_ll);
         iv_love = (ImageView) findViewById(R.id.questionactivity_iv_love);
@@ -105,7 +105,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         iv_chat = (ImageView) findViewById(R.id.questionactivity_iv_talk);
         iv_timu = (ImageView) findViewById(R.id.questionactivity_iv_timu);
         viewPager = (ViewPager) findViewById(R.id.questionactivity_vp);
-        bt_back.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
         bt_ok.setOnClickListener(this);
         ll_chat.setOnClickListener(this);
         iv_love.setOnClickListener(this);
@@ -177,7 +177,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                                 disscussDialog.cancel();
                             Fragment fragment = frag_list.get(viewPager.getCurrentItem());
                             if (fragment instanceof ChooseQuesFragment) {
-                                ((ChooseQuesFragment) fragment).checkOK();
+                                ((ChooseQuesFragment) fragment).checkOK(true);
                             }
                             break;
                         case -1:
@@ -457,6 +457,10 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                                     Question question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1);
                                     postDiscussCode = APPlication.questionSource
                                             .postDiscuss(s, question.getRealID());
+                                    if (postDiscussCode == 0 && !APPlication.DEBUG) {
+                                        APPlication.questionSource.uploadRecord(
+                                                APPlication.user, "评论", question.getRealID() + "", s);
+                                    }
                                     handler.sendEmptyMessage(1);
                                 }
                             }).start();
@@ -531,7 +535,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                     if ("true".equals(isChanged)) {
                         Fragment fragment = frag_list.get(viewPager.getCurrentItem());
                         if (fragment instanceof ChooseQuesFragment) {
-                            ((ChooseQuesFragment) fragment).checkOK();
+                            ((ChooseQuesFragment) fragment).checkOK(true);
                         }
                     }
                 }
