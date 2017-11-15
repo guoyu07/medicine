@@ -474,8 +474,11 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Question question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1
-                                            , type);
+                                    Question question;
+                                    if (type.equals("error"))
+                                        question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1, QuestionSource.ERROR_TABLE_NAME);
+                                    else
+                                        question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1, QuestionSource.QUESTION_TABLE_NAME);
                                     postDiscussCode = APPlication.questionSource
                                             .postDiscuss(s, question.getRealID());
                                     if (postDiscussCode == 0 && !APPlication.DEBUG) {

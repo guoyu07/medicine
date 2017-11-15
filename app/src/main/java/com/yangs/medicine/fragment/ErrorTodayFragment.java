@@ -122,13 +122,15 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
                                         }
                                     } while (cursor.moveToNext());
                                     if (flag == 0) {
-                                        empty_tv.setVisibility(View.VISIBLE);
                                         mrecyclerView.setVisibility(View.GONE);
-                                        empty_tv.setText("还没有错题哦");
+                                        if (time.equals("today"))
+                                            empty_tv.setText("今日还没有错题哦");
+                                        else
+                                            empty_tv.setText("还没有错题哦");
+                                        empty_tv.setVisibility(View.VISIBLE);
                                     } else {
                                         empty_tv.setVisibility(View.GONE);
                                         mrecyclerView.setVisibility(View.VISIBLE);
-                                        empty_tv.setText("今日还没有错题哦");
                                         errorTodayAdapter.notifyDataSetChanged();
                                     }
                                 }

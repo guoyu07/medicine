@@ -418,10 +418,9 @@ public class QuestionSource {
 
     public int postDiscuss(String content, String realIndex) {
         String model = APPlication.getModel();
-        String user = "yangs";
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
                 .add("action", "postDiscuss").add("realIndex", realIndex)
-                .add("content", content).add("user", user).add("model", model);
+                .add("content", content).add("user", APPlication.user).add("model", model);
         RequestBody requestBody = formBodyBuilder.build();
         Request request = new Request.Builder().url(DISCUSS_URL).headers(requestHeaders)
                 .post(requestBody).build();
