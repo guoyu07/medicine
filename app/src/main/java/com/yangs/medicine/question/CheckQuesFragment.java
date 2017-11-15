@@ -18,6 +18,7 @@ import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.Question;
+import com.yangs.medicine.source.QuestionSource;
 
 /**
  * Created by yangs on 2017/10/10 0010.
@@ -47,6 +48,7 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
     private Button bt_sub;
     private Question question;
     private String your_answer = "";
+    private String type;
 
     @Nullable
     @Override
@@ -76,7 +78,11 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
         bt_sub.setOnClickListener(this);
         if (getArguments() != null) {
             int index = (int) getArguments().getSerializable("index");
-            question = QuestionUtil.getQuestionByID(index + 1);
+            type = (String) getArguments().getSerializable("type");
+            if (type.equals("error"))
+                question = QuestionUtil.getQuestionByID(index + 1, QuestionSource.ERROR_TABLE_NAME);
+            else
+                question = QuestionUtil.getQuestionByID(index + 1, QuestionSource.QUESTION_TABLE_NAME);
             tv_ques.setText(question.getId() + "." + question.getQuestion());
         }
         dialogIndex = (int) getArguments().getSerializable("dialogIndex");

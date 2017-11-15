@@ -8,6 +8,33 @@ public class ErrorTodayList {
     private String name;
     private Boolean isClick;
     private int count;
+    private int realIndex;
+    private int SP;
+    private String subject;
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public int getSP() {
+        return SP;
+    }
+
+    public void setSP(int SP) {
+        this.SP = SP;
+    }
+
+    public int getRealIndex() {
+        return realIndex;
+    }
+
+    public void setRealIndex(int realIndex) {
+        this.realIndex = realIndex;
+    }
 
     public String getType() {
         return type;

@@ -38,6 +38,7 @@ import com.yangs.medicine.question.BlankQuesFragment;
 import com.yangs.medicine.question.CheckQuesFragment;
 import com.yangs.medicine.question.ChooseQuesFragment;
 import com.yangs.medicine.question.ExplainQuesFragment;
+import com.yangs.medicine.source.QuestionSource;
 import com.yangs.medicine.util.FitStatusBar;
 
 import java.util.ArrayList;
@@ -81,6 +82,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private String Cha;
     private String Subject;
     private int postDiscussCode;
+    private String type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,9 +95,12 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         Bundle bundle = getIntent().getExtras();
-        SP = bundle.getString("SP");
-        Cha = bundle.getString("Cha");
-        Subject = bundle.getString("Name");
+        if (bundle != null) {
+            type = bundle.getString("type");
+            SP = bundle.getString("SP");
+            Subject = bundle.getString("Name");
+            Cha = bundle.getString("Cha");
+        }
         head_title = (TextView) findViewById(R.id.questionactivity_head_title);
         iv_back = (ImageView) findViewById(R.id.questionactivity_head_back);
         bt_ok = (Button) findViewById(R.id.questionactivity_head_ok);
@@ -125,12 +130,20 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
         new Thread(new Runnable() {
             @Override
             public void run() {
-                get_question_code = APPlication.questionSource.getQuestion(SP, Cha);
-                choose_count = QuestionUtil.getQuestionCount("选择题");
-                blank_count = QuestionUtil.getQuestionCount("填空题");
-                check_count = QuestionUtil.getQuestionCount("判断题");
-                explain_count = QuestionUtil.getQuestionCount("名词解释题");
-                ask_count = QuestionUtil.getQuestionCount("问答题");
+                String table;
+                if (type.equals("error")) {
+                    table = QuestionSource.ERROR_TABLE_NAME;
+                    get_question_code = APPlication.questionSource.getErrorQuestion(APPlication.user
+                            , SP);
+                } else {
+                    table = QuestionSource.QUESTION_TABLE_NAME;
+                    get_question_code = APPlication.questionSource.getQuestion(SP, Cha);
+                }
+                choose_count = QuestionUtil.getQuestionCount("选择题", table);
+                blank_count = QuestionUtil.getQuestionCount("填空题", table);
+                check_count = QuestionUtil.getQuestionCount("判断题", table);
+                explain_count = QuestionUtil.getQuestionCount("名词解释题", table);
+                ask_count = QuestionUtil.getQuestionCount("问答题", table);
                 handler.sendEmptyMessage(0);
             }
         }).start();
@@ -221,6 +234,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("dialogIndex", timuLists.size());
                 bundle.putSerializable("index", i + cursor_count);
+                bundle.putSerializable("type", type);
                 chooseQuesFragment.setArguments(bundle);
                 frag_list.add(chooseQuesFragment);
                 timuLists.add(timuList);
@@ -258,6 +272,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                     int end = i - 1 + cursor_count;
                     bundle.putSerializable("start", start);
                     bundle.putSerializable("end", end);
+                    bundle.putSerializable("type", type);
                     bundle.putSerializable("dialogIndex", timuLists.size() - start + end - 2);
                     blankQuesFragment.setArguments(bundle);
                     frag_list.add(blankQuesFragment);
@@ -278,6 +293,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("start", i - 5 + cursor_count);
                     bundle.putSerializable("end", i - 1 + cursor_count);
+                    bundle.putSerializable("type", type);
                     bundle.putSerializable("dialogIndex", timuLists.size() - 4);
                     blankQuesFragment.setArguments(bundle);
                     frag_list.add(blankQuesFragment);
@@ -311,6 +327,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("index", i + cursor_count);
                 bundle.putSerializable("dialogIndex", timuLists.size());
+                bundle.putSerializable("type", type);
                 checkQuesFragment.setArguments(bundle);
                 frag_list.add(checkQuesFragment);
                 timuLists.add(timuList);
@@ -350,6 +367,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                     bundle.putSerializable("start", start);
                     bundle.putSerializable("end", end);
                     bundle.putSerializable("dialogIndex", timuLists.size() - pice + 1);
+                    bundle.putSerializable("type", type);
                     explainQuesFragment.setArguments(bundle);
                     frag_list.add(explainQuesFragment);
                 }
@@ -370,6 +388,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                     bundle.putSerializable("start", i - 5 + cursor_count);
                     bundle.putSerializable("end", i - 1 + cursor_count);
                     bundle.putSerializable("dialogIndex", timuLists.size() - 4);
+                    bundle.putSerializable("type", type);
                     explainQuesFragment.setArguments(bundle);
                     frag_list.add(explainQuesFragment);
                     flag = false;
@@ -402,6 +421,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("index", i + cursor_count);
                 bundle.putSerializable("dialogIndex", timuLists.size());
+                bundle.putSerializable("type", type);
                 askQuesFragment.setArguments(bundle);
                 frag_list.add(askQuesFragment);
                 timuLists.add(timuList);
@@ -454,12 +474,14 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Question question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1);
+                                    Question question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1
+                                            , type);
                                     postDiscussCode = APPlication.questionSource
                                             .postDiscuss(s, question.getRealID());
                                     if (postDiscussCode == 0 && !APPlication.DEBUG) {
                                         APPlication.questionSource.uploadRecord(
-                                                APPlication.user, "评论", question.getRealID() + "", s);
+                                                APPlication.user, "评论"
+                                                , question.getRealID() + "", s, "");
                                     }
                                     handler.sendEmptyMessage(1);
                                 }
@@ -476,7 +498,11 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 APPlication.showToast("分享", 0);
                 break;
             case R.id.questionactivity_iv_talk:
-                Question question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1);
+                Question question;
+                if (type.equals("error"))
+                    question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1, QuestionSource.ERROR_TABLE_NAME);
+                else
+                    question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1, QuestionSource.QUESTION_TABLE_NAME);
                 Bundle bundle = new Bundle();
                 bundle.putString("realIndex", question.getRealID());
                 Intent intent = new Intent(QuestionActivity.this, DiscussActivity.class);

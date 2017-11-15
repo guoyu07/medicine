@@ -1,5 +1,6 @@
 package com.yangs.medicine.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,18 +34,19 @@ public class SelectSubActivity extends BaseActivity implements View.OnClickListe
     private Button selectsubactivity_bt;
     private String grade;
     private String sub;
-    private Handler handler;
     private int code;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selectsubactivity_layout);
         initView();
-        setHandler();
     }
 
     private void initView() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
         selectsubactivity_grade_tv1 = (TextView) findViewById(R.id.selectsubactivity_grade_tv1);
         selectsubactivity_grade_tv2 = (TextView) findViewById(R.id.selectsubactivity_grade_tv2);
         selectsubactivity_grade_tv3 = (TextView) findViewById(R.id.selectsubactivity_grade_tv3);
@@ -72,24 +74,42 @@ public class SelectSubActivity extends BaseActivity implements View.OnClickListe
         selectsubactivity_bt.setOnClickListener(this);
     }
 
-    private void setHandler() {
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what) {
-                    case 0:
-                        if (code == 0) {
-                            startActivity(new Intent(SelectSubActivity.this, MainActivity.class));
-                        } else {
-                            APPlication.showToast("获取科目失败,请检查网络!", 1);
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    if (code == 0) {
+                        startActivity(new Intent(SelectSubActivity.this, MainActivity.class));
+                    } else {
+                        APPlication.showToast("获取科目失败,请检查网络!", 1);
+                    }
+                    finish();
+                    break;
+                case 1:
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    APPlication.save.edit().putString("grade", grade)
+                            .putString("subject", sub).putBoolean("login_status", true).apply();
+                    APPlication.grade = grade;
+                    APPlication.subject = sub;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            code = APPlication.questionSource.getSubject(APPlication.subject);
+                            handler.sendEmptyMessage(0);
                         }
-                        finish();
-                        break;
-                }
+                    }).start();
+                    break;
+                case 2:
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    APPlication.showToast("更新用户信息失败", 0);
+                    break;
             }
-        };
-    }
+            return true;
+        }
+    });
 
     private void resetGradeView() {
         selectsubactivity_grade_v1.setVisibility(View.VISIBLE);
@@ -178,17 +198,33 @@ public class SelectSubActivity extends BaseActivity implements View.OnClickListe
                     APPlication.showToast("请选择专业", 0);
                     return;
                 }
-                APPlication.save.edit().putString("grade", grade)
-                        .putString("subject", sub).apply();
-                APPlication.grade = grade;
-                APPlication.subject = sub;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        code = APPlication.questionSource.getSubject(APPlication.subject);
-                        handler.sendEmptyMessage(0);
-                    }
-                }).start();
+                if (!APPlication.user.equals("游客")) {
+                    progressDialog.setMessage("更新用户信息中...");
+                    progressDialog.show();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String result = APPlication.questionSource.addGradeSubject(
+                                    APPlication.user, grade, sub);
+                            if (result.equals("成功"))
+                                handler.sendEmptyMessage(1);
+                            else
+                                handler.sendEmptyMessage(2);
+                        }
+                    }).start();
+                } else {
+                    APPlication.save.edit().putString("grade", grade)
+                            .putString("subject", sub).apply();
+                    APPlication.grade = grade;
+                    APPlication.subject = sub;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            code = APPlication.questionSource.getSubject(APPlication.subject);
+                            handler.sendEmptyMessage(0);
+                        }
+                    }).start();
+                }
                 break;
         }
     }

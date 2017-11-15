@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.yangs.medicine.R;
 import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.model.DiscussList;
+import com.yangs.medicine.model.Question;
 import com.yangs.medicine.util.IntenetUtil;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.yangs.medicine.activity.APPlication.DEBUG;
+import static com.yangs.medicine.activity.APPlication.subject;
 
 /**
  * Created by yangs on 2017/10/21 0021.
@@ -44,9 +46,13 @@ public class QuestionSource {
     private static final String GET_CHA_URL = "http://120.55.46.93:8080/medicine2/ChaServlet";
     private static final String DISCUSS_URL = "http://120.55.46.93:8080/medicine2/DiscussServlet";
     private static final String RECORD_URL = "http://120.55.46.93:8080/medicine2/RecordServlet";
+    private static final String REGISTER_URL = "http://120.55.46.93:8080/medicine2/RegisterServlet";
+    private static final String LOGIN_URL = "http://120.55.46.93:8080/medicine2/LoginServlet";
     public static final String QUESTION_TABLE_NAME = "题目_tmp";
     public static final String SUBJECT_TABLE_NAME = "科目_tmp";
     public static final String CHA_TABLE_NAME = "章节_tmp";
+    public static final String ERRORTODAY_TABLE_NAME = "错题集_tmp";
+    public static final String ERROR_TABLE_NAME = "错题集详细_tmp";
     private int cursor_index = 1;
     private String SP;
     private String Cha;
@@ -189,6 +195,71 @@ public class QuestionSource {
         }
     }
 
+    public int getErrorQuestion(String user, String SP) {
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "getErrorList")
+                .add("SP", SP).add("user", user);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(GET_QUESTION_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            String sql = "select count(*) as c from Sqlite_master  where type ='table' " +
+                    "and name ='" + ERROR_TABLE_NAME + "' ";
+            Cursor cursor = APPlication.db.rawQuery(sql, null);
+            try {
+                if (cursor.moveToNext()) {
+                    int count = cursor.getInt(0);
+                    if (count > 0) {
+                        APPlication.db.execSQL("drop table " + ERROR_TABLE_NAME);
+                    }
+                }
+            } catch (Exception e) {
+                APPlication.showToast("清空题目缓存表: " + ERROR_TABLE_NAME + "失败!\n" + e.getMessage(), 1);
+            } finally {
+                if (cursor != null)
+                    cursor.close();
+            }
+            APPlication.db.execSQL("create table " + ERROR_TABLE_NAME + " (id INTEGER PRIMARY KEY AUTOINCREMENT,question text not null,answer text not null,A text,B text,C text,D text,E text,explains text,type text,Cha int,SP int,RealIndex int);");
+            String s = response.body().string();
+            JSONObject jsonObject = JSON.parseObject(s);
+            List<String> list = new ArrayList<>();
+            list.add("选择题");
+            list.add("填空题");
+            list.add("判断题");
+            list.add("名词解释题");
+            list.add("问答题");
+            for (String type : list) {
+                JSONArray jsonArray = jsonObject.getJSONArray(type);
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject jo = (JSONObject) jsonArray.get(i);
+                    ContentValues cv = new ContentValues();
+                    cv.put("question", jo.getString("question"));
+                    cv.put("answer", jo.getString("answer"));
+                    cv.put("A", jo.getString("A"));
+                    cv.put("B", jo.getString("B"));
+                    cv.put("C", jo.getString("C"));
+                    cv.put("D", jo.getString("D"));
+                    cv.put("E", jo.getString("E"));
+                    cv.put("explains", jo.getString("explain"));
+                    cv.put("type", type);
+                    cv.put("Cha", 0);
+                    cv.put("SP", SP);
+                    cv.put("RealIndex", jo.getString("id"));
+                    APPlication.db.insert(ERROR_TABLE_NAME, null, cv);
+                }
+            }
+            response.close();
+            return 0;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return -1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -2;
+        }
+    }
+
     public int getSubject(String pro) {
         String sql = "select count(*) as c from Sqlite_master  where type ='table' " +
                 "and name ='" + SUBJECT_TABLE_NAME + "' ";
@@ -206,7 +277,8 @@ public class QuestionSource {
             if (cursor != null)
                 cursor.close();
         }
-        APPlication.db.execSQL("create table " + SUBJECT_TABLE_NAME + " (id int not null,sub text not null,pro text not null);");
+        APPlication.db.execSQL("create table " + SUBJECT_TABLE_NAME + " (id int not null" +
+                ",sub text not null,pro text not null,error int);");
         if (DEBUG)
             Log.i(TAG, "getSubject start...");
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
@@ -216,7 +288,8 @@ public class QuestionSource {
                 .post(requestBody).build();
         try {
             Response response = mOkHttpClient.newCall(request).execute();
-            JSONObject jsonObject = JSON.parseObject(response.body().string());
+            String s = response.body().string();
+            JSONObject jsonObject = JSON.parseObject(s);
             JSONArray jsonArray = jsonObject.getJSONArray("subject");
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject jo = (JSONObject) jsonArray.get(i);
@@ -403,12 +476,13 @@ public class QuestionSource {
         return -2;
     }
 
-    public void uploadRecord(String user, String operate, String realID, String result) {
+    public void uploadRecord(String user, String operate, String realID, String result, String SP) {
         String network = IntenetUtil.getNetworkState(APPlication.getContext());
         String model = APPlication.getModel();
         String version = APPlication.getVersion();
         FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
                 .add("action", "addRecord").add("user", user)
+                .add("SP", SP)
                 .add("operate", operate).add("realID", realID)
                 .add("result", result).add("network", network)
                 .add("model", model).add("version", version);
@@ -420,5 +494,147 @@ public class QuestionSource {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String checkUserIsExist(String username) {
+        String result = "";
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "checkIsExist").add("username", username);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(REGISTER_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            result = response.body().string();
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String registerUser(String username, String pwd) {
+        String result = "";
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "register").add("username", username)
+                .add("pwd", pwd);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(REGISTER_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            result = response.body().string();
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String login(String username, String pwd) {
+        String result = "";
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("username", username).add("pwd", pwd);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(LOGIN_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            result = response.body().string();
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String addGradeSubject(String username, String grade, String subject) {
+        String result = "";
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "addGradeSubject").add("username", username)
+                .add("grade", grade).add("subject", subject);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(REGISTER_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            result = response.body().string();
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int getErrorList(String flag, String user, String pro) {
+        int code;
+        String sql = "select count(*) as c from Sqlite_master  where type ='table' " +
+                "and name ='" + ERRORTODAY_TABLE_NAME + "' ";
+        Cursor cursor = APPlication.db.rawQuery(sql, null);
+        try {
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(0);
+                if (count > 0) {
+                    APPlication.db.execSQL("drop table " + ERRORTODAY_TABLE_NAME);
+                }
+            }
+        } catch (Exception e) {
+            APPlication.showToast("清空缓存表: " + ERRORTODAY_TABLE_NAME + "失败!\n" + e.getMessage(), 1);
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        APPlication.db.execSQL("create table " + ERRORTODAY_TABLE_NAME + "" +
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT,question text not null,realID int not null" +
+                ",SP int not null);");
+        if (DEBUG)
+            Log.i(TAG, "getError start...");
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "getError").add("user", user)
+                .add("flag", flag).add("pro", pro);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(RECORD_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            String s = response.body().string();
+            JSONObject jsonObject = JSON.parseObject(s);
+            sql = "select * from " + QuestionSource.SUBJECT_TABLE_NAME;
+            Cursor cursor2 = null;
+            try {
+                cursor2 = APPlication.db.rawQuery(sql, null);
+                if (cursor2.getCount() > 0) {
+                    if (cursor2.moveToFirst()) {
+                        do {
+                            int SP = cursor2.getInt(0);
+                            String subject = cursor2.getString(1);
+                            JSONArray jsonArray = jsonObject.getJSONArray(subject);
+                            for (int i = 0; i < jsonArray.size(); i++) {
+                                JSONObject jo = (JSONObject) jsonArray.get(i);
+                                ContentValues cv = new ContentValues();
+                                cv.put("question", jo.getString("question"));
+                                cv.put("realID", jo.getInteger("realID"));
+                                cv.put("SP", SP);
+                                APPlication.db.insert(ERRORTODAY_TABLE_NAME, null, cv);
+                            }
+                            sql = "update " + SUBJECT_TABLE_NAME + " set error=" + jsonArray.size()
+                                    + " where sub='" + subject + "' and pro='" + pro + "'";
+                            APPlication.db.execSQL(sql);
+                        } while (cursor2.moveToNext());
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (cursor2 != null)
+                    cursor2.close();
+            }
+            response.close();
+            code = 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            code = -1;
+        }
+        return code;
     }
 }

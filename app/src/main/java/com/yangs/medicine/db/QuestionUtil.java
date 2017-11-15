@@ -12,8 +12,8 @@ import com.yangs.medicine.source.QuestionSource;
  */
 
 public class QuestionUtil {
-    public static int getQuestionCount(String type) {
-        String sql = "select count(*) from " + QuestionSource.QUESTION_TABLE_NAME + " where type='" + type + "';";
+    public static int getQuestionCount(String type, String table) {
+        String sql = "select count(*) from " + table + " where type='" + type + "';";
         Cursor cursor = null;
         try {
             cursor = APPlication.db.rawQuery(sql, null);
@@ -31,9 +31,9 @@ public class QuestionUtil {
         return 0;
     }
 
-    public static Question getQuestionByID(int id) {
+    public static Question getQuestionByID(int id, String table) {
         Question question = new Question();
-        String sql = "select * from " + QuestionSource.QUESTION_TABLE_NAME + " where id=" + id;
+        String sql = "select * from " + table + " where id=" + id;
         Cursor cursor = null;
         try {
             cursor = APPlication.db.rawQuery(sql, null);

@@ -26,13 +26,14 @@ public class APPlication extends Application {
     public static SQLiteDatabase db;
     public static QuestionSource questionSource;
     public static String user;
+    public static String pwd;
     private static String model;
     private static String version;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        DEBUG = true;
+        DEBUG = false;
         context = getApplicationContext();
         Fresco.initialize(this);
         save = getSharedPreferences("Medicine", MODE_PRIVATE);
@@ -44,7 +45,8 @@ public class APPlication extends Application {
             CrashHandler crashHandler = CrashHandler.getInstance();
             crashHandler.init(getApplicationContext());
         }
-        user = "yangs";
+        user = save.getString("username", "游客");
+        pwd = save.getString("pwd", "");
         model = android.os.Build.MODEL + ";" + android.os.Build.VERSION.SDK + ";"
                 + android.os.Build.VERSION.RELEASE;
         try {

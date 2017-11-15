@@ -16,6 +16,7 @@ import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.BlankList;
 import com.yangs.medicine.model.Question;
+import com.yangs.medicine.source.QuestionSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
     private int dialogIndex;
     private int start;
     private int end;
+    private String type;
 
     @Nullable
     @Override
@@ -50,8 +52,13 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
             return;
         start = (int) getArguments().getSerializable("start");
         end = (int) getArguments().getSerializable("end");
+        type = (String) getArguments().getSerializable("type");
         for (int i = start; i <= end; i++) {
-            Question question = QuestionUtil.getQuestionByID(i + 1);
+            Question question;
+            if (type.equals("error"))
+                question = QuestionUtil.getQuestionByID(i + 1, QuestionSource.ERROR_TABLE_NAME);
+            else
+                question = QuestionUtil.getQuestionByID(i + 1, QuestionSource.QUESTION_TABLE_NAME);
             BlankList blankList = new BlankList();
             blankList.setClick(false);
             blankList.setIndex(i + 1);

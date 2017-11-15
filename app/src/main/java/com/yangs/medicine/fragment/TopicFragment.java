@@ -186,6 +186,7 @@ public class TopicFragment extends LazyLoadFragment implements View.OnClickListe
             return;
         }
         Bundle bundle = new Bundle();
+        bundle.putString("type", "notError");
         bundle.putString("SP", list.get(position).getSP());
         bundle.putString("Cha", list.get(position).getIndex().replace("第", "")
                 .replace("章", "").replace("* ", ""));

@@ -91,6 +91,7 @@ public class MeFragment extends LazyLoadFragment implements MeAdapter.OnItemClic
         iv_edit.setOnClickListener(this);
         mrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mrecyclerView.setAdapter(meAdapter);
+        tv_name.setText(APPlication.user);
         if ("".equals(APPlication.subject)) {
             tv_level.setText("未设置");
         } else {

@@ -52,7 +52,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    APPlication.questionSource.uploadRecord(APPlication.user, "启动", "", "");
+                    APPlication.questionSource.uploadRecord(APPlication.user, "启动",
+                            "", "", "");
                 }
             }).start();
         }

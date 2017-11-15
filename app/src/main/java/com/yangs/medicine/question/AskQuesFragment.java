@@ -16,6 +16,7 @@ import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.fragment.LazyLoadFragment;
 import com.yangs.medicine.model.ExplainList;
 import com.yangs.medicine.model.Question;
+import com.yangs.medicine.source.QuestionSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
     private OnResultListener onResultListener;
     private int dialogIndex;
     private Question question;
+    private String type;
 
     @Nullable
     @Override
@@ -48,7 +50,11 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
         if (getArguments() == null)
             return;
         int index = (int) getArguments().getSerializable("index");
-        question = QuestionUtil.getQuestionByID(index + 1);
+        type = (String) getArguments().getSerializable("type");
+        if (type.equals("error"))
+            question = QuestionUtil.getQuestionByID(index + 1, QuestionSource.ERROR_TABLE_NAME);
+        else
+            question = QuestionUtil.getQuestionByID(index + 1, QuestionSource.QUESTION_TABLE_NAME);
         ExplainList explainList = new ExplainList();
         explainList.setIndex(index + 1);
         explainList.setName(question.getQuestion());

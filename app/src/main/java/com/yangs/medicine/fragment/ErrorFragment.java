@@ -29,7 +29,6 @@ public class ErrorFragment extends LazyLoadFragment implements View.OnClickListe
     private ViewPager vp;
     private List<Fragment> listFragment;
     private ErrorTodayFragment errorTodayFragment;
-    private ErrorAllFragment errorAllFragment;
 
     @Override
     protected int setContentView() {
@@ -50,9 +49,11 @@ public class ErrorFragment extends LazyLoadFragment implements View.OnClickListe
         mLay = getContentView();
         listFragment = new ArrayList<>();
         errorTodayFragment = new ErrorTodayFragment();
-        errorAllFragment = new ErrorAllFragment();
+        errorTodayFragment.setTime("today");
         listFragment.add(errorTodayFragment);
-        listFragment.add(errorAllFragment);
+        errorTodayFragment = new ErrorTodayFragment();
+        errorTodayFragment.setTime("all");
+        listFragment.add(errorTodayFragment);
         bt_1 = (Button) mLay.findViewById(R.id.error_bt_1);
         bt_2 = (Button) mLay.findViewById(R.id.error_bt_2);
         vp = (ViewPager) mLay.findViewById(R.id.error_vp);

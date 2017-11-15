@@ -1,6 +1,7 @@
 package com.yangs.medicine.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -106,6 +107,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         progressDialog.dismiss();
                     APPlication.showToast("发送验证码失败!", 0);
                     break;
+                case -2:
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    break;
                 case 1:
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
@@ -130,6 +135,21 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         if (APPlication.DEBUG)
                             Log.i("注册验证码: ", real_code);
                     }
+                    break;
+                case 3:
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    APPlication.showToast("这个手机号已经注册了!", 0);
+                    break;
+                case 4:
+                    APPlication.showToast("注册成功,请登录", 0);
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("result", "success");
+                    intent.putExtras(bundle);
+                    setResult(1, intent);
+                    APPlication.save.edit().putString("username", phone).putString("pwd", pwd).apply();
+                    finish();
                     break;
             }
             return false;
@@ -191,16 +211,31 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 switch (current_step) {
                     case 1:
                         phone = et_text.getText().toString().trim();
-                        progressDialog.setMessage("发送验证码中...");
+                        progressDialog.setMessage("请稍后...");
                         progressDialog.show();
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    String result = SmsUtil.sendRegister(phone, real_code);
-                                    if ("OK".equals(result)) {
-                                        handler.sendEmptyMessage(1);
-                                        return;
+                                    String result = APPlication.questionSource.checkUserIsExist(phone);
+                                    switch (result) {
+                                        case "用户已存在":
+                                            handler.sendEmptyMessage(3);
+                                            return;
+                                        case "用户不存在":
+                                            result = SmsUtil.sendRegister(phone, real_code);
+                                            if ("OK".equals(result)) {
+                                                handler.sendEmptyMessage(1);
+                                                return;
+                                            }
+                                            break;
+                                        case "内部错误":
+                                            APPlication.showToast("服务器返回了一个错误" +
+                                                    ": checkUserIsExist", 1);
+                                            break;
+                                        default:
+                                            APPlication.showToast("网络出错", 0);
+                                            break;
                                     }
                                 } catch (ClientException e) {
                                     e.printStackTrace();
@@ -212,14 +247,46 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         break;
                     case 2:
                         code = et_text.getText().toString().trim();
-                        if (code.equals(real_code))
-                            goToStep(3);
-                        else
-                            APPlication.showToast("验证码错误", 0);
+                        progressDialog.setMessage("验证中...");
+                        progressDialog.show();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                                if (code.equals(real_code))
+                                    goToStep(3);
+                                else
+                                    APPlication.showToast("验证码错误", 0);
+                            }
+                        }, 500);
                         break;
                     case 3:
                         pwd = et_text.getText().toString().trim();
-                        APPlication.showToast(pwd, 0);
+                        progressDialog.setMessage("注册中...");
+                        progressDialog.show();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String result = APPlication.questionSource.registerUser(phone, pwd);
+                                switch (result) {
+                                    case "注册成功":
+                                        handler.sendEmptyMessage(4);
+                                        return;
+                                    case "用户已存在":
+                                        handler.sendEmptyMessage(3);
+                                        return;
+                                    case "内部错误":
+                                        APPlication.showToast("服务器返回了一个错误" +
+                                                ": registerUser", 1);
+                                        break;
+                                    default:
+                                        APPlication.showToast("网络出错", 0);
+                                        break;
+                                }
+                                handler.sendEmptyMessage(-2);
+                            }
+                        }).start();
                         break;
                 }
                 break;

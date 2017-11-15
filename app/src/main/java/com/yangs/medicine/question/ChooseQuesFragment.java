@@ -23,6 +23,7 @@ import com.yangs.medicine.adapter.DiscussAdapter;
 import com.yangs.medicine.db.QuestionUtil;
 import com.yangs.medicine.model.DiscussList;
 import com.yangs.medicine.model.Question;
+import com.yangs.medicine.source.QuestionSource;
 import com.yangs.medicine.ui.FullyLinearLayoutManager;
 import com.yangs.medicine.ui.MyRecylerview;
 
@@ -87,6 +88,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private TextView tv_noreply;
     private int star_code;
     private int thumb_click_position;
+    private String type;
 
     @Nullable
     @Override
@@ -138,6 +140,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         bt_sub.setOnClickListener(this);
         if (getArguments() != null) {
             index = (int) getArguments().getSerializable("index");
+            type = (String) getArguments().getSerializable("type");
             updateQuestion(index);
         }
         dialogindex = (int) getArguments().getSerializable("dialogIndex");
@@ -238,7 +241,10 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     }
 
     public void updateQuestion(int index) {
-        question = QuestionUtil.getQuestionByID(index + 1);
+        if (type.equals("error"))
+            question = QuestionUtil.getQuestionByID(index + 1, QuestionSource.ERROR_TABLE_NAME);
+        else
+            question = QuestionUtil.getQuestionByID(index + 1, QuestionSource.QUESTION_TABLE_NAME);
         tv_ques.setText(question.getId() + "." + question.getQuestion());
         ll_A_4.setText(question.getA());
         ll_B_4.setText(question.getB());
@@ -376,7 +382,8 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
                 if (!isRedo && !APPlication.DEBUG) {
                     String result = check ? "对" : "错";
                     APPlication.questionSource.uploadRecord(
-                            APPlication.user, "做题", question.getRealID() + "", result);
+                            APPlication.user, "做题", question.getRealID() + ""
+                            , result, question.getSP());
                 }
                 lists = APPlication.questionSource.getDiscussList(question.getRealID(), 0);
                 if (lists.size() > 0) {

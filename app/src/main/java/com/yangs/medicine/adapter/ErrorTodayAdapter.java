@@ -91,6 +91,18 @@ public class ErrorTodayAdapter extends RecyclerView.Adapter<ErrorTodayAdapter.Vi
         this.onItemClickListener = onItemClickListener;
     }
 
+    public void addAll(List<ErrorTodayList> list) {
+        int lastIndex = this.lists.size();
+        if (this.lists.addAll(list)) {
+            notifyItemRangeInserted(lastIndex, this.lists.size());
+        }
+    }
+
+    public void clear() {
+        lists.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onClick(View v) {
         if (onItemClickListener != null)
