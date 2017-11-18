@@ -33,7 +33,7 @@ public class APPlication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DEBUG = true;
+        DEBUG = false;
         context = getApplicationContext();
         Fresco.initialize(this);
         save = getSharedPreferences("Medicine", MODE_PRIVATE);
