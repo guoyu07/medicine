@@ -3,6 +3,7 @@ package com.yangs.medicine.source;
 import android.app.Application;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Handler;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -48,6 +49,7 @@ public class QuestionSource {
     private static final String RECORD_URL = "http://120.55.46.93:8080/medicine2/RecordServlet";
     private static final String REGISTER_URL = "http://120.55.46.93:8080/medicine2/RegisterServlet";
     private static final String LOGIN_URL = "http://120.55.46.93:8080/medicine2/LoginServlet";
+    private static final String UPDATE_URL = "http://120.55.46.93:8080/medicine2/UpdateServlet";
     public static final String QUESTION_TABLE_NAME = "题目_tmp";
     public static final String SUBJECT_TABLE_NAME = "科目_tmp";
     public static final String CHA_TABLE_NAME = "章节_tmp";
@@ -635,5 +637,35 @@ public class QuestionSource {
             code = -1;
         }
         return code;
+    }
+
+    public void checkVersion(Handler handler, final OnResponseResultListener onResponseResultListener) {
+        if (onResponseResultListener == null)
+            return;
+        String s = null;
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "checkVersion")
+                .add("cu_version", APPlication.getVersion());
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(UPDATE_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            s = response.body().string();
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        final String finalS = s;
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                onResponseResultListener.onResponseResult(finalS);
+            }
+        });
+    }
+
+    public interface OnResponseResultListener {
+        void onResponseResult(String response);
     }
 }

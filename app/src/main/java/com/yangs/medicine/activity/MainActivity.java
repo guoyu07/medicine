@@ -1,22 +1,31 @@
 package com.yangs.medicine.activity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.yangs.medicine.R;
 import com.yangs.medicine.fragment.BookFragment;
 import com.yangs.medicine.fragment.ErrorFragment;
 import com.yangs.medicine.fragment.MeFragment;
 import com.yangs.medicine.fragment.TaskFragment;
 import com.yangs.medicine.fragment.TopicFragment;
+import com.yangs.medicine.source.QuestionSource;
+import com.yangs.medicine.util.AsyncTaskUtil;
 import com.yangs.medicine.util.FitStatusBar;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -41,6 +50,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private BookFragment bookFragment;
     private MeFragment meFragment;
     private TaskFragment taskFragment;
+    private AsyncTaskUtil mDownloadAsyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +59,60 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         init();
         switchFragment(1);
         if (!APPlication.DEBUG) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    APPlication.questionSource.uploadRecord(APPlication.user, "启动",
-                            "", "", "");
-                }
-            }).start();
+            checkUpdate();
         }
     }
+
+    private void checkUpdate() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                APPlication.questionSource.uploadRecord(APPlication.user, "启动",
+                        "", "", "");
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                APPlication.questionSource.checkVersion(handler, new QuestionSource.OnResponseResultListener() {
+                    @Override
+                    public void onResponseResult(final String response) {
+                        if (response == null || response.equals("最新版"))
+                            return;
+                        JSONObject jsonObject = JSON.parseObject(response);
+                        final String url = "http://120.55.46.93:8080/app/medicine.apk";
+                        new AlertDialog.Builder(MainActivity.this).setCancelable(false)
+                                .setTitle("发现新版本").setMessage("" +
+                                "更新: " + jsonObject.getString("detail") + "\n"
+                                + "版本号: " + jsonObject.getString("version") + "\n"
+                                + "大小: " + jsonObject.getString("size") + "\n"
+                                + "时间: " + jsonObject.getString("time"))
+                                .setPositiveButton("下载安装", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(MainActivity.this, "正在下载中...", Toast.LENGTH_SHORT).show();
+                                        mDownloadAsyncTask = new AsyncTaskUtil(MainActivity.this, handler);
+                                        mDownloadAsyncTask.execute(url, "medicine.apk");
+                                    }
+                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                APPlication.showToast("新版本有更好的体验哦，推荐下载!", 0);
+                            }
+                        }).create().show();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            return true;
+        }
+    });
 
     private void init() {
         FitStatusBar.addStatusBarView(this);
