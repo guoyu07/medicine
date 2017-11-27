@@ -31,6 +31,33 @@ public class QuestionUtil {
         return 0;
     }
 
+    public static String getQuestionStatusByID(int id, String table) {
+        String result = "未做";
+        String sql = "select * from " + table + " where id=" + id;
+        Cursor cursor = null;
+        try {
+            cursor = APPlication.db.rawQuery(sql, null);
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    String answer = cursor.getString(2);
+                    String youranswer = cursor.getString(13);
+                    if (youranswer.equals(""))
+                        result = "未做";
+                    else if (answer.equals(youranswer))
+                        result = "对";
+                    else
+                        result = "错";
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return result;
+    }
+
     public static Question getQuestionByID(int id, String table) {
         Question question = new Question();
         String sql = "select * from " + table + " where id=" + id;
@@ -52,6 +79,7 @@ public class QuestionUtil {
                     question.setCha(cursor.getString(10));
                     question.setSP(cursor.getString(11));
                     question.setRealID(cursor.getString(12));
+                    question.setYourAnswer(cursor.getString(13));
                 }
             }
         } catch (Exception e) {

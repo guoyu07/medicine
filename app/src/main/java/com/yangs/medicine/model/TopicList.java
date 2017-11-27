@@ -7,6 +7,24 @@ package com.yangs.medicine.model;
 public class TopicList {
     private String name;        //名称
     private String type;        //类型
+    private String readID;
+    private String hasFinishNumber;
+
+    public String getHasFinishNumber() {
+        return hasFinishNumber;
+    }
+
+    public void setHasFinishNumber(String hasFinishNumber) {
+        this.hasFinishNumber = hasFinishNumber;
+    }
+
+    public String getReadID() {
+        return readID;
+    }
+
+    public void setReadID(String readID) {
+        this.readID = readID;
+    }
 
     private Boolean isClick;   //是否点击
     private String index;       //序号

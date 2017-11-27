@@ -87,13 +87,20 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
         }
         dialogIndex = (int) getArguments().getSerializable("dialogIndex");
         String answer = QuestionActivity.timuLists.get(dialogIndex).getAnswer();
+        if (answer == null || answer.equals("")) {
+            String t_answewr = question.getYourAnswer();
+            if (!TextUtils.isEmpty(t_answewr)) {
+                answer = t_answewr;
+                QuestionActivity.timuLists.get(dialogIndex).setSubmmit(true);
+            }
+        }
         if ("对".equals(answer)) {
             setAClick();
         } else if ("错".equals(answer)) {
             setBClick();
         }
         if (QuestionActivity.timuLists.get(dialogIndex).getSubmmit())
-            checkOK();
+            checkOK(true);
     }
 
     @Override
@@ -111,7 +118,7 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
                 if (TextUtils.isEmpty(your_answer))
                     APPlication.showToast("要自己先做了才能查看答案哦!", 0);
                 else
-                    checkOK();
+                    checkOK(false);
                 break;
         }
     }
@@ -162,9 +169,9 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
         ll_B_3.setVisibility(View.VISIBLE);
     }
 
-    public void checkOK() {
+    public void checkOK(final Boolean isRedo) {
         bt_sub.setVisibility(View.GONE);
-        Boolean check = your_answer.equals(question.getAnswer());
+        final Boolean check = your_answer.equals(question.getAnswer());
         QuestionActivity.timuLists.get(dialogIndex).setSubmmit(true);
         if (check) {
             switch (your_answer) {
@@ -197,6 +204,17 @@ public class CheckQuesFragment extends Fragment implements View.OnClickListener 
             else
                 onResultListener.onResult(dialogIndex, 0);
         }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (!isRedo && !APPlication.DEBUG) {
+                    String result = check ? "对" : "错";
+                    APPlication.questionSource.uploadRecord(
+                            APPlication.user, "做题", question.getRealID() + ""
+                            , result, your_answer, question.getSP(), question.getCha());
+                }
+            }
+        }).start();
     }
 
     public void setOnResultListener(OnResultListener onResultListener) {

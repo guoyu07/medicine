@@ -27,6 +27,42 @@ public class BlankList {
     }
 
     private int index;              //序号
+    private String realID;
+    private String isFinish;
+    private String Cha;
+    private String SP;
+
+    public String getCha() {
+        return Cha;
+    }
+
+    public void setCha(String cha) {
+        Cha = cha;
+    }
+
+    public String getSP() {
+        return SP;
+    }
+
+    public void setSP(String SP) {
+        this.SP = SP;
+    }
+
+    public String getIsFinish() {
+        return isFinish;
+    }
+
+    public void setIsFinish(String isFinish) {
+        this.isFinish = isFinish;
+    }
+
+    public String getRealID() {
+        return realID;
+    }
+
+    public void setRealID(String realID) {
+        this.realID = realID;
+    }
 
     public String getQuestion() {
         return question;

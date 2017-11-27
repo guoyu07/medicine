@@ -56,7 +56,8 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
             holder.ada_2_tv_name.setVisibility(View.GONE);
             holder.ada_2_v.setVisibility(View.GONE);
             holder.ada_2_tv_number.setVisibility(View.GONE);
-            holder.ada_1_tv_name.setText(list.get(position).getIndex() + "   " + list.get(position).getName());
+            holder.ada_1_tv_name.setText(list.get(position).getIndex()
+                    + "   " + list.get(position).getName());
             if (list.get(position).getLock().equals("lock")) {
                 holder.ada_1_tv_share.setVisibility(View.VISIBLE);
                 holder.ada_1_iv.setBackgroundResource(R.drawable.icon_suo);
@@ -86,9 +87,11 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
             holder.ada_1_tv_share.setVisibility(View.GONE);
             holder.ada_2_tv_name.setVisibility(View.VISIBLE);
             holder.ada_2_v.setVisibility(View.VISIBLE);
-            holder.ada_2_tv_number.setVisibility(View.VISIBLE);
+            if (!list.get(position).getType().contains("材料阅读")) {
+                holder.ada_2_tv_number.setVisibility(View.VISIBLE);
+                holder.ada_2_tv_number.setText(list.get(position).getNumber());
+            }
             holder.ada_2_tv_name.setText(list.get(position).getIndex() + " " + list.get(position).getName());
-            holder.ada_2_tv_number.setText(list.get(position).getNumber());
         }
     }
 

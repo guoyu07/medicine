@@ -145,21 +145,34 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         }
         dialogindex = (int) getArguments().getSerializable("dialogIndex");
         String answer = QuestionActivity.timuLists.get(dialogindex).getAnswer();
+        if (answer == null || answer.equals("")) {
+            String t_answewr = question.getYourAnswer();
+            if (!TextUtils.isEmpty(t_answewr)) {
+                answer = t_answewr;
+                your_answer = answer;
+                QuestionActivity.timuLists.get(dialogindex).setSubmmit(true);
+            }
+        }
         if (!"".equals(answer)) {
             switch (answer) {
                 case "a":
+                case "A":
                     setA();
                     break;
                 case "b":
+                case "B":
                     setB();
                     break;
                 case "c":
+                case "C":
                     setC();
                     break;
                 case "d":
+                case "D":
                     setD();
                     break;
                 case "e":
+                case "E":
                     setE();
                     break;
             }
@@ -264,7 +277,6 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
         ll_E_1.setBackgroundResource(R.drawable.selector_white_7dp);
         ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
-        your_answer = "";
     }
 
     public void checkOK(final Boolean isRedo) {
@@ -383,7 +395,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
                     String result = check ? "对" : "错";
                     APPlication.questionSource.uploadRecord(
                             APPlication.user, "做题", question.getRealID() + ""
-                            , result, question.getSP());
+                            , result, your_answer, question.getSP(), question.getCha());
                 }
                 lists = APPlication.questionSource.getDiscussList(question.getRealID(), 0);
                 if (lists.size() > 0) {

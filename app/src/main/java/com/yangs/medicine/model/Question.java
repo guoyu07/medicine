@@ -12,6 +12,15 @@ public class Question {
     private String explains;
     private String A;
     private String B;
+    private String yourAnswer;
+
+    public String getYourAnswer() {
+        return yourAnswer;
+    }
+
+    public void setYourAnswer(String yourAnswer) {
+        this.yourAnswer = yourAnswer;
+    }
 
     public String getRealID() {
         return realID;

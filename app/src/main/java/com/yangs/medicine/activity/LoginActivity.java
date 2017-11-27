@@ -111,7 +111,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                getSubjectCode = APPlication.questionSource.getSubject(APPlication.subject);
+                                getSubjectCode = APPlication.questionSource.getSubject(APPlication.subject
+                                ,APPlication.grade);
                                 handler.sendEmptyMessage(2);
                             }
                         }).start();

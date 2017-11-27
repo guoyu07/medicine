@@ -9,6 +9,43 @@ public class ExplainList {
     private String name;
     private String explain;
     private Boolean isClick;
+    private String Cha;
+    private String SP;
+    private String answer;
+    private String realID;
+
+    public String getRealID() {
+        return realID;
+    }
+
+    public void setRealID(String realID) {
+        this.realID = realID;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public String getCha() {
+        return Cha;
+    }
+
+    public void setCha(String cha) {
+        Cha = cha;
+    }
+
+    public String getSP() {
+        return SP;
+    }
+
+    public void setSP(String SP) {
+        this.SP = SP;
+    }
+
 
     public int getIndex() {
         return index;

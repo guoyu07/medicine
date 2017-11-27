@@ -96,7 +96,8 @@ public class SelectSubActivity extends BaseActivity implements View.OnClickListe
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            code = APPlication.questionSource.getSubject(APPlication.subject);
+                            code = APPlication.questionSource.getSubject(APPlication.subject
+                                    , APPlication.grade);
                             handler.sendEmptyMessage(0);
                         }
                     }).start();
@@ -220,7 +221,8 @@ public class SelectSubActivity extends BaseActivity implements View.OnClickListe
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            code = APPlication.questionSource.getSubject(APPlication.subject);
+                            code = APPlication.questionSource.getSubject(APPlication.subject
+                                    , APPlication.grade);
                             handler.sendEmptyMessage(0);
                         }
                     }).start();

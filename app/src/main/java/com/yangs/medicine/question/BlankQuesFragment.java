@@ -5,11 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.BlankAdapter;
 import com.yangs.medicine.db.QuestionUtil;
@@ -60,8 +62,14 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
             else
                 question = QuestionUtil.getQuestionByID(i + 1, QuestionSource.QUESTION_TABLE_NAME);
             BlankList blankList = new BlankList();
-            blankList.setClick(false);
+            if (TextUtils.isEmpty(question.getYourAnswer()))
+                blankList.setClick(false);
+            else
+                blankList.setClick(true);
             blankList.setIndex(i + 1);
+            blankList.setCha(question.getCha());
+            blankList.setSP(question.getSP());
+            blankList.setRealID(question.getRealID());
             blankList.setQuestion(question.getQuestion());
             blankList.setAnswer(question.getAnswer());
             lists.add(blankList);
@@ -69,10 +77,14 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
         blankAdapter.notifyDataSetChanged();
         for (int i = 0; i <= (end - start); i++) {
             int real = i + (int) getArguments().getSerializable("dialogIndex");
-            if ("1".equals(QuestionActivity.timuLists.get(real).getAnswer())) {
+            if (!TextUtils.isEmpty(lists.get(i).getAnswer()))
                 lists.get(i).setClick(true);
-            } else {
-                lists.get(i).setClick(false);
+            else {
+                if ("1".equals(QuestionActivity.timuLists.get(real).getAnswer())) {
+                    lists.get(i).setClick(true);
+                } else {
+                    lists.get(i).setClick(false);
+                }
             }
             blankAdapter.notifyDataSetChanged();
         }
@@ -96,7 +108,17 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
             QuestionActivity.timuLists.get(dialogIndex).setAnswer("0");
         } else {
             lists.get(position).setClick(true);
+            final BlankList question = lists.get(position);
             QuestionActivity.timuLists.get(dialogIndex).setAnswer("1");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    APPlication.questionSource.uploadRecord(
+                            APPlication.user, "做题", question.getRealID() + ""
+                            , "", "click", question.getSP(), question.getCha());
+
+                }
+            }).start();
         }
         blankAdapter.notifyDataSetChanged();
         onResultListener.onResult(dialogIndex, click ? 0 : 1);

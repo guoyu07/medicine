@@ -5,11 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.AskAdapter;
 import com.yangs.medicine.db.QuestionUtil;
@@ -57,16 +59,27 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
             question = QuestionUtil.getQuestionByID(index + 1, QuestionSource.QUESTION_TABLE_NAME);
         ExplainList explainList = new ExplainList();
         explainList.setIndex(index + 1);
+        explainList.setCha(question.getCha());
+        explainList.setSP(question.getSP());
+        explainList.setAnswer(question.getYourAnswer());
         explainList.setName(question.getQuestion());
+        explainList.setRealID(question.getRealID());
         explainList.setExplain(question.getAnswer());
-        explainList.setClick(false);
+        if (TextUtils.isEmpty(question.getYourAnswer()))
+            explainList.setClick(false);
+        else
+            explainList.setClick(true);
         lists.add(explainList);
-        if ("1".equals(QuestionActivity.timuLists.get(dialogIndex).getAnswer())) {
+        if (!TextUtils.isEmpty(lists.get(0).getAnswer()))
             lists.get(0).setClick(true);
-        } else if ("0".equals(QuestionActivity.timuLists.get(dialogIndex).getAnswer())) {
-            lists.get(0).setClick(false);
+        else {
+            if ("1".equals(QuestionActivity.timuLists.get(dialogIndex).getAnswer())) {
+                lists.get(0).setClick(true);
+            } else if ("0".equals(QuestionActivity.timuLists.get(dialogIndex).getAnswer())) {
+                lists.get(0).setClick(false);
+            }
+            askAdapter.notifyDataSetChanged();
         }
-        askAdapter.notifyDataSetChanged();
     }
 
     private void initView() {
@@ -93,6 +106,16 @@ public class AskQuesFragment extends Fragment implements AskAdapter.OnItemClickL
         if (getArguments() != null && onResultListener != null) {
             onResultListener.onResult(dialogIndex, click ? 0 : 1);
         }
+        final ExplainList explainList = lists.get(position);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                APPlication.questionSource.uploadRecord(
+                        APPlication.user, "做题", explainList.getRealID() + ""
+                        , "", "click", explainList.getSP(), explainList.getCha());
+
+            }
+        }).start();
     }
 
     public void setOnResultListener(OnResultListener onResultListener) {

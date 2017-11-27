@@ -42,7 +42,8 @@ public class Splash extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    code = APPlication.questionSource.getSubject(APPlication.subject);
+                    code = APPlication.questionSource.getSubject(APPlication.subject
+                            , APPlication.grade);
                     handler.post(new Runnable() {
                         @Override
                         public void run() {

@@ -5,11 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.yangs.medicine.R;
+import com.yangs.medicine.activity.APPlication;
 import com.yangs.medicine.activity.QuestionActivity;
 import com.yangs.medicine.adapter.ExplainAdapter;
 import com.yangs.medicine.db.QuestionUtil;
@@ -35,7 +37,6 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
     private int start;
     private int end;
     private int dialogIndex;
-    private Question question;
     private String type;
 
     @Nullable
@@ -62,20 +63,31 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
                 question = QuestionUtil.getQuestionByID(i + 1, QuestionSource.QUESTION_TABLE_NAME);
             ExplainList explainList = new ExplainList();
             explainList.setIndex(i + 1);
+            explainList.setCha(question.getCha());
+            explainList.setSP(question.getSP());
+            explainList.setAnswer(question.getYourAnswer());
             explainList.setName(question.getQuestion());
+            explainList.setRealID(question.getRealID());
             explainList.setExplain(question.getAnswer());
-            explainList.setClick(false);
+            if (TextUtils.isEmpty(question.getYourAnswer()))
+                explainList.setClick(false);
+            else
+                explainList.setClick(true);
             lists.add(explainList);
         }
         explainAdapter.notifyDataSetChanged();
         for (int i = 0; i <= (end - start); i++) {
             int real = i + (int) getArguments().getSerializable("dialogIndex");
-            if ("1".equals(QuestionActivity.timuLists.get(real).getAnswer())) {
+            if (!TextUtils.isEmpty(lists.get(i).getAnswer()))
                 lists.get(i).setClick(true);
-            } else {
-                lists.get(i).setClick(false);
+            else {
+                if ("1".equals(QuestionActivity.timuLists.get(real).getAnswer())) {
+                    lists.get(i).setClick(true);
+                } else {
+                    lists.get(i).setClick(false);
+                }
+                explainAdapter.notifyDataSetChanged();
             }
-            explainAdapter.notifyDataSetChanged();
         }
     }
 
@@ -97,7 +109,17 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
             QuestionActivity.timuLists.get(dialogIndex).setAnswer("0");
         } else {
             lists.get(position).setClick(true);
+            final ExplainList explainList = lists.get(position);
             QuestionActivity.timuLists.get(dialogIndex).setAnswer("1");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    APPlication.questionSource.uploadRecord(
+                            APPlication.user, "做题", explainList.getRealID() + ""
+                            , "", "click", explainList.getSP(), explainList.getCha());
+
+                }
+            }).start();
         }
         explainAdapter.notifyDataSetChanged();
         if (getArguments() != null && onResultListener != null) {
