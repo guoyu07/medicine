@@ -1,6 +1,7 @@
 package com.yangs.medicine.question;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,7 +29,7 @@ import java.util.List;
  * 名词解释Fragment
  */
 
-public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnItemClickListener {
+public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnItemClickListener, ExplainAdapter.OnBtItemClickListener {
     private View mLay;
     private RecyclerView recyclerView;
     private List<ExplainList> lists;
@@ -38,6 +39,7 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
     private int end;
     private int dialogIndex;
     private String type;
+    private Handler handler;
 
     @Nullable
     @Override
@@ -73,6 +75,10 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
                 explainList.setClick(false);
             else
                 explainList.setClick(true);
+            if (question.getIsInError().equals("true"))
+                explainList.setAddError(true);
+            else
+                explainList.setAddError(false);
             lists.add(explainList);
         }
         explainAdapter.notifyDataSetChanged();
@@ -92,12 +98,14 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
     }
 
     private void initView() {
+        handler = new Handler();
         recyclerView = (RecyclerView) mLay.findViewById(R.id.explainfrag_rv);
         lists = new ArrayList<>();
         explainAdapter = new ExplainAdapter(lists, getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(explainAdapter);
         explainAdapter.setOnItemClickListener(this);
+        explainAdapter.setOnBtItemClickListener(this);
     }
 
     @Override
@@ -130,6 +138,55 @@ public class ExplainQuesFragment extends Fragment implements ExplainAdapter.OnIt
 
     public void setOnResultListener(OnResultListener onResultListener) {
         this.onResultListener = onResultListener;
+    }
+
+    @Override
+    public void onBtItemClick(final int position) {
+        final ExplainList explainList = lists.get(position);
+        if (explainList.getAddError()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    APPlication.questionSource.removeError(APPlication.user, explainList.getRealID()
+                            , new QuestionSource.OnResponseCodeResultListener() {
+                                @Override
+                                public void onResponseResult(int code, String response) {
+                                    if (code == -1)
+                                        return;
+                                    if (response.equals("失败"))
+                                        return;
+                                    lists.get(position).setAddError(false);
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            explainAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+                            });
+                }
+            }).start();
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String s = APPlication.questionSource.uploadRecord(
+                            APPlication.user, "做题", explainList.getRealID() + ""
+                            , "错", "错", explainList.getSP(), explainList.getCha());
+                    if (s.equals("成功")) {
+                        lists.get(position).setAddError(true);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                explainAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    } else {
+                        APPlication.showToast("加入错题集发生了错误,请反馈!", 1);
+                    }
+                }
+            }).start();
+        }
     }
 
     public interface OnResultListener {

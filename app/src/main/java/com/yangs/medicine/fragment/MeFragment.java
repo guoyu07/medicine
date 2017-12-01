@@ -1,7 +1,11 @@
 package com.yangs.medicine.fragment;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +16,9 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.yangs.medicine.R;
+import com.yangs.medicine.Splash;
 import com.yangs.medicine.activity.APPlication;
+import com.yangs.medicine.activity.LoginActivity;
 import com.yangs.medicine.activity.MeActivity;
 import com.yangs.medicine.adapter.MeAdapter;
 import com.yangs.medicine.adapter.TitleBuilder;
@@ -36,6 +42,7 @@ public class MeFragment extends LazyLoadFragment implements MeAdapter.OnItemClic
     private MeAdapter meAdapter;
     private List<MeList> list;
     private View mLay;
+    private Handler handler;
 
     @Override
     protected int setContentView() {
@@ -78,6 +85,7 @@ public class MeFragment extends LazyLoadFragment implements MeAdapter.OnItemClic
     }
 
     private void initView() {
+        handler = new Handler();
         mLay = getContentView();
         sv_head = (SimpleDraweeView) mLay.findViewById(R.id.me_sv);
         iv_edit = (ImageView) mLay.findViewById(R.id.me_iv_edit);
@@ -126,7 +134,32 @@ public class MeFragment extends LazyLoadFragment implements MeAdapter.OnItemClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.me_bt_logout:
-                APPlication.showToast("logout...", 0);
+                new AlertDialog.Builder(getContext()).setTitle("提示")
+                        .setMessage("是否要退出登录?").setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                        progressDialog.setCancelable(false);
+                        progressDialog.setMessage("请稍后...");
+                        progressDialog.show();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressDialog.dismiss();
+                                APPlication.save.edit().putBoolean("login_status", false)
+                                        .putString("grade", "").putString("subject", "").apply();
+                                startActivity(new Intent(getContext(), LoginActivity.class));
+                                getActivity().finish();
+                            }
+                        }, 1500);
+                    }
+                }).setNegativeButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
                 break;
             case R.id.me_iv_edit:
                 APPlication.showToast("edit...", 0);

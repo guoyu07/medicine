@@ -13,6 +13,15 @@ public class Question {
     private String A;
     private String B;
     private String yourAnswer;
+    private String IsInError;
+
+    public String getIsInError() {
+        return IsInError;
+    }
+
+    public void setIsInError(String isInError) {
+        IsInError = isInError;
+    }
 
     public String getYourAnswer() {
         return yourAnswer;

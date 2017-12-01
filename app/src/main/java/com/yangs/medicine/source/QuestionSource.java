@@ -164,7 +164,7 @@ public class QuestionSource {
             APPlication.db.execSQL("create table " + QUESTION_TABLE_NAME + " " +
                     "(id INTEGER PRIMARY KEY AUTOINCREMENT,question text not null," +
                     "answer text not null,A text,B text,C text,D text,E text,explains text," +
-                    "type text,Cha int,SP int,RealIndex int,yourAnswer text);");
+                    "type text,Cha int,SP int,RealIndex int,yourAnswer text,IsInError text);");
             String s = response.body().string();
             JSONObject jsonObject = JSON.parseObject(s);
             List<String> list = new ArrayList<>();
@@ -191,6 +191,7 @@ public class QuestionSource {
                     cv.put("SP", this.SP);
                     cv.put("RealIndex", jo.getString("id"));
                     cv.put("yourAnswer", jo.getString("yourAnswer"));
+                    cv.put("IsInError", jo.getString("IsInError"));
                     APPlication.db.insert(QUESTION_TABLE_NAME, null, cv);
                 }
             }
@@ -233,7 +234,7 @@ public class QuestionSource {
             APPlication.db.execSQL("create table " + ERROR_TABLE_NAME + " " +
                     "(id INTEGER PRIMARY KEY AUTOINCREMENT,question text not null," +
                     "answer text not null,A text,B text,C text,D text,E text,explains text," +
-                    "type text,Cha int,SP int,RealIndex int,yourAnswer text);");
+                    "type text,Cha int,SP int,RealIndex int,yourAnswer text,IsInError text);");
             String s = response.body().string();
             JSONObject jsonObject = JSON.parseObject(s);
             List<String> list = new ArrayList<>();
@@ -260,6 +261,7 @@ public class QuestionSource {
                     cv.put("SP", SP);
                     cv.put("RealIndex", jo.getString("id"));
                     cv.put("yourAnswer", "");
+                    cv.put("IsInError", jo.getString("IsInError"));
                     APPlication.db.insert(ERROR_TABLE_NAME, null, cv);
                 }
             }
@@ -371,7 +373,8 @@ public class QuestionSource {
                 .post(requestBody).build();
         try {
             Response response = mOkHttpClient.newCall(request).execute();
-            JSONObject ChajsonObject = JSON.parseObject(response.body().string());
+            String s = response.body().string();
+            JSONObject ChajsonObject = JSON.parseObject(s);
             response.close();
             formBodyBuilder = new FormBody.Builder().add("check", "yangs")
                     .add("action", "getReadBrief").add("pro", pro)
@@ -535,8 +538,9 @@ public class QuestionSource {
         return -2;
     }
 
-    public void uploadRecord(String user, String operate, String realID, String result,
-                             String answer, String SP, String Cha) {
+    public String uploadRecord(String user, String operate, String realID, String result,
+                               String answer, String SP, String Cha) {
+        String s = "";
         String network = IntenetUtil.getNetworkState(APPlication.getContext());
         String model = APPlication.getModel();
         String version = APPlication.getVersion();
@@ -550,9 +554,31 @@ public class QuestionSource {
         Request request = new Request.Builder().url(RECORD_URL).headers(requestHeaders)
                 .post(requestBody).build();
         try {
-            mOkHttpClient.newCall(request).execute();
+            Response response = mOkHttpClient.newCall(request).execute();
+            s = response.body().string();
+            response.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return s;
+    }
+
+    public void removeError(String user, String realID, OnResponseCodeResultListener onResponseCodeResultListener) {
+        if (onResponseCodeResultListener == null)
+            return;
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "removeError").add("user", user)
+                .add("realID", realID);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(RECORD_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            onResponseCodeResultListener.onResponseResult(1, response.body().string());
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            onResponseCodeResultListener.onResponseResult(-1, null);
         }
     }
 

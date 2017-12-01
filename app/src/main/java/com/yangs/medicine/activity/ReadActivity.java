@@ -101,6 +101,7 @@ public class ReadActivity extends BaseActivity implements View.OnClickListener {
         bt_goto = (Button) findViewById(R.id.readactivity_bt_goto);
         tv_content.setMovementMethod(ScrollingMovementMethod.getInstance());
         bt_goto.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
     }
 
     @Override
@@ -124,6 +125,9 @@ public class ReadActivity extends BaseActivity implements View.OnClickListener {
                         APPlication.showToast("无法跳转!", 0);
                     }
                 }
+                break;
+            case R.id.readactivity_head_back:
+                finish();
                 break;
         }
     }

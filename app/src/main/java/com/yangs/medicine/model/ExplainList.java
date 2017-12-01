@@ -13,6 +13,15 @@ public class ExplainList {
     private String SP;
     private String answer;
     private String realID;
+    private Boolean isAddError = false;
+
+    public Boolean getAddError() {
+        return isAddError;
+    }
+
+    public void setAddError(Boolean addError) {
+        isAddError = addError;
+    }
 
     public String getRealID() {
         return realID;

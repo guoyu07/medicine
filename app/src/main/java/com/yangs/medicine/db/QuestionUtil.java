@@ -45,6 +45,8 @@ public class QuestionUtil {
                         result = "未做";
                     else if (answer.equals(youranswer))
                         result = "对";
+                    else if (youranswer.equals("click"))
+                        result = "对";
                     else
                         result = "错";
                 }
@@ -80,6 +82,7 @@ public class QuestionUtil {
                     question.setSP(cursor.getString(11));
                     question.setRealID(cursor.getString(12));
                     question.setYourAnswer(cursor.getString(13));
+                    question.setIsInError(cursor.getString(14));
                 }
             }
         } catch (Exception e) {

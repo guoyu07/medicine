@@ -8,7 +8,8 @@
         android:id="@+id/explain_adapter_ll_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_white_5dp_press">
+        android:background="@drawable/selector_white_5dp_press"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/explain_adapter_ques"
@@ -21,6 +22,18 @@
             android:text="问题"
             android:textColor="@color/error_tv"
             android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/explain_adapter_bt"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="17dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <View

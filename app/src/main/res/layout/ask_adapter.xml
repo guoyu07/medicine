@@ -32,6 +32,18 @@
             android:layout_marginRight="15dp"
             android:textColor="@color/error_tv"
             android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/ask_adapter_bt"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="17dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <View

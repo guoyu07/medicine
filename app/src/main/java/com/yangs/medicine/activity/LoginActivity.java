@@ -67,6 +67,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         bt_nologin.setOnClickListener(this);
         iv_qq.setOnClickListener(this);
         iv_wechat.setOnClickListener(this);
+        if (!APPlication.user.equals("游客")) {
+            et_user.setText(APPlication.user);
+            et_pwd.setText(APPlication.pwd);
+        }
     }
 
     @Override
@@ -112,7 +116,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             @Override
                             public void run() {
                                 getSubjectCode = APPlication.questionSource.getSubject(APPlication.subject
-                                ,APPlication.grade);
+                                        , APPlication.grade);
                                 handler.sendEmptyMessage(2);
                             }
                         }).start();

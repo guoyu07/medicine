@@ -37,74 +37,40 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (APPlication.save.getBoolean("login_status", false)) {
-            handler = new Handler();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    code = APPlication.questionSource.getSubject(APPlication.subject
-                            , APPlication.grade);
-                    handler.post(new Runnable() {
+        handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (APPlication.save.getBoolean("login_status", false)) {
+                    new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            switch (code) {
-                                case 0:
-                                    startActivity(new Intent(Splash.this, MainActivity.class));
-                                    break;
-                                case -1:
-                                    APPlication.showToast("解析题目数据时发生了错误,请反馈!", 1);
-                                    break;
-                                case -2:
-                                    APPlication.showToast("获取科目失败,请检查网络!", 1);
-                                    break;
-                            }
-                            finish();
+                            code = APPlication.questionSource.getSubject(APPlication.subject
+                                    , APPlication.grade);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    switch (code) {
+                                        case 0:
+                                            startActivity(new Intent(Splash.this, MainActivity.class));
+                                            break;
+                                        case -1:
+                                            APPlication.showToast("解析题目数据时发生了错误,请反馈!", 1);
+                                            break;
+                                        case -2:
+                                            APPlication.showToast("获取科目失败,请检查网络!", 1);
+                                            break;
+                                    }
+                                    finish();
+                                }
+                            });
                         }
-                    });
+                    }).start();
+                } else {
+                    startActivity(new Intent(Splash.this, LoginActivity.class));
+                    finish();
                 }
-            }).start();
-        } else {
-            startActivity(new Intent(Splash.this, LoginActivity.class));
-            finish();
-        }
-//        setContentView(R.layout.splash_layout);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        sp_jump_btn = (TextView) findViewById(R.id.sp_jump_btn);
-//        code = -1;
-//        final CountDownTimer timer = new CountDownTimer(3200, 1000) {
-//            int count = 3;
-//
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                sp_jump_btn.setVisibility(View.VISIBLE);
-//                sp_jump_btn.setText("跳过(" + millisUntilFinished / 1000 + "s)");
-//                count--;
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                sp_jump_btn.setText("跳过(" + 0 + "s)");
-//                if (APPlication.save.getBoolean("login_status", false)) {
-//                    if (code == 0) {
-//                        startActivity(new Intent(Splash.this, MainActivity.class));
-//                    } else {
-//                        APPlication.showToast("获取科目失败,请检查网络!", 1);
-//                    }
-//                } else {
-//                    startActivity(new Intent(Splash.this, LoginActivity.class));
-//                }
-//                finish();
-//            }
-//        };
-//        timer.start();
-//        if (APPlication.save.getBoolean("login_status", false)) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    code = APPlication.questionSource.getSubject(APPlication.subject);
-//                }
-//            }).start();
-//        }
+            }
+        }, 2000);
     }
 }
