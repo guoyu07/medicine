@@ -7,6 +7,15 @@ package com.yangs.medicine.model;
 public class BlankList {
     private String question;        // $ 代替 ( )
     private String answer;          //答案 ; 分隔
+    private String yourAnswer;
+
+    public String getYourAnswer() {
+        return yourAnswer;
+    }
+
+    public void setYourAnswer(String yourAnswer) {
+        this.yourAnswer = yourAnswer;
+    }
 
     public Boolean getClick() {
         return isClick;

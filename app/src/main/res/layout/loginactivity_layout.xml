@@ -120,17 +120,6 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
-            <Button
-                android:id="@+id/loginactivity_bt_nologin"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/login_bt_lay2"
-                android:gravity="center"
-                android:text="游客登录"
-                android:textColor="@color/blue2"
-                android:textSize="18sp" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

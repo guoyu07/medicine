@@ -30,7 +30,6 @@ import com.yangs.medicine.util.FitStatusBar;
  */
 
 public class Splash extends AppCompatActivity {
-    private TextView sp_jump_btn;
     private int code;
     private Handler handler;
 
@@ -71,6 +70,6 @@ public class Splash extends AppCompatActivity {
                     finish();
                 }
             }
-        }, 2000);
+        }, 3500);
     }
 }

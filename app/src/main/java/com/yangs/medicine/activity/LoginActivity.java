@@ -30,7 +30,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private TextView tv_forgetpwd;
     private TextView tv_register;
     private Button bt_login;
-    private Button bt_nologin;
     private ImageView iv_qq;
     private ImageView iv_wechat;
     private String user;
@@ -58,13 +57,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         tv_forgetpwd = (TextView) findViewById(R.id.loginactivity_tv_forgetpwd);
         tv_register = (TextView) findViewById(R.id.loginactivity_tv_register);
         bt_login = (Button) findViewById(R.id.loginactivity_bt_login);
-        bt_nologin = (Button) findViewById(R.id.loginactivity_bt_nologin);
         iv_qq = (ImageView) findViewById(R.id.loginactivity_iv_qq);
         iv_wechat = (ImageView) findViewById(R.id.loginactivity_iv_wechat);
         tv_forgetpwd.setOnClickListener(this);
         tv_register.setOnClickListener(this);
         bt_login.setOnClickListener(this);
-        bt_nologin.setOnClickListener(this);
         iv_qq.setOnClickListener(this);
         iv_wechat.setOnClickListener(this);
         if (!APPlication.user.equals("游客")) {
@@ -78,6 +75,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 1:
+                if (data == null)
+                    return;
                 Bundle bundle = data.getExtras();
                 if (bundle != null && "success".equals(bundle.getString("result"))) {
                     String s1 = APPlication.save.getString("username", "");
@@ -184,20 +183,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             handler.sendEmptyMessage(-2);
                     }
                 }).start();
-                break;
-            case R.id.loginactivity_bt_nologin:
-                progressDialog.setMessage("登录中...");
-                progressDialog.show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (progressDialog.isShowing())
-                            progressDialog.dismiss();
-                        APPlication.user = "游客";
-                        startActivity(new Intent(LoginActivity.this, SelectSubActivity.class));
-                        finish();
-                    }
-                }, 1000);
                 break;
             case R.id.loginactivity_iv_qq:
                 APPlication.showToast("目前未开放qq登录,请等待!", 0);

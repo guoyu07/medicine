@@ -10,7 +10,8 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/task_srl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -30,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="还没有发布的任务"
+                android:text="还没有任务"
                 android:textColor="@color/colorPrimary"
                 android:textSize="22sp"
                 android:visibility="gone" />

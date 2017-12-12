@@ -52,6 +52,7 @@ public class QuestionSource {
     private static final String LOGIN_URL = HEAD_URL + "LoginServlet";
     private static final String UPDATE_URL = HEAD_URL + "UpdateServlet";
     private static final String READ_URL = HEAD_URL + "ReadServlet";
+    private static final String TASK_URL = HEAD_URL + "TaskServlet";
     public static final String QUESTION_TABLE_NAME = "题目_tmp";
     public static final String SUBJECT_TABLE_NAME = "科目_tmp";
     public static final String CHA_TABLE_NAME = "章节_tmp";
@@ -744,6 +745,26 @@ public class QuestionSource {
         }
     }
 
+    public void editInfo(String user, String grade, String subject, OnResponseCodeResultListener onResponseCodeResultListener) {
+        if (onResponseCodeResultListener == null)
+            return;
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "editInfo")
+                .add("user", user).add("grade", grade)
+                .add("subject", subject);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(UPDATE_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            onResponseCodeResultListener.onResponseResult(1, response.body().string());
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            onResponseCodeResultListener.onResponseResult(-1, null);
+        }
+    }
+
     public void checkVersion(Handler handler, final OnResponseResultListener onResponseResultListener) {
         if (onResponseResultListener == null)
             return;
@@ -768,6 +789,94 @@ public class QuestionSource {
                 onResponseResultListener.onResponseResult(finalS);
             }
         });
+    }
+
+    public void uploadErrorLog(String src, String filename) {
+        if (src == null || src.length() == 0)
+            return;
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "uploadErrorLog")
+                .add("msg", src).add("filename", filename)
+                .add("user", APPlication.user);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(RECORD_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            mOkHttpClient.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addTask(String content, String user, String money, OnResponseCodeResultListener onResponseCodeResultListener) {
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "addTask")
+                .add("content", content).add("user", user)
+                .add("money", money);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(TASK_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            onResponseCodeResultListener.onResponseResult(1, response.body().string());
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            onResponseCodeResultListener.onResponseResult(-1, null);
+        }
+    }
+
+    public void getTaskList(String type, String user, String start, OnResponseCodeResultListener onResponseCodeResultListener) {
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "getTaskList")
+                .add("type", type).add("user", user)
+                .add("start", start);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(TASK_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            onResponseCodeResultListener.onResponseResult(1, response.body().string());
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            onResponseCodeResultListener.onResponseResult(-1, null);
+        }
+    }
+
+    public void acceptTaskByID(String type, String user, String id, OnResponseCodeResultListener onResponseCodeResultListener) {
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "acceptTaskByID")
+                .add("type", type).add("user", user)
+                .add("id", id);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(TASK_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            onResponseCodeResultListener.onResponseResult(1, response.body().string());
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            onResponseCodeResultListener.onResponseResult(-1, null);
+        }
+    }
+
+    public void doTaskByID(String type, String id, OnResponseCodeResultListener onResponseCodeResultListener) {
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", type)
+                .add("id", id);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(TASK_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            onResponseCodeResultListener.onResponseResult(1, response.body().string());
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            onResponseCodeResultListener.onResponseResult(-1, null);
+        }
     }
 
     public interface OnResponseResultListener {

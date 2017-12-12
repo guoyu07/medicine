@@ -43,6 +43,7 @@
         <activity android:name=".activity.DiscussActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.ReadActivity" />
+        <activity android:name=".activity.InfoEditActivity" />
     </application>
 
 </manifest>

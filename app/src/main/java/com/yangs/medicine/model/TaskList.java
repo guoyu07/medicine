@@ -5,8 +5,62 @@ package com.yangs.medicine.model;
  */
 
 public class TaskList {
+    private String id;
+    private String user;
+    private String status;
+    private String accepter;
+    private String accepttime;
+    private String finishtime;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAccepter() {
+        return accepter;
+    }
+
+    public void setAccepter(String accepter) {
+        this.accepter = accepter;
+    }
+
+    public String getAccepttime() {
+        return accepttime;
+    }
+
+    public void setAccepttime(String accepttime) {
+        this.accepttime = accepttime;
+    }
+
+    public String getFinishtime() {
+        return finishtime;
+    }
+
+    public void setFinishtime(String finishtime) {
+        this.finishtime = finishtime;
+    }
+
     private String picUrl;
-    private String name;
     private String time;
     private String content;
     private String money;
@@ -18,14 +72,6 @@ public class TaskList {
 
     public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getTime() {

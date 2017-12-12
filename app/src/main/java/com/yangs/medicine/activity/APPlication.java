@@ -43,7 +43,7 @@ public class APPlication extends Application {
         questionSource = new QuestionSource("yangs", "12345");
         if (!DEBUG) {
             CrashHandler crashHandler = CrashHandler.getInstance();
-            crashHandler.init(getApplicationContext());
+            crashHandler.init(context);
         }
         user = save.getString("username", "游客");
         pwd = save.getString("pwd", "");

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/me_white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            app:srcCompat="@drawable/tabbar_icon_renwu_selected" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="管理我的任务"
+            android:textColor="@color/error_tv"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/taskoperatedialog_iv_close"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            app:srcCompat="@drawable/ic_close_black_24dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray7" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/taskoperatedialog_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="状态:   待完成"
+            android:textColor="@color/error_tv" />
+
+        <Button
+            android:id="@+id/taskoperatedialog_bt_finish"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/choose_bt_lay"
+            android:gravity="center"
+            android:text="标记为已完成"
+            android:textColor="@color/error_tv"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/taskoperatedialog_bt_notaccept"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/choose_bt_lay"
+            android:gravity="center"
+            android:text="标记为未接受"
+            android:textColor="@color/error_tv"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/taskoperatedialog_bt_deltask"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/choose_bt_lay_red"
+            android:gravity="center"
+            android:text="删除此任务"
+            android:textColor="@color/me_white"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

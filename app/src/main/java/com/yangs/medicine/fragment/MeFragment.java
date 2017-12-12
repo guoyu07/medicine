@@ -18,6 +18,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.yangs.medicine.R;
 import com.yangs.medicine.Splash;
 import com.yangs.medicine.activity.APPlication;
+import com.yangs.medicine.activity.InfoEditActivity;
 import com.yangs.medicine.activity.LoginActivity;
 import com.yangs.medicine.activity.MeActivity;
 import com.yangs.medicine.adapter.MeAdapter;
@@ -131,6 +132,15 @@ public class MeFragment extends LazyLoadFragment implements MeAdapter.OnItemClic
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            startActivity(new Intent(getContext(), LoginActivity.class));
+            getActivity().finish();
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.me_bt_logout:
@@ -162,7 +172,7 @@ public class MeFragment extends LazyLoadFragment implements MeAdapter.OnItemClic
                 }).create().show();
                 break;
             case R.id.me_iv_edit:
-                APPlication.showToast("edit...", 0);
+                startActivityForResult(new Intent(getContext(), InfoEditActivity.class), 1);
                 break;
         }
     }

@@ -72,12 +72,13 @@ public class BlankQuesFragment extends Fragment implements BlankAdapter.OnItemCl
             blankList.setRealID(question.getRealID());
             blankList.setQuestion(question.getQuestion());
             blankList.setAnswer(question.getAnswer());
+            blankList.setYourAnswer(question.getYourAnswer());
             lists.add(blankList);
         }
         blankAdapter.notifyDataSetChanged();
         for (int i = 0; i <= (end - start); i++) {
             int real = i + (int) getArguments().getSerializable("dialogIndex");
-            if (!TextUtils.isEmpty(lists.get(i).getAnswer()))
+            if (!TextUtils.isEmpty(lists.get(i).getYourAnswer()))
                 lists.get(i).setClick(true);
             else {
                 if ("1".equals(QuestionActivity.timuLists.get(real).getAnswer())) {
