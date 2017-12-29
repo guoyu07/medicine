@@ -8,6 +8,12 @@ public class BlankList {
     private String question;        // $ 代替 ( )
     private String answer;          //答案 ; 分隔
     private String yourAnswer;
+    private int index;              //序号
+    private String realID;
+    private String isFinish;
+    private String Cha;
+    private String SP;
+    private Boolean isAddError = false;
 
     public String getYourAnswer() {
         return yourAnswer;
@@ -35,11 +41,13 @@ public class BlankList {
         this.index = index;
     }
 
-    private int index;              //序号
-    private String realID;
-    private String isFinish;
-    private String Cha;
-    private String SP;
+    public Boolean getAddError() {
+        return isAddError;
+    }
+
+    public void setAddError(Boolean addError) {
+        isAddError = addError;
+    }
 
     public String getCha() {
         return Cha;

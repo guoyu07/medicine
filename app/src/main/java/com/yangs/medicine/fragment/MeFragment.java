@@ -3,6 +3,8 @@ package com.yangs.medicine.fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -124,6 +126,18 @@ public class MeFragment extends LazyLoadFragment implements MeAdapter.OnItemClic
                 intent = new Intent(getActivity(), MeActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                break;
+            case 3:
+                PackageManager packageManager = getContext().getPackageManager();
+                try {
+                    packageManager.getPackageInfo("com.tencent.mobileqq", 0);
+                    String url = "mqqwpa://im/chat?chat_type=wpa&uin=908379757";
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } catch (PackageManager.NameNotFoundException e) {
+                    APPlication.showToast("安装QQ后才能反馈意见哦", 0);
+                }
                 break;
             default:
                 APPlication.showToast(list.get(position).getName(), 0);

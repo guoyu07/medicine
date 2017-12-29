@@ -29,22 +29,24 @@ public class APPlication extends Application {
     public static String pwd;
     private static String model;
     private static String version;
+    public static String kp_status;     //是否显示开屏
 
     @Override
     public void onCreate() {
         super.onCreate();
-        DEBUG = true;
+        DEBUG = false;
         context = getApplicationContext();
         Fresco.initialize(this);
         save = getSharedPreferences("Medicine", MODE_PRIVATE);
         db = context.openOrCreateDatabase("medicine.db", Context.MODE_PRIVATE, null);
         grade = save.getString("grade", "");
+        kp_status = save.getString("kp_status", "关");
         subject = save.getString("subject", "");
         questionSource = new QuestionSource("yangs", "12345");
-        if (!DEBUG) {
-            CrashHandler crashHandler = CrashHandler.getInstance();
-            crashHandler.init(context);
-        }
+//        if (!DEBUG) {
+//            CrashHandler crashHandler = CrashHandler.getInstance();
+//            crashHandler.init(context);
+//        }
         user = save.getString("username", "游客");
         pwd = save.getString("pwd", "");
         model = android.os.Build.MODEL + ";" + android.os.Build.VERSION.SDK + ";"
@@ -57,6 +59,10 @@ public class APPlication extends Application {
             version = "1.0";
             e.printStackTrace();
         }
+    }
+
+    public static String getPath() {
+        return context.getFilesDir().getAbsolutePath();
     }
 
     public static void showToast(final String msg, final int time) {

@@ -23,6 +23,7 @@ public class AskAdapter extends RecyclerView.Adapter<AskAdapter.ViewHolder> impl
     private Context context;
     private OnItemClickListener onItemClickListener;
     private OnBtItemClickListener onBtItemClickListener;
+    private OnBtErrorClickListener onBtErrorClickListener;
 
     public AskAdapter(List<ExplainList> lists, Context context) {
         this.lists = lists;
@@ -45,6 +46,7 @@ public class AskAdapter extends RecyclerView.Adapter<AskAdapter.ViewHolder> impl
             holder.ans.setVisibility(View.VISIBLE);
             holder.ans.setText("答:  " + lists.get(position).getExplain());
             holder.bt.setVisibility(View.VISIBLE);
+            holder.bt_error.setVisibility(View.VISIBLE);
             if (lists.get(position).getAddError()) {
                 holder.bt.setBackgroundResource(R.drawable.choose_bt_lay_red);
                 holder.bt.setTextColor(ContextCompat.getColor(context, R.color.white));
@@ -62,8 +64,16 @@ public class AskAdapter extends RecyclerView.Adapter<AskAdapter.ViewHolder> impl
                     }
                 }
             });
+            holder.bt_error.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onBtErrorClickListener != null)
+                        onBtErrorClickListener.onBtError(position);
+                }
+            });
         } else {
             holder.bt.setVisibility(View.GONE);
+            holder.bt_error.setVisibility(View.GONE);
             holder.ans.setVisibility(View.GONE);
         }
     }
@@ -87,6 +97,10 @@ public class AskAdapter extends RecyclerView.Adapter<AskAdapter.ViewHolder> impl
         this.onBtItemClickListener = onBtItemClickListener;
     }
 
+    public void setOnBtErrorClickListener(OnBtErrorClickListener onBtErrorClickListener) {
+        this.onBtErrorClickListener = onBtErrorClickListener;
+    }
+
 
     public interface OnItemClickListener {
         public void onItemClick(View v, int position);
@@ -96,10 +110,15 @@ public class AskAdapter extends RecyclerView.Adapter<AskAdapter.ViewHolder> impl
         void onBtItemClick(int position);
     }
 
+    public interface OnBtErrorClickListener {
+        void onBtError(int position);
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView ques;
         TextView ans;
         Button bt;
+        Button bt_error;
         View v;
 
         ViewHolder(View view) {
@@ -107,6 +126,7 @@ public class AskAdapter extends RecyclerView.Adapter<AskAdapter.ViewHolder> impl
             ques = (TextView) view.findViewById(R.id.ask_adapter_ques);
             ans = (TextView) view.findViewById(R.id.ask_adapter_ans);
             bt = (Button) view.findViewById(R.id.ask_adapter_bt);
+            bt_error = (Button) view.findViewById(R.id.ask_adapter_bt_error);
             v = view.findViewById(R.id.blank_adapter_v);
         }
     }

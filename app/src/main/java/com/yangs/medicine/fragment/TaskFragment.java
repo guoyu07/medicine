@@ -227,7 +227,45 @@ public class TaskFragment extends LazyLoadFragment implements TaskAdapter.OnItem
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
+                        }).setNegativeButton("我要取消任务", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        new AlertDialog.Builder(getContext()).setTitle("提示")
+                                .setMessage("你确定要取消这个任务吗?")
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        TaskOperateUntil.acceptTaskByID(getContext(), handler, "cancel", APPlication.user,
+                                                lists.get(position).getId(), new TaskOperateUntil.OnResultListener() {
+                                                    @Override
+                                                    public void onResult(int code) {
+                                                        switch (code) {
+                                                            case -1:
+                                                                APPlication.showToast("网络出错", 0);
+                                                                break;
+                                                            case 1:
+                                                                APPlication.showToast("取消成功", 0);
+                                                                srl.setRefreshing(true);
+                                                                onRefresh();
+                                                                break;
+                                                            case 0:
+                                                                APPlication.showToast("取消失败,请反馈!\n" +
+                                                                        "id: " + lists.get(position).getId(), 1);
+                                                                break;
+                                                        }
+                                                    }
+                                                });
+                                    }
+                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
                         }).create().show();
+                    }
+                }).create().show();
             } else
                 APPlication.showToast("这个任务已经完成啦", 0);
             return;
@@ -244,15 +282,26 @@ public class TaskFragment extends LazyLoadFragment implements TaskAdapter.OnItem
             return;
         }
         if (lists.get(position).getStatus().equals("待完成")) {
-            new AlertDialog.Builder(getContext()).setTitle("这个任务已经被人接受了")
-                    .setMessage("接单人:   " + lists.get(position).getAccepter()
-                            + "\n接单时间:   " + lists.get(position).getAccepttime())
-                    .setPositiveButton("我知道了", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();
+            if (lists.get(position).getAccepter().equals(APPlication.user)) {
+                new AlertDialog.Builder(getContext()).setTitle("你已经接下了这个任务")
+                        .setMessage("请联系发布者完成任务\n在我的-我的任务里面可以查看,取消任务!")
+                        .setPositiveButton("我知道了", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+            } else {
+                new AlertDialog.Builder(getContext()).setTitle("这个任务已经被人接受了")
+                        .setMessage("接单人:   " + lists.get(position).getAccepter()
+                                + "\n接单时间:   " + lists.get(position).getAccepttime())
+                        .setPositiveButton("我知道了", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+            }
             return;
         }
         AlertDialog accept_dialog = new AlertDialog.Builder(getContext()).setTitle("任务")

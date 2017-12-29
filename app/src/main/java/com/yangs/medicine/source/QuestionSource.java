@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -16,7 +17,9 @@ import com.yangs.medicine.model.DiscussList;
 import com.yangs.medicine.model.Question;
 import com.yangs.medicine.util.IntenetUtil;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +56,7 @@ public class QuestionSource {
     private static final String UPDATE_URL = HEAD_URL + "UpdateServlet";
     private static final String READ_URL = HEAD_URL + "ReadServlet";
     private static final String TASK_URL = HEAD_URL + "TaskServlet";
+    private static final String Advice_URL = HEAD_URL + "AdviceServlet";
     public static final String QUESTION_TABLE_NAME = "题目_tmp";
     public static final String SUBJECT_TABLE_NAME = "科目_tmp";
     public static final String CHA_TABLE_NAME = "章节_tmp";
@@ -877,6 +881,67 @@ public class QuestionSource {
             e.printStackTrace();
             onResponseCodeResultListener.onResponseResult(-1, null);
         }
+    }
+
+    public void addQuestionError(String realID, String qq, String content, String user, OnResponseCodeResultListener onResponseCodeResultListener) {
+        if (TextUtils.isEmpty(qq))
+            qq = " ";
+        if (TextUtils.isEmpty(content))
+            content = " ";
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "addQuestionError")
+                .add("realID", realID).add("qq", qq)
+                .add("content", content).add("user", user);
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(Advice_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            onResponseCodeResultListener.onResponseResult(1, response.body().string());
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            onResponseCodeResultListener.onResponseResult(-1, null);
+        }
+    }
+
+    public void getAd(OnResponseResultListener onResponseResultListener) {
+        if (onResponseResultListener == null)
+            return;
+        FormBody.Builder formBodyBuilder = new FormBody.Builder().add("check", "yangs")
+                .add("action", "getAd");
+        RequestBody requestBody = formBodyBuilder.build();
+        Request request = new Request.Builder().url(RECORD_URL).headers(requestHeaders)
+                .post(requestBody).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            onResponseResultListener.onResponseResult(response.body().string());
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Boolean downloadKpAd(String url) {
+        Boolean flag = false;
+        Request request = new Request.Builder().url(url).headers(requestHeaders).build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            InputStream inStream = response.body().byteStream();
+            FileOutputStream fs = new FileOutputStream(APPlication.getPath()
+                    + "/kp.jpg");
+            byte[] buffer = new byte[1204];
+            int bytesum = 0;
+            int byteread;
+            while ((byteread = inStream.read(buffer)) != -1) {
+                bytesum += byteread;
+                fs.write(buffer, 0, byteread);
+            }
+            flag = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
 
     public interface OnResponseResultListener {

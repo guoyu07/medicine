@@ -25,6 +25,7 @@ public class ExplainAdapter extends RecyclerView.Adapter<ExplainAdapter.ViewHold
     private Context context;
     private OnItemClickListener onItemClickListener;
     private OnBtItemClickListener onBtItemClickListener;
+    private OnBtErrorClickListener onBtErrorClickListener;
 
     public ExplainAdapter(List<ExplainList> lists, Context context) {
         this.lists = lists;
@@ -45,6 +46,8 @@ public class ExplainAdapter extends RecyclerView.Adapter<ExplainAdapter.ViewHold
         String src = lists.get(position).getIndex() + "." + lists.get(position).getName() +
                 ":&nbsp;";
         if (lists.get(position).getClick()) {
+            holder.bt.setVisibility(View.VISIBLE);
+            holder.bt_error.setVisibility(View.VISIBLE);
             src = src + "&nbsp;&nbsp;<font>" + lists.get(position).getExplain() + "</font>";
             holder.bt.setVisibility(View.VISIBLE);
             if (lists.get(position).getAddError()) {
@@ -64,8 +67,17 @@ public class ExplainAdapter extends RecyclerView.Adapter<ExplainAdapter.ViewHold
                     }
                 }
             });
-        } else
+            holder.bt_error.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onBtErrorClickListener != null)
+                        onBtErrorClickListener.onBtError(position);
+                }
+            });
+        } else {
             holder.bt.setVisibility(View.GONE);
+            holder.bt_error.setVisibility(View.GONE);
+        }
         holder.tv.setText(Html.fromHtml(src));
     }
 
@@ -88,6 +100,10 @@ public class ExplainAdapter extends RecyclerView.Adapter<ExplainAdapter.ViewHold
         this.onBtItemClickListener = onBtItemClickListener;
     }
 
+    public void setOnBtErrorClickListener(OnBtErrorClickListener onBtErrorClickListener) {
+        this.onBtErrorClickListener = onBtErrorClickListener;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
@@ -96,16 +112,23 @@ public class ExplainAdapter extends RecyclerView.Adapter<ExplainAdapter.ViewHold
         void onBtItemClick(int position);
     }
 
+    public interface OnBtErrorClickListener {
+        void onBtError(int position);
+    }
+
+
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv;
         Button bt;
         View v;
+        Button bt_error;
 
         ViewHolder(View view) {
             super(view);
             tv = (TextView) view.findViewById(R.id.explain_adapter_ques);
             v = view.findViewById(R.id.explain_adapter_v);
             bt = (Button) view.findViewById(R.id.explain_adapter_bt);
+            bt_error = (Button) view.findViewById(R.id.explain_adapter_bt_error);
         }
     }
 }

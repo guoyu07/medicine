@@ -67,6 +67,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                APPlication.questionSource.getAd(new QuestionSource.OnResponseResultListener() {
+                    @Override
+                    public void onResponseResult(String response) {
+                        final JSONObject json = JSON.parseObject(response);
+                        if (json.getString("状态").equals("开")) {
+                            if (!json.getString("id").equals(
+                                    APPlication.save.getString("kp_id", ""))) {
+                                Boolean status = APPlication.questionSource.downloadKpAd(
+                                        json.getString("url"));
+                                if (status)
+                                    APPlication.save.edit().putString("kp_id", json.getString("id"))
+                                            .putString("kp_status", "开")
+                                            .putString("kp_remark", json.getString("remark"))
+                                            .apply();
+                            } else
+                                APPlication.save.edit().putString("kp_status", "开").apply();
+                        } else {
+                            APPlication.save.edit().putString("kp_status", "关").apply();
+                        }
+                    }
+                });
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
                 APPlication.questionSource.uploadRecord(APPlication.user, "启动",
                         "", "", "", "", "");
             }

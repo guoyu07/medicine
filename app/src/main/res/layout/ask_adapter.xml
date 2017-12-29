@@ -33,17 +33,43 @@
             android:textColor="@color/error_tv"
             android:textSize="17sp" />
 
-        <Button
-            android:id="@+id/ask_adapter_bt"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_gravity="right"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="17dp"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:visibility="gone" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/ask_adapter_bt_error"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/choose_bt_lay"
+                android:gravity="center"
+                android:text="题目报错"
+                android:textColor="@color/error_tv"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/ask_adapter_bt"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="17dp"
+                android:gravity="center"
+                android:text="加入错题集"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
 
     <View

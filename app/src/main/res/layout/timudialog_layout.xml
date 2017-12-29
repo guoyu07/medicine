@@ -105,7 +105,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/timudialog_rv"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp" />
 </LinearLayout>
