@@ -42,44 +42,20 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> im
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.itemView.setTag(position);
         holder.sdv.setImageURI(lists.get(position).getPicUrl());
-        holder.name.setText(lists.get(position).getName());
+        holder.name.setText(lists.get(position).getUser());
         holder.time.setText(lists.get(position).getTime());
         holder.content.setText(lists.get(position).getContent());
         holder.money.setText(lists.get(position).getMoney());
         holder.v.setVisibility(View.VISIBLE);
-        if ("我发布的".equals(type)) {
-            if (lists.get(position).getFinish()) {
-                holder.ok.setText("已被接受");
-                holder.ok.setBackgroundResource(R.drawable.task_selector_blue);
-                holder.ok.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
-            } else {
-                holder.ok.setText("未被接受");
-                holder.ok.setBackgroundResource(R.drawable.task_selector_red);
-                holder.ok.setTextColor(ContextCompat.getColor(context, R.color.red));
-            }
-        } else if ("我接受的".equals(type)) {
-            if (lists.get(position).getFinish()) {
-                holder.ok.setText("已完成");
-                holder.ok.setBackgroundResource(R.drawable.task_selector_blue);
-                holder.ok.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
-            } else {
-                holder.ok.setText("未完成");
-                holder.ok.setBackgroundResource(R.drawable.task_selector_red);
-                holder.ok.setTextColor(ContextCompat.getColor(context, R.color.red));
-            }
+        if (lists.get(position).getStatus().equals("未接受")) {
+            holder.ok.setText(lists.get(position).getStatus());
+            holder.ok.setBackgroundResource(R.drawable.task_selector_red);
+            holder.ok.setTextColor(ContextCompat.getColor(context, R.color.red));
         } else {
-            if (lists.get(position).getFinish()) {
-                holder.ok.setText("已完成");
-            } else {
-                holder.ok.setText("我要接受");
-            }
+            holder.ok.setText(lists.get(position).getStatus());
+            holder.ok.setBackgroundResource(R.drawable.task_selector_blue);
+            holder.ok.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
         }
-        holder.ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                APPlication.showToast(lists.get(position).getName(), 0);
-            }
-        });
     }
 
     @Override
@@ -90,7 +66,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> im
     @Override
     public void onClick(View v) {
         if (onItemClickListener != null) {
-            onItemClickListener.onItemClick(v, (int) v.getTag());
+            onItemClickListener.onItemClick((int) v.getTag());
         }
     }
 
@@ -99,7 +75,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> im
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

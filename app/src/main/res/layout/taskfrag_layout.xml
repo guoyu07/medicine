@@ -10,7 +10,8 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/task_srl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -30,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="还没有发布的任务"
+                android:text="还没有任务"
                 android:textColor="@color/colorPrimary"
                 android:textSize="22sp"
                 android:visibility="gone" />
@@ -39,13 +40,12 @@
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/task_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="25dp"
         android:layout_marginRight="25dp"
         android:visibility="invisible"
-        app:srcCompat="@drawable/ic_edit_white_24dp"
         fab:fab_colorNormal="@color/blue3"
         fab:fab_colorPressed="@color/blue2" />
 

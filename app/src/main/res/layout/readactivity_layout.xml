@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.yangs.medicine.activity.ReadActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_topic_top"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="start">
+
+            <ImageView
+                android:id="@+id/readactivity_head_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="10dp"
+                app:srcCompat="@drawable/ic_chevron_left_white_24dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/readactivity_head_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="考试重点"
+            android:textColor="@color/me_white"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:fadingEdge="vertical"
+        android:scrollbars="vertical">
+
+        <TextView
+            android:id="@+id/readactivity_tv_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"
+            android:textIsSelectable="true"
+            android:textSize="18sp" />
+    </ScrollView>
+
+
+    <Button
+        android:id="@+id/readactivity_bt_goto"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/choose_bt_lay"
+        android:gravity="center"
+        android:text="开始做题"
+        android:textColor="@color/error_tv"
+        android:textSize="14sp"
+        android:visibility="gone" />
+</LinearLayout>

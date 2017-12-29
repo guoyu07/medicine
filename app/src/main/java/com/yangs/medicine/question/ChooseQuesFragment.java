@@ -1,16 +1,20 @@
 package com.yangs.medicine.question;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -78,6 +82,8 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private LinearLayout ll_jiexi;
     private TextView ll_jiexi2;
     private Button bt_sub;
+    private Button bt;
+    private Button bt_error;
     private String your_answer;
     private Question question;
     private List<DiscussList> lists;
@@ -126,18 +132,22 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_D_4 = (TextView) mLay.findViewById(R.id.choosequesfrag_ll_D_4);
         ll_E_4 = (TextView) mLay.findViewById(R.id.choosequesfrag_ll_E_4);
         bt_sub = (Button) mLay.findViewById(R.id.choosequesfrag_bt_sub);
+        bt_error = (Button) mLay.findViewById(R.id.choosequesfrag_bt_error);
         ll_jiexi = (LinearLayout) mLay.findViewById(R.id.choosequesfrag_ll_jiexi);
         ll_jiexi2 = (TextView) mLay.findViewById(R.id.choosequesfrag_ll_jiexi2);
         dis_rv = (MyRecylerview) mLay.findViewById(R.id.choosequesfrag_rv);
         progressBar = (ProgressBar) mLay.findViewById(R.id.choosequesfrag_pb);
         iv_noreply = (ImageView) mLay.findViewById(R.id.choosequesfrag_iv_noreply);
         tv_noreply = (TextView) mLay.findViewById(R.id.choosequesfrag_tv_noreply);
+        bt = (Button) mLay.findViewById(R.id.choosequesfrag_bt);
         ll_A.setOnClickListener(this);
         ll_B.setOnClickListener(this);
         ll_C.setOnClickListener(this);
         ll_D.setOnClickListener(this);
         ll_E.setOnClickListener(this);
         bt_sub.setOnClickListener(this);
+        bt_error.setOnClickListener(this);
+        bt.setOnClickListener(this);
         if (getArguments() != null) {
             index = (int) getArguments().getSerializable("index");
             type = (String) getArguments().getSerializable("type");
@@ -145,21 +155,34 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         }
         dialogindex = (int) getArguments().getSerializable("dialogIndex");
         String answer = QuestionActivity.timuLists.get(dialogindex).getAnswer();
+        if (answer == null || answer.equals("")) {
+            String t_answewr = question.getYourAnswer();
+            if (!TextUtils.isEmpty(t_answewr)) {
+                answer = t_answewr;
+                your_answer = answer;
+                QuestionActivity.timuLists.get(dialogindex).setSubmmit(true);
+            }
+        }
         if (!"".equals(answer)) {
             switch (answer) {
                 case "a":
+                case "A":
                     setA();
                     break;
                 case "b":
+                case "B":
                     setB();
                     break;
                 case "c":
+                case "C":
                     setC();
                     break;
                 case "d":
+                case "D":
                     setD();
                     break;
                 case "e":
+                case "E":
                     setE();
                     break;
             }
@@ -237,6 +260,113 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
                 else
                     checkOK(false);
                 break;
+            case R.id.choosequesfrag_bt:
+                if (question.getIsInError().equals("true")) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            APPlication.questionSource.removeError(APPlication.user, question.getRealID()
+                                    , new QuestionSource.OnResponseCodeResultListener() {
+                                        @Override
+                                        public void onResponseResult(int code, String response) {
+                                            if (code == -1)
+                                                return;
+                                            if (response.equals("失败"))
+                                                return;
+                                            handler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    bt.setBackgroundResource(R.drawable.choose_bt_lay);
+                                                    bt.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
+                                                    bt.setText("加入错题集");
+                                                    question.setIsInError("false");
+                                                }
+                                            });
+                                        }
+                                    });
+                        }
+                    }).start();
+                } else {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String s = APPlication.questionSource.uploadRecord(
+                                    APPlication.user, "做题", question.getRealID() + ""
+                                    , "错", "错", question.getSP(), question.getCha());
+                            if (s.equals("成功")) {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        bt.setBackgroundResource(R.drawable.choose_bt_lay_red);
+                                        bt.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                                        bt.setText("已加入错题集");
+                                        question.setIsInError("true");
+                                    }
+                                });
+                            } else {
+                                APPlication.showToast("加入错题集发生了错误,请反馈!", 1);
+                            }
+                        }
+                    }).start();
+                }
+                break;
+            case R.id.choosequesfrag_bt_error:
+                View view = LayoutInflater.from(getContext()).inflate(R.layout.errordialog_layout, null);
+                final ImageView iv_close = (ImageView) view.findViewById(R.id.errordialog_iv_close);
+                final CheckBox cb_1 = (CheckBox) view.findViewById(R.id.errordialog_cb_1);
+                final CheckBox cb_2 = (CheckBox) view.findViewById(R.id.errordialog_cb_2);
+                final CheckBox cb_3 = (CheckBox) view.findViewById(R.id.errordialog_cb_3);
+                final EditText et_content = (EditText) view.findViewById(R.id.errordialog_et_content);
+                final ProgressBar pb = (ProgressBar) view.findViewById(R.id.errordialog_pb);
+                final Button bt_sub = (Button) view.findViewById(R.id.errordialog_bt_sub);
+                final Dialog errordialog = new AlertDialog.Builder(getContext()).setCancelable(false).setView(view)
+                        .create();
+                iv_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        errordialog.dismiss();
+                    }
+                });
+                bt_sub.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final String s_qq = (cb_1.isChecked() ? cb_1.getText().toString() : "")
+                                + ";" + (cb_2.isChecked() ? cb_2.getText().toString() : "")
+                                + ";" + (cb_3.isChecked() ? cb_3.getText().toString() : "");
+                        final String s_content = et_content.getText().toString().trim();
+                        pb.setVisibility(View.VISIBLE);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                APPlication.questionSource.addQuestionError(question.getRealID()
+                                        , s_qq, s_content, APPlication.user, new QuestionSource.OnResponseCodeResultListener() {
+                                            @Override
+                                            public void onResponseResult(final int code, final String response) {
+                                                handler.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        pb.setVisibility(View.GONE);
+                                                        if (code == -1) {
+                                                            APPlication.showToast("网络出错", 0);
+                                                            return;
+                                                        }
+                                                        if (response.equals("成功")) {
+                                                            APPlication.showToast("提交成功", 0);
+                                                            errordialog.dismiss();
+                                                        } else {
+                                                            APPlication.showToast("提交失败,请通过我的-" +
+                                                                    "反馈意见来报告错误", 1);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                            }
+                        }).start();
+                    }
+                });
+                errordialog.show();
+                break;
         }
     }
 
@@ -264,7 +394,6 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
         ll_E_1.setBackgroundResource(R.drawable.selector_white_7dp);
         ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
-        your_answer = "";
     }
 
     public void checkOK(final Boolean isRedo) {
@@ -376,6 +505,15 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
             else
                 onResultListener.onResult(dialogIndex, 0);
         }
+        if (question.getIsInError().equals("true")) {
+            bt.setBackgroundResource(R.drawable.choose_bt_lay_red);
+            bt.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            bt.setText("已加入错题集");
+        } else {
+            bt.setBackgroundResource(R.drawable.choose_bt_lay);
+            bt.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
+            bt.setText("加入错题集");
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -383,7 +521,16 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
                     String result = check ? "对" : "错";
                     APPlication.questionSource.uploadRecord(
                             APPlication.user, "做题", question.getRealID() + ""
-                            , result, question.getSP());
+                            , result, your_answer, question.getSP(), question.getCha());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            bt.setBackgroundResource(R.drawable.choose_bt_lay_red);
+                            bt.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                            bt.setText("已加入错题集");
+                            question.setIsInError("true");
+                        }
+                    });
                 }
                 lists = APPlication.questionSource.getDiscussList(question.getRealID(), 0);
                 if (lists.size() > 0) {

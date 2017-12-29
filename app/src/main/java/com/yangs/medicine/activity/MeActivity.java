@@ -68,6 +68,7 @@ public class MeActivity extends BaseActivity implements View.OnClickListener, Vi
             ErrorTodayFragment errorTodayFragment = new ErrorTodayFragment();      //题
             MeBookFragment meBookFragment = new MeBookFragment();              //教材
             errorTodayFragment.setType("NotError");
+            errorTodayFragment.setTime("all");
             listFragment.add(errorTodayFragment);
             listFragment.add(meBookFragment);
         } else {
@@ -76,8 +77,8 @@ public class MeActivity extends BaseActivity implements View.OnClickListener, Vi
             bt_2.setText("我接受的");
             TaskFragment taskFragment1 = new TaskFragment();
             TaskFragment taskFragment2 = new TaskFragment();
-            taskFragment1.setTyep("我发布的");
-            taskFragment2.setTyep("我接受的");
+            taskFragment1.setType("我发布的");
+            taskFragment2.setType("我接受的");
             listFragment.add(taskFragment1);
             listFragment.add(taskFragment2);
         }

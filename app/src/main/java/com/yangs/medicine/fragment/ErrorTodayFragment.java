@@ -154,9 +154,11 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
     public void onItemClickListener(View view, int position) {
         if (list.get(position).getType().equals("small")) {
             Bundle bundle = new Bundle();
+            bundle.putString("flag", time);
             bundle.putString("type", "error");
             bundle.putString("SP", list.get(position).getSP() + "");
             bundle.putString("Name", list.get(position).getSubject() + "错题");
+            bundle.putString("continues", list.get(position).getCount() + "");
             Intent intent = new Intent(getActivity(), QuestionActivity.class);
             intent.putExtras(bundle);
             startActivity(intent);
@@ -178,6 +180,7 @@ public class ErrorTodayFragment extends LazyLoadFragment implements ErrorTodayAd
                             ErrorTodayList errorTodayList = new ErrorTodayList();
                             errorTodayList.setName(count + "." + cursor.getString(1));
                             errorTodayList.setType("small");
+                            errorTodayList.setCount(count - 1);
                             errorTodayList.setRealIndex(cursor.getInt(2));
                             errorTodayList.setSP(cursor.getInt(3));
                             errorTodayList.setSubject(list.get(position).getName());

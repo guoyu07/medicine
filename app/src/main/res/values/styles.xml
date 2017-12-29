@@ -10,11 +10,11 @@
     </style>
 
     <style name="ToolbarTheme">
-    <item name="colorControlNormal">#000000</item>
-</style>
+        <item name="colorControlNormal">#000000</item>
+    </style>
 
     <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/medicine_start</item>
+        <item name="android:windowBackground">@drawable/medicine</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 

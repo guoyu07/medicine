@@ -83,6 +83,8 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
     private String Subject;
     private int postDiscussCode;
     private String type;
+    private String flag;
+    private String continues;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +102,8 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
             SP = bundle.getString("SP");
             Subject = bundle.getString("Name");
             Cha = bundle.getString("Cha");
+            flag = bundle.getString("flag");
+            continues = bundle.getString("continues");
         }
         head_title = (TextView) findViewById(R.id.questionactivity_head_title);
         iv_back = (ImageView) findViewById(R.id.questionactivity_head_back);
@@ -134,7 +138,7 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 if (type.equals("error")) {
                     table = QuestionSource.ERROR_TABLE_NAME;
                     get_question_code = APPlication.questionSource.getErrorQuestion(APPlication.user
-                            , SP);
+                            , SP, flag);
                 } else {
                     table = QuestionSource.QUESTION_TABLE_NAME;
                     get_question_code = APPlication.questionSource.getQuestion(SP, Cha);
@@ -171,6 +175,9 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                                     return frag_list.size();
                                 }
                             });
+                            int page = Integer.parseInt(continues);
+                            if (page != 0)
+                                viewPager.setCurrentItem(page);
                             break;
                         case -1:
                             APPlication.showToast("解析题目数据时发生了错误,请反馈!", 1);
@@ -217,7 +224,10 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
             for (int i = 0; i < choose_count; i++) {
                 timuList = new TimuList();
                 timuList.setIndex(i + cursor_count + 1);
-                timuList.setStatus("未做");
+                if (type.equals("error"))
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.ERROR_TABLE_NAME));
+                else
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.QUESTION_TABLE_NAME));
                 timuList.setFragIndex(frag_list.size());
                 ChooseQuesFragment chooseQuesFragment = new ChooseQuesFragment();
                 chooseQuesFragment.setOnResultListener(new ChooseQuesFragment.OnResultListener() {
@@ -252,7 +262,10 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 }
                 timuList = new TimuList();
                 timuList.setIndex(i + cursor_count);
-                timuList.setStatus("未做");
+                if (type.equals("error"))
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.ERROR_TABLE_NAME));
+                else
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.QUESTION_TABLE_NAME));
                 timuList.setFragIndex(frag_list.size());
                 if ((blank_count - i == 0) && !flag) {
                     BlankQuesFragment blankQuesFragment = new BlankQuesFragment();
@@ -310,7 +323,10 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
             for (int i = 0; i < check_count; i++) {
                 timuList = new TimuList();
                 timuList.setIndex(i + cursor_count + 1);
-                timuList.setStatus("未做");
+                if (type.equals("error"))
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.ERROR_TABLE_NAME));
+                else
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.QUESTION_TABLE_NAME));
                 timuList.setFragIndex(frag_list.size());
                 CheckQuesFragment checkQuesFragment = new CheckQuesFragment();
                 checkQuesFragment.setOnResultListener(new CheckQuesFragment.OnResultListener() {
@@ -345,7 +361,10 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                 }
                 timuList = new TimuList();
                 timuList.setIndex(i + cursor_count);
-                timuList.setStatus("未做");
+                if (type.equals("error"))
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.ERROR_TABLE_NAME));
+                else
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.QUESTION_TABLE_NAME));
                 timuList.setFragIndex(frag_list.size());
                 if ((explain_count - i == 0) && !flag) {
                     ExplainQuesFragment explainQuesFragment = new ExplainQuesFragment();
@@ -404,7 +423,10 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
             for (int i = 0; i < ask_count; i++) {
                 timuList = new TimuList();
                 timuList.setIndex(i + cursor_count + 1);
-                timuList.setStatus("未做");
+                if (type.equals("error"))
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.ERROR_TABLE_NAME));
+                else
+                    timuList.setStatus(QuestionUtil.getQuestionStatusByID(timuList.getIndex(), QuestionSource.QUESTION_TABLE_NAME));
                 timuList.setFragIndex(frag_list.size());
                 AskQuesFragment askQuesFragment = new AskQuesFragment();
                 askQuesFragment.setOnResultListener(new AskQuesFragment.OnResultListener() {
@@ -476,15 +498,20 @@ public class QuestionActivity extends BaseActivity implements View.OnClickListen
                                 public void run() {
                                     Question question;
                                     if (type.equals("error"))
-                                        question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1, QuestionSource.ERROR_TABLE_NAME);
+                                        question = QuestionUtil.getQuestionByID(
+                                                viewPager.getCurrentItem() + 1,
+                                                QuestionSource.ERROR_TABLE_NAME);
                                     else
-                                        question = QuestionUtil.getQuestionByID(viewPager.getCurrentItem() + 1, QuestionSource.QUESTION_TABLE_NAME);
+                                        question = QuestionUtil.getQuestionByID(
+                                                viewPager.getCurrentItem() + 1,
+                                                QuestionSource.QUESTION_TABLE_NAME);
                                     postDiscussCode = APPlication.questionSource
                                             .postDiscuss(s, question.getRealID());
                                     if (postDiscussCode == 0 && !APPlication.DEBUG) {
                                         APPlication.questionSource.uploadRecord(
                                                 APPlication.user, "评论"
-                                                , question.getRealID() + "", s, "");
+                                                , question.getRealID() + "", s, ""
+                                                , "", "");
                                     }
                                     handler.sendEmptyMessage(1);
                                 }
