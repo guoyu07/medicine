@@ -84,7 +84,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private Button bt_sub;
     private Button bt;
     private Button bt_error;
-    private String your_answer;
+    private String your_answer = "";
     private Question question;
     private List<DiscussList> lists;
     private MyRecylerview dis_rv;
@@ -95,6 +95,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     private int star_code;
     private int thumb_click_position;
     private String type;
+    private Boolean isMultiChoose;
 
     @Nullable
     @Override
@@ -197,60 +198,95 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
     }
 
     private void setA() {
-        ll_A_1.setBackgroundResource(R.drawable.ques_selector_blue);
-        ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        your_answer = "A";
+        if (your_answer.contains("A")) {
+            ll_A_1.setBackgroundResource(R.drawable.selector_white_7dp);
+            ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
+            your_answer = your_answer.replaceAll("A", "");
+        } else {
+            ll_A_1.setBackgroundResource(R.drawable.ques_selector_blue);
+            ll_A_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            your_answer += "A";
+        }
     }
 
     private void setB() {
-        ll_B_1.setBackgroundResource(R.drawable.ques_selector_blue);
-        ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        your_answer = "B";
+        if (your_answer.contains("B")) {
+            ll_B_1.setBackgroundResource(R.drawable.selector_white_7dp);
+            ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
+            your_answer = your_answer.replaceAll("B", "");
+        } else {
+            ll_B_1.setBackgroundResource(R.drawable.ques_selector_blue);
+            ll_B_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            your_answer += "B";
+        }
     }
 
     private void setC() {
-        ll_C_1.setBackgroundResource(R.drawable.ques_selector_blue);
-        ll_C_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        your_answer = "C";
+        if (your_answer.contains("C")) {
+            ll_C_1.setBackgroundResource(R.drawable.selector_white_7dp);
+            ll_C_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
+            your_answer = your_answer.replaceAll("C", "");
+        } else {
+            ll_C_1.setBackgroundResource(R.drawable.ques_selector_blue);
+            ll_C_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            your_answer += "C";
+        }
     }
 
     private void setD() {
-        ll_D_1.setBackgroundResource(R.drawable.ques_selector_blue);
-        ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        your_answer = "D";
+        if (your_answer.contains("D")) {
+            ll_D_1.setBackgroundResource(R.drawable.selector_white_7dp);
+            ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
+            your_answer = your_answer.replaceAll("D", "");
+        } else {
+            ll_D_1.setBackgroundResource(R.drawable.ques_selector_blue);
+            ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            your_answer += "D";
+        }
     }
 
     private void setE() {
-        ll_E_1.setBackgroundResource(R.drawable.ques_selector_blue);
-        ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-        your_answer = "E";
+        if (your_answer.contains("E")) {
+            ll_E_1.setBackgroundResource(R.drawable.selector_white_7dp);
+            ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
+            your_answer = your_answer.replaceAll("E", "");
+        } else {
+            ll_E_1.setBackgroundResource(R.drawable.ques_selector_blue);
+            ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            your_answer += "E";
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.choosequesfrag_ll_A:
-                reset();
+                if (!isMultiChoose)
+                    reset();
                 setA();
                 QuestionActivity.timuLists.get(dialogindex).setAnswer("a");
                 break;
             case R.id.choosequesfrag_ll_B:
-                reset();
+                if (!isMultiChoose)
+                    reset();
                 setB();
                 QuestionActivity.timuLists.get(dialogindex).setAnswer("b");
                 break;
             case R.id.choosequesfrag_ll_C:
-                reset();
+                if (!isMultiChoose)
+                    reset();
                 setC();
                 QuestionActivity.timuLists.get(dialogindex).setAnswer("c");
                 break;
             case R.id.choosequesfrag_ll_D:
-                reset();
+                if (!isMultiChoose)
+                    reset();
                 setD();
                 QuestionActivity.timuLists.get(dialogindex).setAnswer("d");
                 break;
             case R.id.choosequesfrag_ll_E:
-                reset();
+                if (!isMultiChoose)
+                    reset();
                 setE();
                 QuestionActivity.timuLists.get(dialogindex).setAnswer("e");
                 break;
@@ -375,7 +411,11 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
             question = QuestionUtil.getQuestionByID(index + 1, QuestionSource.ERROR_TABLE_NAME);
         else
             question = QuestionUtil.getQuestionByID(index + 1, QuestionSource.QUESTION_TABLE_NAME);
-        tv_ques.setText(question.getId() + "." + question.getQuestion());
+        isMultiChoose = question.getAnswer().length() > 1;
+        if (isMultiChoose)
+            tv_ques.setText(question.getId() + "." + question.getQuestion() + " (多选题)");
+        else
+            tv_ques.setText(question.getId() + "." + question.getQuestion());
         ll_A_4.setText(question.getA());
         ll_B_4.setText(question.getB());
         ll_C_4.setText(question.getC());
@@ -394,6 +434,7 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         ll_D_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
         ll_E_1.setBackgroundResource(R.drawable.selector_white_7dp);
         ll_E_1.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
+        your_answer = "";
     }
 
     public void checkOK(final Boolean isRedo) {
@@ -403,96 +444,113 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
         tv_noreply.setVisibility(View.GONE);
         iv_noreply.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        final Boolean check = your_answer.equalsIgnoreCase(question.getAnswer());
-        switch (your_answer) {
-            case "A":
-            case "a":
-                ll_A_1.setVisibility(View.GONE);
-                if (check) {
-                    ll_A_2.setVisibility(View.VISIBLE);
-                    ll_A_3.setVisibility(View.GONE);
-                } else {
-                    ll_A_2.setVisibility(View.GONE);
-                    ll_A_3.setVisibility(View.VISIBLE);
+        Boolean check = true;  // = your_answer.equalsIgnoreCase(question.getAnswer());
+        if (your_answer.length() != question.getAnswer().length()) {
+            check = false;
+        } else {
+            for (int i = 0; i < your_answer.length(); i++) {
+                char a = your_answer.charAt(i);
+                if (!question.getAnswer().contains(a + "")) {
+                    check = false;
+                    break;
                 }
-                break;
-            case "B":
-            case "b":
-                ll_B_1.setVisibility(View.GONE);
-                if (check) {
-                    ll_B_2.setVisibility(View.VISIBLE);
-                    ll_B_3.setVisibility(View.GONE);
-                } else {
-                    ll_B_2.setVisibility(View.GONE);
-                    ll_B_3.setVisibility(View.VISIBLE);
-                }
-                break;
-            case "C":
-            case "c":
-                ll_C_1.setVisibility(View.GONE);
-                if (check) {
-                    ll_C_2.setVisibility(View.VISIBLE);
-                    ll_C_3.setVisibility(View.GONE);
-                } else {
-                    ll_C_2.setVisibility(View.GONE);
-                    ll_C_3.setVisibility(View.VISIBLE);
-                }
-                break;
-            case "D":
-            case "d":
-                ll_D_1.setVisibility(View.GONE);
-                if (check) {
-                    ll_D_2.setVisibility(View.VISIBLE);
-                    ll_D_3.setVisibility(View.GONE);
-                } else {
-                    ll_D_2.setVisibility(View.GONE);
-                    ll_D_3.setVisibility(View.VISIBLE);
-                }
-                break;
-            case "E":
-            case "e":
-                ll_E_1.setVisibility(View.GONE);
-                if (check) {
-                    ll_E_2.setVisibility(View.VISIBLE);
-                    ll_E_3.setVisibility(View.GONE);
-                } else {
-                    ll_E_2.setVisibility(View.GONE);
-                    ll_E_3.setVisibility(View.VISIBLE);
-                }
-                break;
+            }
         }
-        if (!check) {
-            switch (question.getAnswer()) {
+        for (int i = 0; i < your_answer.length(); i++) {
+            String a = your_answer.charAt(i) + "";
+            switch (a) {
                 case "A":
                 case "a":
                     ll_A_1.setVisibility(View.GONE);
-                    ll_A_2.setVisibility(View.VISIBLE);
-                    ll_A_3.setVisibility(View.GONE);
+                    if (check) {
+                        ll_A_2.setVisibility(View.VISIBLE);
+                        ll_A_3.setVisibility(View.GONE);
+                    } else {
+                        ll_A_2.setVisibility(View.GONE);
+                        ll_A_3.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case "B":
                 case "b":
                     ll_B_1.setVisibility(View.GONE);
-                    ll_B_2.setVisibility(View.VISIBLE);
-                    ll_B_3.setVisibility(View.GONE);
+                    if (check) {
+                        ll_B_2.setVisibility(View.VISIBLE);
+                        ll_B_3.setVisibility(View.GONE);
+                    } else {
+                        ll_B_2.setVisibility(View.GONE);
+                        ll_B_3.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case "C":
                 case "c":
                     ll_C_1.setVisibility(View.GONE);
-                    ll_C_2.setVisibility(View.VISIBLE);
-                    ll_C_3.setVisibility(View.GONE);
+                    if (check) {
+                        ll_C_2.setVisibility(View.VISIBLE);
+                        ll_C_3.setVisibility(View.GONE);
+                    } else {
+                        ll_C_2.setVisibility(View.GONE);
+                        ll_C_3.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case "D":
                 case "d":
                     ll_D_1.setVisibility(View.GONE);
-                    ll_D_2.setVisibility(View.VISIBLE);
-                    ll_D_3.setVisibility(View.GONE);
+                    if (check) {
+                        ll_D_2.setVisibility(View.VISIBLE);
+                        ll_D_3.setVisibility(View.GONE);
+                    } else {
+                        ll_D_2.setVisibility(View.GONE);
+                        ll_D_3.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case "E":
                 case "e":
                     ll_E_1.setVisibility(View.GONE);
-                    ll_E_2.setVisibility(View.VISIBLE);
-                    ll_E_3.setVisibility(View.GONE);
+                    if (check) {
+                        ll_E_2.setVisibility(View.VISIBLE);
+                        ll_E_3.setVisibility(View.GONE);
+                    } else {
+                        ll_E_2.setVisibility(View.GONE);
+                        ll_E_3.setVisibility(View.VISIBLE);
+                    }
                     break;
+            }
+        }
+        if (!check) {
+            for (int i = 0; i < question.getAnswer().length(); i++) {
+                String a = question.getAnswer().charAt(i) + "";
+                switch (a) {
+                    case "A":
+                    case "a":
+                        ll_A_1.setVisibility(View.GONE);
+                        ll_A_2.setVisibility(View.VISIBLE);
+                        ll_A_3.setVisibility(View.GONE);
+                        break;
+                    case "B":
+                    case "b":
+                        ll_B_1.setVisibility(View.GONE);
+                        ll_B_2.setVisibility(View.VISIBLE);
+                        ll_B_3.setVisibility(View.GONE);
+                        break;
+                    case "C":
+                    case "c":
+                        ll_C_1.setVisibility(View.GONE);
+                        ll_C_2.setVisibility(View.VISIBLE);
+                        ll_C_3.setVisibility(View.GONE);
+                        break;
+                    case "D":
+                    case "d":
+                        ll_D_1.setVisibility(View.GONE);
+                        ll_D_2.setVisibility(View.VISIBLE);
+                        ll_D_3.setVisibility(View.GONE);
+                        break;
+                    case "E":
+                    case "e":
+                        ll_E_1.setVisibility(View.GONE);
+                        ll_E_2.setVisibility(View.VISIBLE);
+                        ll_E_3.setVisibility(View.GONE);
+                        break;
+                }
             }
         }
         String ex = question.getExplains();
@@ -514,23 +572,25 @@ public class ChooseQuesFragment extends Fragment implements View.OnClickListener
             bt.setTextColor(ContextCompat.getColor(getContext(), R.color.error_tv));
             bt.setText("加入错题集");
         }
+        final Boolean new_check = check;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 if (!isRedo && !APPlication.DEBUG) {
-                    String result = check ? "对" : "错";
+                    String result = new_check ? "对" : "错";
                     APPlication.questionSource.uploadRecord(
                             APPlication.user, "做题", question.getRealID() + ""
                             , result, your_answer, question.getSP(), question.getCha());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            bt.setBackgroundResource(R.drawable.choose_bt_lay_red);
-                            bt.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                            bt.setText("已加入错题集");
-                            question.setIsInError("true");
-                        }
-                    });
+                    if (!new_check)
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                bt.setBackgroundResource(R.drawable.choose_bt_lay_red);
+                                bt.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                                bt.setText("已加入错题集");
+                                question.setIsInError("true");
+                            }
+                        });
                 }
                 lists = APPlication.questionSource.getDiscussList(question.getRealID(), 0);
                 if (lists.size() > 0) {

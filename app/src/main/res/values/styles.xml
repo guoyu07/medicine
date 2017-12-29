@@ -14,7 +14,9 @@
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
+        <!--
         <item name="android:windowBackground">@drawable/medicine</item>
+        <-->
         <item name="android:windowFullscreen">true</item>
     </style>
 

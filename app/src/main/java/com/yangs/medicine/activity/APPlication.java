@@ -43,10 +43,10 @@ public class APPlication extends Application {
         kp_status = save.getString("kp_status", "关");
         subject = save.getString("subject", "");
         questionSource = new QuestionSource("yangs", "12345");
-//        if (!DEBUG) {
-//            CrashHandler crashHandler = CrashHandler.getInstance();
-//            crashHandler.init(context);
-//        }
+        if (!DEBUG) {
+            CrashHandler crashHandler = CrashHandler.getInstance();
+            crashHandler.init(context);
+        }
         user = save.getString("username", "游客");
         pwd = save.getString("pwd", "");
         model = android.os.Build.MODEL + ";" + android.os.Build.VERSION.SDK + ";"
